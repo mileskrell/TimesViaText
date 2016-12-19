@@ -1,4 +1,4 @@
-package com.example.mmkrell.timesviatextforctariders;
+package com.example.mmkrell.timesviatext;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.mmkrell.timesviatextforctariders", appContext.getPackageName());
+        assertEquals("com.example.mmkrell.timesviatext", appContext.getPackageName());
     }
 }

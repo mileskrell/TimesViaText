@@ -1,4 +1,4 @@
-package com.example.mmkrell.timesviatextforctariders;
+package com.example.mmkrell.timesviatext;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

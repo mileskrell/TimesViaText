@@ -1,4 +1,4 @@
-package com.example.mmkrell.timesviatextforctariders;
+package com.example.mmkrell.timesviatext;
 
 import org.junit.Test;
 
