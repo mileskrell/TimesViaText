@@ -9,14 +9,13 @@ public class Stop {
     private double stopLat;
     private double stopLon;
     private int locationType;
-    private int parentStation;
     private int wheelchairBoarding;
 
     public Stop() {
-        this(0, 0, "STOPNAME", "STOPDESC", 1.0, 2.0, 1, 2, 3);
+        this(0, 0, "STOPNAME", "STOPDESC", 1.0, 2.0, 1, 3);
     }
 
-    public Stop(int stopId, int stopCode, String stopName, String stopDesc, double stopLat, double stopLon, int locationType, int parentStation, int wheelchairBoarding) {
+    public Stop(int stopId, int stopCode, String stopName, String stopDesc, double stopLat, double stopLon, int locationType, int wheelchairBoarding) {
         this.stopId = stopId;
         this.stopCode = stopCode;
         this.stopName = stopName;
@@ -24,7 +23,6 @@ public class Stop {
         this.stopLat = stopLat;
         this.stopLon = stopLon;
         this.locationType = locationType;
-        this.parentStation = parentStation;
         this.wheelchairBoarding = wheelchairBoarding;
     }
     public int getStopId() {
@@ -53,10 +51,6 @@ public class Stop {
 
     public int getLocationType() {
         return locationType;
-    }
-
-    public int getParentStation() {
-        return parentStation;
     }
 
     public int getWheelchairBoarding() {

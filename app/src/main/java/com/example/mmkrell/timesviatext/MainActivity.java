@@ -27,24 +27,33 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Stop> stops = new ArrayList<Stop>();
 
         AssetManager assetManager = getApplicationContext().getAssets();
-        InputStream inputStream = null;
-        try {
-            inputStream = assetManager.open("message.txt");
 
+        Scanner outerScanner = null;
+        try {
+            outerScanner = new Scanner(assetManager.open("message.txt"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Scanner outerScanner = new Scanner(inputStream);
         outerScanner.nextLine();            // Skip the first line; it's just the legend
         while (outerScanner.hasNextLine()) {
             Scanner innerScanner = new Scanner(outerScanner.nextLine()).useDelimiter(",");
             while (innerScanner.hasNext()) {
-                //stops.add(new Stop(innerScanner.nextInt(), innerScanner.nextInt(), innerScanner.next(), innerScanner.next(), innerScanner.nextDouble(), innerScanner.nextDouble(), innerScanner.nextInt(), innerScanner.nextInt(), innerScanner.nextInt()));
-                stops.add(new Stop());
+                int currentStopId = innerScanner.nextInt();
+                int currentStopCode = innerScanner.nextInt();
+                String currentStopName = innerScanner.next();
+                String currentStopDesc = innerScanner.next() + "," + innerScanner.next() + "," + innerScanner.next(); // stop_desc has three comma-separated parts
+                double currentStopLat = innerScanner.nextDouble();
+                double currentStopLon = innerScanner.nextDouble();
+                int currentLocationType = innerScanner.nextInt();
+                innerScanner.next(); // Skip the second-to-last thing; it's always empty for the bus stops
+                int currentWheelchairBoarding = innerScanner.nextInt();
+
+                stops.add(new Stop(currentStopId, currentStopCode, currentStopName, currentStopDesc, currentStopLat, currentStopLon, currentLocationType, currentWheelchairBoarding));
+                //stops.add(new Stop());
             }
         }
-        //textView.setText(stops.get(0).getStopName() + " " + stops.get(0).getStopCode());
-        //textView2.setText(stops.get(1).getStopName() + " " + stops.get(1).getStopCode());
+        textView.setText(stops.get(0).getStopName() + " " + stops.get(0).getStopCode());
+        textView2.setText(stops.get(1).getStopName() + " " + stops.get(1).getStopCode());
     }
 }
