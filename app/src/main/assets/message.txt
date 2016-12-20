@@ -1,0 +1,5 @@
+stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_station,wheelchair_boarding
+1,1,"Jackson & Austin Terminal","Jackson & Austin Terminal, Northeastbound, Bus Terminal",41.87632184,-87.77410482,0,,1
+2,2,"5900 W Jackson","5900 W Jackson, Eastbound, Southside of the Street",41.87706679,-87.77131794,0,,1
+3,3,"Jackson & Menard","Jackson & Menard, Eastbound, Southside of the Street",41.87695725,-87.76975039,0,,1
+4,4,"5700 W Jackson","5700 W Jackson, Eastbound, Southside of the Street",41.87702418,-87.76745055,0,,1
