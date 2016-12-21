@@ -35,25 +35,37 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        outerScanner.nextLine();            // Skip the first line; it's just the legend
+        outerScanner.nextLine(); // Skip the first line; it's just the legend
         while (outerScanner.hasNextLine()) {
             Scanner innerScanner = new Scanner(outerScanner.nextLine()).useDelimiter(",");
-            while (innerScanner.hasNext()) {
-                int currentStopId = innerScanner.nextInt();
-                int currentStopCode = innerScanner.nextInt();
-                String currentStopName = innerScanner.next();
-                String currentStopDesc = innerScanner.next() + "," + innerScanner.next() + "," + innerScanner.next(); // stop_desc has three comma-separated parts
-                double currentStopLat = innerScanner.nextDouble();
-                double currentStopLon = innerScanner.nextDouble();
-                int currentLocationType = innerScanner.nextInt();
-                innerScanner.next(); // Skip the second-to-last thing; it's always empty for the bus stops
-                int currentWheelchairBoarding = innerScanner.nextInt();
+            int currentStopId = innerScanner.nextInt();
+            int currentStopCode = innerScanner.nextInt();
+            String currentStopName = innerScanner.next();
 
-                stops.add(new Stop(currentStopId, currentStopCode, currentStopName, currentStopDesc, currentStopLat, currentStopLon, currentLocationType, currentWheelchairBoarding));
-                //stops.add(new Stop());
+            String currentStopDesc;
+            String currentToken = innerScanner.next();
+            if (currentToken.equals("\"\"")) { // If stop_desc is "empty" (it has 2 sets of quotes), just move on
+                currentStopDesc = "";
+            } else {
+                currentStopDesc = currentToken + "," + innerScanner.next() + "," + innerScanner.next(); // Otherwise, use it and the following 2 tokens for the description
             }
+
+            double currentStopLat = innerScanner.nextDouble();
+            double currentStopLon = innerScanner.nextDouble();
+            int currentLocationType = innerScanner.nextInt();
+
+            int currentParentStation;
+            if (innerScanner.hasNextInt()) { // If parent_station isn't empty, get its value
+                currentParentStation = innerScanner.nextInt();
+            } else {
+                currentParentStation = -1; // Otherwise, use -1 and move on
+                innerScanner.next();
+            }
+
+            int currentWheelchairBoarding = innerScanner.nextInt();
+            stops.add(new Stop(currentStopId, currentStopCode, currentStopName, currentStopDesc, currentStopLat, currentStopLon, currentLocationType, currentParentStation, currentWheelchairBoarding));
         }
-        textView.setText(stops.get(0).getStopName() + " " + stops.get(0).getStopCode());
-        textView2.setText(stops.get(1).getStopName() + " " + stops.get(1).getStopCode());
+        textView.setText(stops.get(0).getStopName() + " " + stops.get(0).getStopLat());
+        textView2.setText(stops.get(1).getStopName() + " " + stops.get(1).getStopLat());
     }
 }

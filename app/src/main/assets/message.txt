@@ -3,3 +3,7 @@ stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_sta
 2,2,"5900 W Jackson","5900 W Jackson, Eastbound, Southside of the Street",41.87706679,-87.77131794,0,,1
 3,3,"Jackson & Menard","Jackson & Menard, Eastbound, Southside of the Street",41.87695725,-87.76975039,0,,1
 4,4,"5700 W Jackson","5700 W Jackson, Eastbound, Southside of the Street",41.87702418,-87.76745055,0,,1
+13148,13148,"Ridge & Hull Terrace","",42.02459156,-87.6852933,0,,1
+13149,13149,"Ridge & Hull Terrace","",42.02447143,-87.68504199,0,,1
+13198,13198,"Ontario & Wabash","Ontario & Wabash, Westbound, Northeast Corner",41.89329558,-87.62664133,0,,1
+14001,14001,"95th Red Line Station","95th Red Line Station, Eastbound, Bus Terminal",41.72273793,-87.62412249,0,40450,1
