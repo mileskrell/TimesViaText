@@ -1,9 +1,140 @@
 stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,location_type,parent_station,wheelchair_boarding
-1,1,"Jackson & Austin Terminal","Jackson & Austin Terminal, Northeastbound, Bus Terminal",41.87632184,-87.77410482,0,,1
-2,2,"5900 W Jackson","5900 W Jackson, Eastbound, Southside of the Street",41.87706679,-87.77131794,0,,1
-3,3,"Jackson & Menard","Jackson & Menard, Eastbound, Southside of the Street",41.87695725,-87.76975039,0,,1
-4,4,"5700 W Jackson","5700 W Jackson, Eastbound, Southside of the Street",41.87702418,-87.76745055,0,,1
-13148,13148,"Ridge & Hull Terrace","",42.02459156,-87.6852933,0,,1
-13149,13149,"Ridge & Hull Terrace","",42.02447143,-87.68504199,0,,1
-13198,13198,"Ontario & Wabash","Ontario & Wabash, Westbound, Northeast Corner",41.89329558,-87.62664133,0,,1
-14001,14001,"95th Red Line Station","95th Red Line Station, Eastbound, Bus Terminal",41.72273793,-87.62412249,0,40450,1
+12462,12462,"Addison & Cumberland Terminal","Addison & Cumberland Terminal, Northbound, Bus Terminal",41.94443813,-87.83549313,0,,1
+12464,12464,"Addison & Pittsburgh","Addison & Pittsburgh, Eastbound, Southwest Corner",41.944807,-87.832846,0,,1
+12466,12466,"Addison & Paris","Addison & Paris, Eastbound, Southwest Corner",41.944873,-87.830403,0,,1
+12469,12469,"Addison & Forest Preserve Avenue","Addison & Forest Preserve Avenue, Eastbound, Southwest Corner",41.9450165,-87.8256147,0,,1
+12470,12470,"Addison & Orange","Addison & Orange, Eastbound, Southwest Corner",41.945053,-87.824261,0,,1
+12471,12471,"Addison & Ozanam","Addison & Ozanam, Eastbound, Southwest Corner",41.945121,-87.821795,0,,1
+12472,12472,"Addison & Overhill","Addison & Overhill, Eastbound, Southwest Corner",41.945169,-87.819706,0,,1
+12473,12473,"Addison & Oriole","Addison & Oriole, Eastbound, Southwest Corner",41.945122,-87.816876,0,,1
+12474,12474,"Addison & Olcott","Addison & Olcott, Eastbound, Southwest Corner",41.945061,-87.814441,0,,1
+12475,12475,"Addison & Oketo","Addison & Oketo, Eastbound, Southwest Corner",41.945107,-87.811931,0,,1
+12476,12476,"Addison & Octavia","Addison & Octavia, Eastbound, Southwest Corner",41.945151,-87.809525,0,,1
+12479,12479,"Addison & Nordica","Addison & Nordica, Eastbound, Southwest Corner",41.945273,-87.803444,0,,1
+12480,12480,"Addison & Sayre","Addison & Sayre, Eastbound, Southside of the Street",41.945321,-87.800767,0,,1
+12481,12481,"Addison & New England","Addison & New England, Eastbound, Southwest Corner",41.94537,-87.798541,0,,1
+12483,12483,"Addison & Normandy","Addison & Normandy, Eastbound, Southwest Corner",41.94543957,-87.79363422,0,,1
+12485,12485,"Addison & Neenah","Addison & Neenah, Eastbound, Southwest Corner",41.945535,-87.79009,0,,1
+12488,12488,"Addison & Mobile","Addison & Mobile, Eastbound, Southwest Corner",41.945634,-87.783909,0,,1
+12489,12489,"Addison & Melvina","Addison & Melvina, Eastbound, Southwest Corner",41.94566,-87.781482,0,,1
+12490,12490,"Addison & Meade","Addison & Meade, Eastbound, Southwest Corner",41.945686,-87.779045,0,,1
+12491,12491,"Addison & Austin","Addison & Austin, Eastbound, Southeast Corner",41.94571,-87.776253,0,,1
+12492,12492,"Addison & Marmora","Addison & Marmora, Eastbound, Southwest Corner",41.945738,-87.77418,0,,1
+12493,12493,"Addison & Menard","Addison & Menard, Eastbound, Southwest Corner",41.94577284,-87.77167961,0,,1
+12494,12494,"Addison & Major","Addison & Major, Eastbound, Southwest Corner",41.94576518,-87.76930621,0,,1
+12496,12496,"Addison & Linder","Addison & Linder, Eastbound, Southwest Corner",41.94582218,-87.76440121,0,,1
+12497,12497,"Addison & Long","Addison & Long, Eastbound, Southwest Corner",41.94585318,-87.76194821,0,,1
+12498,12498,"Addison & Lockwood","Addison & Lockwood, Eastbound, Southwest Corner",41.94593383,-87.75942346,0,,1
+12499,12499,"Addison & Laramie","Addison & Laramie, Eastbound, Southwest Corner",41.94590359,-87.7570356,0,,1
+12500,12500,"Addison & Leclaire","Addison & Leclaire, Eastbound, Southside of the Street",41.94599482,-87.75442046,0,,1
+12501,12501,"Addison & Lavergne","Addison & Lavergne, Eastbound, Southwest Corner",41.94602582,-87.75206046,0,,1
+12502,12502,"Addison & Lamon","Addison & Lamon, Eastbound, Southside of the Street",41.94602164,-87.74973813,0,,1
+12504,12504,"Addison & Kilpatrick","Addison & Kilpatrick, Eastbound, Southwest Corner",41.94609917,-87.74409295,0,,1
+12505,12505,"Addison & Kenton","Addison & Kenton, Eastbound, Southeast Corner",41.94613066,-87.74183914,0,,1
+12507,12507,"Addison & Kostner","Addison & Kostner, Eastbound, Southwest Corner",41.94618879,-87.73730274,0,,1
+12508,12508,"Addison & Milwaukee","Addison & Milwaukee, Eastbound, Southeast Corner",41.94621021,-87.73501993,0,,1
+12509,12509,"Addison & Keeler","Addison & Keeler, Eastbound, Southwest Corner",41.9462376,-87.73229411,0,,1
+12510,12510,"Addison & Karlov","Addison & Karlov, Eastbound, Southwest Corner",41.94629113,-87.72931198,0,,1
+12512,12512,"Addison & Springfield","Addison & Springfield, Eastbound, Southwest Corner",41.9463223,-87.72507899,0,,1
+12513,12513,"Addison & Hamlin","Addison & Hamlin, Eastbound, Southwest Corner",41.9463543,-87.72263599,0,,1
+12514,12514,"Addison & Lawndale/Avondale","Addison & Lawndale/Avondale, Eastbound, Southwest Corner",41.94641121,-87.72014702,0,,1
+12515,12515,"Addison Blue Line Station","Addison Blue Line Station, Eastbound, Southwest Corner",41.9464173,-87.717525,0,,1
+12516,12516,"Addison & St. Louis","Addison & St. Louis, Eastbound, Southside of the Street",41.94646099,-87.71526047,0,,1
+12518,12518,"Addison & Elston","Addison & Elston, Eastbound, Southwest Corner",41.946558,-87.708933,0,,1
+12519,12519,"Addison & Kedzie","Addison & Kedzie, Eastbound, Southeast Corner",41.94656864,-87.70758353,0,,1
+12520,12520,"Addison & Albany","Addison & Albany, Eastbound, Southwest Corner",41.94658833,-87.70547852,0,,1
+12521,12521,"Addison & Sacramento","Addison & Sacramento, Eastbound, Southwest Corner",41.94659714,-87.70302458,0,,1
+12522,12522,"Addison & Francisco","Addison & Francisco, Eastbound, Southside of the Street",41.94659314,-87.70054336,0,,1
+12523,12523,"Addison & California","Addison & California, Eastbound, Southwest Corner",41.946624,-87.698134,0,,1
+12524,12524,"Addison & Rockwell","Addison & Rockwell, Eastbound, Southwest Corner",41.946644,-87.694245,0,,1
+12525,12525,"Addison & Campbell (Lane Tech HS)","Addison & Campbell (Lane Tech HS), Eastbound, Southeast Corner",41.94667222,-87.69050761,0,,1
+12526,12526,"Addison & Artesian","Addison & Artesian, Eastbound, Southside of the Street",41.94667708,-87.68959679,0,,1
+12527,12527,"Addison & Western","Addison & Western, Eastbound, Southwest Corner",41.9466599,-87.68847434,0,,1
+12528,12528,"Addison & Oakley","Addison & Oakley, Eastbound, Southwest Corner",41.94671243,-87.6859281,0,,1
+12529,12529,"Addison & Leavitt","Addison & Leavitt, Eastbound, Southwest Corner",41.94674604,-87.68349379,0,,1
+12530,12530,"Addison & Hoyne","Addison & Hoyne, Eastbound, Southwest Corner",41.94676416,-87.68105904,0,,1
+12531,12531,"Addison & Damen","Addison & Damen, Eastbound, Southwest Corner",41.94679958,-87.6786764,0,,1
+12532,12532,"Addison & Wolcott","Addison & Wolcott, Eastbound, Southwest Corner",41.94683298,-87.67622282,0,,1
+12533,12533,"Addison Brown Line Station","Addison Brown Line Station, Eastbound, Southside of the Street",41.9468416,-87.67464775,0,,1
+12534,12534,"Addison & Lincoln","Addison & Lincoln, Eastbound, Southeast Corner",41.94685453,-87.67338938,0,,1
+12535,12535,"Addison & Paulina","Addison & Paulina, Eastbound, Southwest Corner",41.9468959,-87.671393,0,,1
+12536,12536,"Addison & Ashland","Addison & Ashland, Eastbound, Southwest Corner",41.94691775,-87.6690407,0,,1
+12537,12537,"Addison & Greenview","Addison & Greenview, Eastbound, Southwest Corner",41.946974,-87.666547,0,,1
+12538,12538,"Addison & Southport","Addison & Southport, Eastbound, Southwest Corner",41.947014,-87.664134,0,,1
+12539,12539,"Addison & Lakewood","Addison & Lakewood, Eastbound, Southwest Corner",41.947055,-87.661709,0,,1
+12541,12541,"Addison & Clark","Addison & Clark, Eastbound, Southeast Corner",41.94714718,-87.65618186,0,,1
+12543,12543,"Addison Red Line Station","Addison Red Line Station, Eastbound, Southside of the Street",41.94719704,-87.65363481,0,,1
+12546,12546,"Addison & Broadway","Addison & Broadway, Eastbound, Southwest Corner",41.94725576,-87.647371,0,,1
+12547,12547,"Addison & Pine Grove","Addison & Pine Grove, Eastbound, Southwest Corner",41.94784445,-87.6455957,0,,1
+12548,12548,"Addison & Lake Shore","Addison & Lake Shore, Eastbound, Southwest Corner",41.94853216,-87.64355208,0,,1
+12549,12549,"Addison & Lake Shore","Addison & Lake Shore, Westbound, Northwest Corner",41.94860888,-87.64376299,0,,1
+12550,12550,"Addison & Pine Grove","Addison & Pine Grove, Westbound, Northeast Corner",41.94799725,-87.6454874,0,,1
+12551,12551,"Addison & Broadway","Addison & Broadway, Westbound, Northeast Corner",41.94745346,-87.64716741,0,,1
+12552,12552,"Addison & Halsted","Addison & Halsted, Westbound, Northeast Corner",41.94737081,-87.64931745,0,,1
+12553,12553,"Addison & Fremont","Addison & Fremont, Westbound, Northeast Corner",41.94734962,-87.65179573,0,,1
+12554,12554,"Addison Red Line Station","Addison Red Line Station, Westbound, Northside of the Street",41.94729888,-87.65361096,0,,1
+12555,12555,"Addison & Clark","Addison & Clark, Westbound, Northeast Corner",41.94727653,-87.65640515,0,,1
+12556,12556,"Addison & Racine","Addison & Racine, Westbound, Northeast Corner",41.94721081,-87.65903679,0,,1
+12557,12557,"Addison & Lakewood","Addison & Lakewood, Westbound, Northeast Corner",41.94716956,-87.66150477,0,,1
+12558,12558,"Addison & Southport","Addison & Southport, Westbound, Northeast Corner",41.94712923,-87.66388352,0,,1
+12559,12559,"Addison & Greenview","Addison & Greenview, Westbound, Northeast Corner",41.9470931,-87.66633777,0,,1
+12560,12560,"Addison & Ashland","Addison & Ashland, Westbound, Northeast Corner",41.94706603,-87.66867322,0,,1
+12561,12561,"Addison & Paulina","Addison & Paulina, Westbound, Northeast Corner",41.94702236,-87.67120375,0,,1
+12562,12562,"Addison & Lincoln","Addison & Lincoln, Westbound, Northeast Corner",41.94700475,-87.67349668,0,,1
+12563,12563,"Addison Brown Line Station","Addison Brown Line Station, Westbound, Northside of the Street",41.94695777,-87.67466746,0,,1
+12564,12564,"Addison & Wolcott","Addison & Wolcott, Westbound, Northeast Corner",41.9469329,-87.67598661,0,,1
+12565,12565,"Addison & Damen","Addison & Damen, Westbound, Northeast Corner",41.94692921,-87.67836701,0,,1
+12566,12566,"Addison & Hoyne","Addison & Hoyne, Westbound, Northeast Corner",41.94686846,-87.68085903,0,,1
+12567,12567,"Addison & Leavitt","Addison & Leavitt, Westbound, Northeast Corner",41.94686719,-87.68334031,0,,1
+12568,12568,"Addison & Oakley","Addison & Oakley, Westbound, Northeast Corner",41.94681107,-87.68570343,0,,1
+12569,12569,"Addison & Western","Addison & Western, Westbound, Northeast Corner",41.94679975,-87.68802662,0,,1
+12571,12571,"Addison & Campbell","Addison & Campbell, Westbound, Northside of the Street",41.94678437,-87.69101309,0,,1
+12573,12573,"Addison & Talman","Addison & Talman, Westbound, Northeast Corner",41.946764,-87.69479282,0,,1
+12574,12574,"Addison & California","Addison & California, Westbound, Northeast Corner",41.94674469,-87.69785558,0,,1
+12575,12575,"Addison & Francisco","Addison & Francisco, Westbound, Northeast Corner",41.94672904,-87.70038986,0,,1
+12576,12576,"Addison & Sacramento","Addison & Sacramento, Westbound, Northeast Corner",41.94671522,-87.70282937,0,,1
+12577,12577,"Addison & Albany","Addison & Albany, Westbound, Northeast Corner",41.94669488,-87.70520192,0,,1
+12578,12578,"Addison & Kedzie","Addison & Kedzie, Westbound, Northeast Corner",41.94669988,-87.70769128,0,,1
+12579,12579,"Addison & Elston","Addison & Elston, Westbound, Northwest Corner",41.94666952,-87.70908637,0,,1
+12581,12581,"Addison & St. Louis","Addison & St. Louis, Westbound, Northeast Corner",41.9465937,-87.71506138,0,,1
+12582,12582,"Addison Blue Line Station","Addison Blue Line Station, Westbound, Northside of the Street",41.9465882,-87.71841032,0,,1
+12583,12583,"Addison & Lawndale/Avondale","Addison & Lawndale/Avondale, Westbound, Northwest Corner",41.94652374,-87.72037696,0,,1
+12584,12584,"Addison & Hamlin","Addison & Hamlin, Westbound, Northeast Corner",41.94651977,-87.72232738,0,,1
+12585,12585,"Addison & Springfield","Addison & Springfield, Westbound, Northeast Corner",41.94646708,-87.72482792,0,,1
+12586,12586,"Addison & Pulaski","Addison & Pulaski, Westbound, Northeast Corner",41.94643977,-87.72726222,0,,1
+12587,12587,"Addison & Karlov","Addison & Karlov, Westbound, Northside of the Street",41.94640131,-87.72906837,0,,1
+12589,12589,"Addison & Keeler","Addison & Keeler, Westbound, Northeast Corner",41.94637704,-87.73214334,0,,1
+12590,12590,"Addison & Milwaukee","Addison & Milwaukee, Westbound, Northeast Corner",41.94630338,-87.73546129,0,,1
+12591,12591,"Addison & Kostner","Addison & Kostner, Westbound, Northside of the Street",41.9463062,-87.7371856,0,,1
+12592,12592,"Addison & Kilbourn","Addison & Kilbourn, Westbound, Northeast Corner",41.94627847,-87.73925469,0,,1
+12593,12593,"Addison & Kenton","Addison & Kenton, Westbound, Northside of the Street",41.94624875,-87.74199119,0,,1
+12594,12594,"Addison & Kilpatrick","Addison & Kilpatrick, Westbound, Northeast Corner",41.94623548,-87.74441595,0,,1
+12596,12596,"Addison & Lamon","Addison & Lamon, Westbound, Northeast Corner",41.94616812,-87.74941411,0,,1
+12597,12597,"Addison & Lavergne","Addison & Lavergne, Westbound, Northeast Corner",41.94611879,-87.75185225,0,,1
+12598,12598,"Addison & Leclaire","Addison & Leclaire, Westbound, Northeast Corner",41.94612064,-87.7543376,0,,1
+12599,12599,"Addison & Laramie","Addison & Laramie, Westbound, Northeast Corner",41.9460168,-87.75675319,0,,1
+12600,12600,"Addison & Lockwood","Addison & Lockwood, Westbound, Northeast Corner",41.94605279,-87.75925189,0,,1
+12602,12602,"Addison & Linder","Addison & Linder, Westbound, Northeast Corner",41.94593366,-87.76422928,0,,1
+12604,12604,"Addison & Major","Addison & Major, Westbound, Northeast Corner",41.94588564,-87.76903084,0,,1
+12605,12605,"Addison & Menard","Addison & Menard, Westbound, Northeast Corner",41.94589257,-87.7715173,0,,1
+12606,12606,"Addison & Marmora","Addison & Marmora, Westbound, Northeast Corner",41.94581642,-87.77398492,0,,1
+12608,12608,"Addison & Meade","Addison & Meade, Westbound, Northeast Corner",41.94585259,-87.77883028,0,,1
+12609,12609,"Addison & Melvina","Addison & Melvina, Westbound, Northeast Corner",41.94575459,-87.78122829,0,,1
+12610,12610,"Addison & Mobile","Addison & Mobile, Westbound, Northeast Corner",41.94575258,-87.7837273,0,,1
+12613,12613,"Addison & Neenah","Addison & Neenah, Westbound, Northside of the Street",41.94566022,-87.78995225,0,,1
+12615,12615,"Addison & Normandy","Addison & Normandy, Westbound, Northside of the Street",41.94557786,-87.79342378,0,,1
+12616,12616,"Addison & Oak Park","Addison & Oak Park, Westbound, Northeast Corner",41.94551493,-87.7958919,0,,1
+12617,12617,"Addison & New England","Addison & New England, Westbound, Northeast Corner",41.94548491,-87.79829233,0,,1
+12618,12618,"Addison & Sayre","Addison & Sayre, Westbound, Northeast Corner",41.94545023,-87.80066192,0,,1
+12619,12619,"Addison & Nordica","Addison & Nordica, Westbound, Northeast Corner",41.94540153,-87.8032298,0,,1
+12622,12622,"Addison & Octavia","Addison & Octavia, Westbound, Northeast Corner",41.94524859,-87.80932334,0,,1
+12623,12623,"Addison & Oketo","Addison & Oketo, Westbound, Northeast Corner",41.9452661,-87.81173804,0,,1
+12624,12624,"Addison & Olcott","Addison & Olcott, Westbound, Northeast Corner",41.94521888,-87.8141921,0,,1
+12625,12625,"Addison & Oriole","Addison & Oriole, Westbound, Northeast Corner",41.94523245,-87.81666859,0,,1
+12626,12626,"Addison & Overhill","Addison & Overhill, Westbound, Northeast Corner",41.94528658,-87.81946735,0,,1
+12627,12627,"Addison & Ozanam","Addison & Ozanam, Westbound, Northeast Corner",41.94518556,-87.82165195,0,,1
+12628,12628,"Addison & Forest Preserve Avenue","Addison & Forest Preserve Avenue, Westbound, Northeast Corner",41.94511567,-87.82511976,0,,1
+12629,12629,"Addison & Page","Addison & Page, Westbound, Northeast Corner",41.94506984,-87.82764332,0,,1
+12631,12631,"Addison & Paris","Addison & Paris, Westbound, Northeast Corner",41.94503207,-87.83023936,0,,1
+12633,12633,"Addison & Pittsburgh","Addison & Pittsburgh, Westbound, Northeast Corner",41.94496676,-87.8326718,0,,1
+12635,12635,"Addison & Pontiac","Addison & Pontiac, Westbound, Northeast Corner",41.94485096,-87.83511447,0,,1
