@@ -36,7 +36,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Scanner outerScanner = null;
         try {
-            outerScanner = new Scanner(assetManager.open("message.txt"));
+            outerScanner = new Scanner(assetManager.open("messages.txt"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -69,6 +69,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
 
             int currentWheelchairBoarding = innerScanner.nextInt();
+            Log.d("Debug", "Adding new stop: " + String.valueOf(currentStopId));
             stops.add(new Stop(currentStopId, currentStopCode, currentStopName, currentStopDesc, currentStopLat, currentStopLon, currentLocationType, currentParentStation, currentWheelchairBoarding));
         }
     }
