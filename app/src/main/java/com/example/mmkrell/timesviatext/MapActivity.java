@@ -21,7 +21,7 @@ import java.util.Scanner;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ArrayList<Stop> stops; // TODO: 12/20/16  This uses a huge amount of RAM. Learn how to use databases (or maybe just use arrays or something)
+    ArrayList<Stop> stops;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         Scanner outerScanner = null;
         try {
-            outerScanner = new Scanner(assetManager.open("messages.txt"));
+            outerScanner = new Scanner(assetManager.open("message.txt"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,8 +78,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         for (Stop stop : stops) {
             LatLng currentStop = new LatLng(stop.getStopLat(), stop.getStopLon());
+            Log.d("Debug", "Adding new marker: " + String.valueOf(currentStop));
             googleMap.addMarker(new MarkerOptions().position(currentStop).title(String.valueOf(stop.getStopCode())));
         }
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(stops.get(0).getStopLat(), stops.get(0).getStopLon())));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
     }
 }
