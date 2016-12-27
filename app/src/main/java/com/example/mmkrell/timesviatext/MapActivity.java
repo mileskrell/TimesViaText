@@ -1,11 +1,17 @@
 package com.example.mmkrell.timesviatext;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,13 +21,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    ArrayList<Stop> stops;
+    //int[] stopId;
+    int[] stopCode;
+    String[] stopName;
+    //String[] stopDesc;
+    double[] stopLat;
+    double[] stopLon;
+    //int[] locationType;
+    //int[] parentStation;
+    //int[] wheelchairBoarding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,60 +42,77 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         supportMapFragment.getMapAsync(this);
-
-        stops = new ArrayList<Stop>();
-
-        AssetManager assetManager = getApplicationContext().getAssets();
-
-        Scanner outerScanner = null;
-        try {
-            outerScanner = new Scanner(assetManager.open("message.txt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        outerScanner.nextLine(); // Skip the first line; it's just the legend
-        while (outerScanner.hasNextLine()) {
-            Scanner innerScanner = new Scanner(outerScanner.nextLine()).useDelimiter(",");
-            int currentStopId = innerScanner.nextInt();
-            int currentStopCode = innerScanner.nextInt();
-            String currentStopName = innerScanner.next();
-
-            String currentStopDesc;
-            String currentToken = innerScanner.next();
-            if (currentToken.equals("\"\"")) { // If stop_desc is "empty" (it has 2 sets of quotes), just move on
-                currentStopDesc = "";
-            } else {
-                currentStopDesc = currentToken + "," + innerScanner.next() + "," + innerScanner.next(); // Otherwise, use it and the following 2 tokens for the description
-            }
-
-            double currentStopLat = innerScanner.nextDouble();
-            double currentStopLon = innerScanner.nextDouble();
-            int currentLocationType = innerScanner.nextInt();
-
-            int currentParentStation;
-            if (innerScanner.hasNextInt()) { // If parent_station isn't empty, get its value
-                currentParentStation = innerScanner.nextInt();
-            } else {
-                currentParentStation = -1; // Otherwise, use -1 and move on
-                innerScanner.next();
-            }
-
-            int currentWheelchairBoarding = innerScanner.nextInt();
-            Log.d("Debug", "Adding new stop: " + String.valueOf(currentStopId));
-            stops.add(new Stop(currentStopId, currentStopCode, currentStopName, currentStopDesc, currentStopLat, currentStopLon, currentLocationType, currentParentStation, currentWheelchairBoarding));
-        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        for (Stop stop : stops) {
-            LatLng currentStop = new LatLng(stop.getStopLat(), stop.getStopLon());
-            Log.d("Debug", "Adding new marker: " + String.valueOf(currentStop));
-            googleMap.addMarker(new MarkerOptions().position(currentStop).title(String.valueOf(stop.getStopCode())));
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            finish();
+
+        googleMap.setMyLocationEnabled(true);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.945477, -87.690778)));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(20));
+
+        Scanner numberOfStopsScanner;
+        //Scanner stopIdScanner = null;
+        Scanner stopCodeScanner = null;
+        Scanner stopNameScanner = null;
+        //Scanner stopDescScanner = null;
+        Scanner stopLatScanner = null;
+        Scanner stopLonScanner = null;
+        //Scanner locationTypeScanner = null;
+        //Scanner parentStationScanner = null;
+        //Scanner wheelchairBoardingScanner = null;
+        int numberOfStops = 0;
+
+        AssetManager assetManager = getApplicationContext().getAssets();
+
+        try {
+            numberOfStopsScanner = new Scanner(assetManager.open("stop_code_list.txt")).useDelimiter(", ");
+            numberOfStops = new StringTokenizer(numberOfStopsScanner.nextLine()).countTokens();
+
+            //stopIdScanner = new Scanner(assetManager.open("stop_id_list.txt")).useDelimiter(", ");
+            stopCodeScanner = new Scanner(assetManager.open("stop_code_list.txt")).useDelimiter(", ");
+            stopNameScanner = new Scanner(assetManager.open("stop_name_list.txt")).useDelimiter(", ");
+            //stopDescScanner = new Scanner(assetManager.open("stop_desc_list.txt")).useDelimiter(", ");
+            stopLatScanner = new Scanner(assetManager.open("stop_lat_list.txt")).useDelimiter(", ");
+            stopLonScanner = new Scanner(assetManager.open("stop_lon_list.txt")).useDelimiter(", ");
+            //locationTypeScanner = new Scanner(assetManager.open("location_type_list.txt")).useDelimiter(", ");
+            //parentStationScanner = new Scanner(assetManager.open("parent_station_list.txt")).useDelimiter(", ");
+            //wheelchairBoardingScanner = new Scanner(assetManager.open("wheelchair_boarding_list.txt")).useDelimiter(", ");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(stops.get(0).getStopLat(), stops.get(0).getStopLon())));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+        //stopId = new int[numberOfStops];
+        stopCode = new int[numberOfStops];
+        stopName = new String[numberOfStops];
+        //stopDesc = new String[numberOfStops];
+        stopLat = new double[numberOfStops];
+        stopLon = new double[numberOfStops];
+        //locationType = new int[numberOfStops];
+        //parentStation = new int[numberOfStops];
+        //wheelchairBoarding = new int[numberOfStops];
+
+        int i = 0;
+        while (i < numberOfStops) {
+            //stopId[i] = stopIdScanner.nextInt();
+            stopCode[i] = stopCodeScanner.nextInt();
+            stopName[i] = stopNameScanner.next();
+            //stopDesc[i] = stopDescScanner.next() + ", " + stopDescScanner.next() + ", " + stopDescScanner.next(); // The stop description has three parts
+            stopLat[i] = stopLatScanner.nextDouble();
+            stopLon[i] = stopLonScanner.nextDouble();
+            //locationType[i] = locationTypeScanner.nextInt();
+            //parentStation[i] = parentStationScanner.nextInt();
+            //wheelchairBoarding[i] = wheelchairBoardingScanner.nextInt();
+            i++;
+        }
+
+        for (i = 0; i < stopCode.length; i ++) {
+            LatLng currentStop = new LatLng(stopLat[i], stopLon[i]);
+            googleMap.addMarker(new MarkerOptions().position(currentStop).title(stopName[i]).snippet(String.valueOf(stopCode[i])));
+        }
     }
 }
