@@ -53,7 +53,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.setMyLocationEnabled(true);
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.945477, -87.690778)));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(20));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
 
         Scanner numberOfStopsScanner;
         //Scanner stopIdScanner = null;
