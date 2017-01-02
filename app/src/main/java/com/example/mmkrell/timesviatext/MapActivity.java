@@ -1,24 +1,32 @@
 package com.example.mmkrell.timesviatext;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+import org.osmdroid.api.IGeoPoint;
+import org.osmdroid.api.IMapController;
+import org.osmdroid.config.Configuration;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.compass.CompassOverlay;
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint;
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay;
+import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions;
+import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme;
+
+public class MapActivity extends AppCompatActivity {
 
     //int[] stopId;
     int[] stopCode;
@@ -34,20 +42,33 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        supportMapFragment.getMapAsync(this);
-    }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+        MapView mapView = (MapView) findViewById(R.id.mapView);
+        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        mapView.setMultiTouchControls(true);
+        mapView.setMaxZoomLevel(20);
+        mapView.setMinZoomLevel(12);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            finish();
+        BoundingBox boundingBox = new BoundingBox(42.06470019, -87.52569948, 41.6441576, -87.884297);
+        mapView.setScrollableAreaLimitDouble(boundingBox);
 
-        googleMap.setMyLocationEnabled(true);
+        IMapController iMapController = mapView.getController();
+        iMapController.setZoom(18);
+        GeoPoint startingPoint = new GeoPoint(41.945477, -87.690778);
+        iMapController.setCenter(startingPoint);
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(41.945477, -87.690778)));
-        googleMap.moveCamera(CameraUpdateFactory.zoomTo(18));
+        CompassOverlay compassOverlay = new CompassOverlay(MapActivity.this, new InternalCompassOrientationProvider(getApplicationContext()), mapView);
+        compassOverlay.enableCompass();
+        mapView.getOverlays().add(compassOverlay);
+
+        //RotationGestureOverlay rotationGestureOverlay = new RotationGestureOverlay(mapView);
+        //rotationGestureOverlay.setEnabled(true);
+        //mapView.getOverlays().add(rotationGestureOverlay);
+
+        MyLocationNewOverlay myLocationNewOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
+        myLocationNewOverlay.enableMyLocation();
+        mapView.getOverlays().add(myLocationNewOverlay);
 
         Scanner numberOfStopsScanner;
         //Scanner stopIdScanner = null;
@@ -101,12 +122,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             //locationType[i] = locationTypeScanner.nextInt();
             //parentStation[i] = parentStationScanner.nextInt();
             //wheelchairBoarding[i] = wheelchairBoardingScanner.nextInt();
-            i++;
+            i ++;
         }
 
-        for (i = 0; i < stopCode.length; i ++) {
-            LatLng currentStop = new LatLng(stopLat[i], stopLon[i]);
-            googleMap.addMarker(new MarkerOptions().position(currentStop).title(stopName[i]).snippet(String.valueOf(stopCode[i])));
+        ArrayList<IGeoPoint> points = new ArrayList<IGeoPoint>();
+        for (i = 0; i < numberOfStops; i ++) {
+            points.add(new LabelledGeoPoint(stopLat[i], stopLon[i], stopName[i]));
         }
+
+        SimpleFastPointOverlay simpleFastPointOverlay = new SimpleFastPointOverlay(new SimplePointTheme(points, true), new SimpleFastPointOverlayOptions().setSymbol(SimpleFastPointOverlayOptions.Shape.SQUARE));
+        simpleFastPointOverlay.setOnClickListener(new SimpleFastPointOverlay.OnClickListener() {
+            @Override
+            public void onClick(SimpleFastPointOverlay.PointAdapter points, Integer point) {
+
+            }
+        });
+        simpleFastPointOverlay.setEnabled(true);
+        mapView.getOverlays().add(simpleFastPointOverlay);
     }
 }
