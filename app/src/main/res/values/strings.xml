@@ -2,7 +2,9 @@
     <string name="app_name">Times via Text (for CTA riders)</string>
 
     <string name="welcome_message">Thanks for downloading this app!</string>
-    <string name="goToMap">Click here to open the map</string>
+    <string name="open_map">Click here to open the map</string>
 
     <string name="update_maps">Download the latest map tiles</string>
+
+    <string name="go_to_my_location">Go to my location</string>
 </resources>
