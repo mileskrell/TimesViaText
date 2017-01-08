@@ -3,11 +3,11 @@ package com.example.mmkrell.timesviatext;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,14 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.StringTokenizer;
 
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -34,25 +28,10 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
-import org.osmdroid.views.overlay.gestures.RotationGestureOverlay;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-import org.osmdroid.views.overlay.simplefastpoint.LabelledGeoPoint;
-import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlay;
-import org.osmdroid.views.overlay.simplefastpoint.SimpleFastPointOverlayOptions;
-import org.osmdroid.views.overlay.simplefastpoint.SimplePointTheme;
 
 public class MapActivity extends AppCompatActivity implements LocationListener {
-
-    //int[] stopId;
-    String[] stopCode;
-    String[] stopName;
-    //String[] stopDesc;
-    String[] stopLat;
-    String[] stopLon;
-    //int[] locationType;
-    //int[] parentStation;
-    //int[] wheelchairBoarding;
 
     MapView mapView;
 
@@ -61,13 +40,18 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     CompassOverlay compassOverlay;
     MyLocationNewOverlay myLocationOverlay;
 
-    ImageButton buttonGoToMyLocation;
+    ImageButton buttonMyLocation;
+    ImageButton buttonFollowMe;
+
+    boolean firstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        buttonGoToMyLocation = (ImageButton) findViewById(R.id.buttonGoToMyLocation);
+        buttonMyLocation = (ImageButton) findViewById(R.id.buttonMyLocation);
+        buttonFollowMe = (ImageButton) findViewById(R.id.buttonFollowMe);
+        buttonFollowMe.setTag("disabled");
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) findViewById(R.id.mapView);
@@ -80,7 +64,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         BoundingBox boundingBox = new BoundingBox(42.06470019, -87.52569948, 41.6441576, -87.884297);
         mapView.setScrollableAreaLimitDouble(boundingBox);
 
-        IMapController iMapController = mapView.getController();
+        final IMapController iMapController = mapView.getController();
         iMapController.setZoom(18);
         GeoPoint startingPoint = new GeoPoint(41.945477, -87.690778);
         iMapController.setCenter(startingPoint);
@@ -89,72 +73,68 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         mapView.getOverlays().add(compassOverlay);
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
+        myLocationOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocationOverlay);
+        if (currentLocation != null)
+            mapView.getController().animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
-        buttonGoToMyLocation.setOnClickListener(new View.OnClickListener() {
+        buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentLocation != null)
-                    mapView.getController().animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                Log.d("Button Press", "Clicked myLocation button");
+                System.out.println("followMe state is " + String.valueOf(myLocationOverlay.isFollowLocationEnabled()));
+                //System.out.println("North Latitude: " + mapView.getBoundingBox().getLatNorth());
+                //System.out.println("East Longitude: " + mapView.getBoundingBox().getLonEast());
+                //System.out.println("South Latitude: " + mapView.getBoundingBox().getLatSouth());
+                //System.out.println("West Longitude: " + mapView.getBoundingBox().getLonWest());
+                if (currentLocation != null) {
+                    iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                }
             }
         });
 
-        Log.d("Progress", "Finished initial map stuff");
+        buttonFollowMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (myLocationOverlay.isFollowLocationEnabled()) {
+                    myLocationOverlay.disableFollowLocation();
+                    buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
+                } else {
+                    myLocationOverlay.enableFollowLocation();
+                    buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
+                }
+            }
+        });
 
-        Scanner numberOfStopsScanner;
-        //Scanner stopIdScanner = null;
-        BufferedReader stopCodeBufferedReader = null;
-        BufferedReader stopNameBufferedReader = null;
-        //Scanner stopDescScanner = null;
-        BufferedReader stopLatBufferedReader = null;
-        BufferedReader stopLonBufferedReader = null;
-        //Scanner locationTypeScanner = null;
-        //Scanner parentStationScanner = null;
-        //Scanner wheelchairBoardingScanner = null;
-        int numberOfStops = 0;
+        //double north = mapView.getBoundingBox().getLatNorth();
+        //double east = mapView.getBoundingBox().getLonEast();
+        //double south = mapView.getBoundingBox().getLatSouth();
+        //double west = mapView.getBoundingBox().getLonWest();
 
-        AssetManager assetManager = getApplicationContext().getAssets();
+        SQLiteDatabase database = new GTFSHelper(MapActivity.this).getReadableDatabase();
 
-        try {
-            numberOfStopsScanner = new Scanner(assetManager.open("stop_code_list.txt")).useDelimiter(", ");
-            numberOfStops = new StringTokenizer(numberOfStopsScanner.nextLine()).countTokens();
+        String[] projection = {
+                "stop_code",
+                "stop_name",
+                "stop_lat",
+                "stop_lon"
+        };
 
-            //stopIdScanner = new Scanner(assetManager.open("stop_id_list.txt")).useDelimiter(", ");
-            stopCodeBufferedReader = new BufferedReader(new InputStreamReader(assetManager.open("stop_code_list.txt")));
-            stopNameBufferedReader = new BufferedReader(new InputStreamReader(assetManager.open("stop_name_list.txt")));
-            //stopDescScanner = new Scanner(assetManager.open("stop_desc_list.txt")).useDelimiter(", ");
-            stopLatBufferedReader = new BufferedReader(new InputStreamReader(assetManager.open("stop_lat_list.txt")));
-            stopLonBufferedReader = new BufferedReader(new InputStreamReader(assetManager.open("stop_lon_list.txt")));
-            //locationTypeScanner = new Scanner(assetManager.open("location_type_list.txt")).useDelimiter(", ");
-            //parentStationScanner = new Scanner(assetManager.open("parent_station_list.txt")).useDelimiter(", ");
-            //wheelchairBoardingScanner = new Scanner(assetManager.open("wheelchair_boarding_list.txt")).useDelimiter(", ");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //String selection = "(stop_lat BETWEEN ? AND ?) AND (stop_lon BETWEEN ? AND ?)";
+        //String[] selectionArgs = {String.valueOf(north), String.valueOf(south), String.valueOf(east), String.valueOf(west)};
 
-        Log.d("Progress", "Just created scanners and buffered readers from files");
-        try {
-            //stopId = new int[numberOfStops];
-            stopCode = stopCodeBufferedReader.readLine().split(", ");
-            stopName = stopNameBufferedReader.readLine().split(", ");
-            //stopDesc = new String[numberOfStops];
-            stopLat = stopLatBufferedReader.readLine().split(", ");
-            stopLon = stopLonBufferedReader.readLine().split(", ");
-            //locationType = new int[numberOfStops];
-            //parentStation = new int[numberOfStops];
-            //wheelchairBoarding = new int[numberOfStops];
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Log.d("Progress", "Just finished adding everything to arrays");
+        Cursor query = database.query("stops", projection, null, null, null, null, null);
 
         ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
-        for (int i = 0; i < numberOfStops; i++) {
-            points.add(new OverlayItem(stopName[i], String.valueOf(stopCode[i]), new GeoPoint(Double.valueOf(stopLat[i]), Double.valueOf(stopLon[i]))));
-        }
 
-        Log.d("Progress", "Just finished adding everything to \"points\" ArrayList");
+        System.out.println("About to add points to ArrayList");
+        while (query.moveToNext()) {
+            //System.out.println("stop_name: " + query.getString(1));
+            //System.out.println("stop_code: " + query.getInt(0));
+            //System.out.println("stop_lat: " + query.getDouble(2));
+            //System.out.println("stop_lon: " + query.getDouble(3));
+            points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
+        }
 
         ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
@@ -167,9 +147,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 return false;
             }
         }, MapActivity.this);
-        Log.d("Progress", "Just created itemizedOverlayWithFocus");
         itemizedOverlayWithFocus.setFocusItemsOnTap(true);
         mapView.getOverlays().add(itemizedOverlayWithFocus);
+
+        query.close();
     }
 
     @Override
@@ -177,8 +158,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         super.onResume();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         myLocationOverlay.enableMyLocation();
+        if (firstTime)
+            myLocationOverlay.enableFollowLocation();
+        firstTime = false;
     }
 
     @Override
@@ -186,6 +170,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         super.onPause();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.removeUpdates(this);
+        myLocationOverlay.disableFollowLocation();
         myLocationOverlay.disableMyLocation();
 
     }
