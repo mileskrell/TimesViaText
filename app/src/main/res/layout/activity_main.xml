@@ -12,18 +12,19 @@
     android:orientation="vertical"
     tools:context="com.example.mmkrell.timesviatext.MapActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="40dp"
-        android:textSize="18sp"
-        android:text="@string/welcome_message" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/button_open_map"
         android:id="@+id/buttonOpenMap" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:textSize="18sp"
+        android:text="@string/welcome_message"
+        android:id="@+id/textViewWelcomeMessage" />
 </LinearLayout>

@@ -11,9 +11,11 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.method.LinkMovementMethod;
+import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -43,6 +45,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     ImageButton buttonMyLocation;
     ImageButton buttonFollowMe;
 
+    TextView textViewOpenStreetMapCredit;
+
     boolean firstTime = true;
 
     @Override
@@ -52,6 +56,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         buttonMyLocation = (ImageButton) findViewById(R.id.buttonMyLocation);
         buttonFollowMe = (ImageButton) findViewById(R.id.buttonFollowMe);
         buttonFollowMe.setTag("disabled");
+
+        textViewOpenStreetMapCredit = (TextView) findViewById(R.id.textViewOpenStreetMapCredit);
+        textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance()); // Makes the link clickable
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) findViewById(R.id.mapView);
@@ -76,19 +83,19 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         myLocationOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocationOverlay);
         if (currentLocation != null)
-            mapView.getController().animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+            mapView.getController().setCenter(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Button Press", "Clicked myLocation button");
-                System.out.println("followMe state is " + String.valueOf(myLocationOverlay.isFollowLocationEnabled()));
+                //System.out.println("Clicked myLocation button");
+                //System.out.println("followMe state is " + String.valueOf(myLocationOverlay.isFollowLocationEnabled()));
                 //System.out.println("North Latitude: " + mapView.getBoundingBox().getLatNorth());
                 //System.out.println("East Longitude: " + mapView.getBoundingBox().getLonEast());
                 //System.out.println("South Latitude: " + mapView.getBoundingBox().getLatSouth());
                 //System.out.println("West Longitude: " + mapView.getBoundingBox().getLonWest());
                 if (currentLocation != null) {
-                    iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                //    iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 }
             }
         });
@@ -106,10 +113,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             }
         });
 
-        //double north = mapView.getBoundingBox().getLatNorth();
-        //double east = mapView.getBoundingBox().getLonEast();
-        //double south = mapView.getBoundingBox().getLatSouth();
-        //double west = mapView.getBoundingBox().getLonWest();
+        mapView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                return false;
+            }
+        });
 
         SQLiteDatabase database = new GTFSHelper(MapActivity.this).getReadableDatabase();
 
@@ -121,17 +130,21 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         };
 
         //String selection = "(stop_lat BETWEEN ? AND ?) AND (stop_lon BETWEEN ? AND ?)";
-        //String[] selectionArgs = {String.valueOf(north), String.valueOf(south), String.valueOf(east), String.valueOf(west)};
+
+        //System.out.println("NORTH BORDER IS " + mapView.getBoundingBox().getLatNorth());
+        //System.out.println("EAST BORDER IS " + mapView.getBoundingBox().getLonEast());
+        //System.out.println("SOUTH BORDER IS " + mapView.getBoundingBox().getLatSouth());
+        //System.out.println("WEST BORDER IS " + mapView.getBoundingBox().getLonWest());
+        //String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
 
         Cursor query = database.query("stops", projection, null, null, null, null, null);
 
         ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
 
-        System.out.println("About to add points to ArrayList");
         while (query.moveToNext()) {
             //System.out.println("stop_name: " + query.getString(1));
             //System.out.println("stop_code: " + query.getInt(0));
-            //System.out.println("stop_lat: " + query.getDouble(2));
+            //System.out.println("stop_lat: " + query.getDouble(2) + " is less than " + north);
             //System.out.println("stop_lon: " + query.getDouble(3));
             points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
         }

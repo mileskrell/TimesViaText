@@ -1,11 +1,21 @@
 <resources>
     <string name="app_name">Times via Text (for CTA riders)</string>
 
-    <string name="welcome_message">Thanks for downloading this app!</string>
-    <string name="button_open_map">Click here to open the map</string>
+    <string name="welcome_message">
+        Things that will be in the final version of the app:\n\n
+        * A proper welcome screen\n\n
+        * It\'ll download map tiles on first run (with a nice progress bar)\n\n
+        * Moving around the map won\'t be slow\n\n
+        * When you click a marker, it\'ll bring up an info window with a button to get estimated stop times\n\n
+        * ^ The app will send a text to the CTA, and then receive/parse the response, all within the app\n\n
+        * Possibly a navigation drawer
+    </string>
+    <string name="button_open_map">Click here to open the map!</string>
 
     <string name="update_maps">Download the latest map tiles</string>
 
     <string name="image_button_my_location_description">Go to my location</string>
     <string name="image_button_follow_me_description">Follow my location</string>
+
+    <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
 </resources>

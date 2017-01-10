@@ -7,18 +7,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     Button buttonOpenMap;
+    TextView textViewWelcomeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonOpenMap = (Button) findViewById(R.id.buttonOpenMap);
+        textViewWelcomeMessage = (TextView) findViewById(R.id.textViewWelcomeMessage);
 
         buttonOpenMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -26,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
                 startActivity(new Intent(MainActivity.this, MapActivity.class));
             }
         });
+
+        textViewWelcomeMessage.setMovementMethod(new ScrollingMovementMethod());
 
         if ((ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) |
                 (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_WIFI_STATE) != PackageManager.PERMISSION_GRANTED) |

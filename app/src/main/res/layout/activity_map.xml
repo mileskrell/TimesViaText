@@ -14,8 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_center_map"
         android:background="#00000000"
@@ -26,11 +26,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
         android:layout_below="@+id/buttonMyLocation"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_follow_me"
         android:background="#00000000"
         android:contentDescription="@string/image_button_follow_me_description"
         android:id="@+id/buttonFollowMe"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp"
+        android:layout_margin="5dp"
+        android:text="@string/openstreetmap_credit"
+        android:textColorLink="#0000FF"
+        android:textColorHighlight="#CC00CC"
+        android:background="@drawable/gray_background_rounded_corners"
+        android:id="@+id/textViewOpenStreetMapCredit" />
 </RelativeLayout>
