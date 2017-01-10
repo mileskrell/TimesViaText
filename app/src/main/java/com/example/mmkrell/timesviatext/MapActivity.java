@@ -21,6 +21,9 @@ import java.util.ArrayList;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
@@ -95,7 +98,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 //System.out.println("South Latitude: " + mapView.getBoundingBox().getLatSouth());
                 //System.out.println("West Longitude: " + mapView.getBoundingBox().getLonWest());
                 if (currentLocation != null) {
-                //    iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                    iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 }
             }
         });
@@ -113,57 +116,61 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             }
         });
 
-        mapView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                return false;
-            }
-        });
-
-        SQLiteDatabase database = new GTFSHelper(MapActivity.this).getReadableDatabase();
-
-        String[] projection = {
+        final SQLiteDatabase database = new GTFSHelper(MapActivity.this).getReadableDatabase();
+        final String[] projection = {
                 "stop_code",
                 "stop_name",
                 "stop_lat",
                 "stop_lon"
         };
+        final String selection = "(stop_lat BETWEEN ? AND ?) AND (stop_lon BETWEEN ? AND ?)";
 
-        //String selection = "(stop_lat BETWEEN ? AND ?) AND (stop_lon BETWEEN ? AND ?)";
-
-        //System.out.println("NORTH BORDER IS " + mapView.getBoundingBox().getLatNorth());
-        //System.out.println("EAST BORDER IS " + mapView.getBoundingBox().getLonEast());
-        //System.out.println("SOUTH BORDER IS " + mapView.getBoundingBox().getLatSouth());
-        //System.out.println("WEST BORDER IS " + mapView.getBoundingBox().getLonWest());
-        //String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
-
-        Cursor query = database.query("stops", projection, null, null, null, null, null);
-
-        ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
-
-        while (query.moveToNext()) {
-            //System.out.println("stop_name: " + query.getString(1));
-            //System.out.println("stop_code: " + query.getInt(0));
-            //System.out.println("stop_lat: " + query.getDouble(2) + " is less than " + north);
-            //System.out.println("stop_lon: " + query.getDouble(3));
-            points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
-        }
-
-        ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+        mapView.setMapListener(new MapListener() {
             @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+            public boolean onScroll(ScrollEvent event) {
+                //System.out.println("NORTH BORDER IS " + mapView.getBoundingBox().getLatNorth());
+                //System.out.println("EAST BORDER IS " + mapView.getBoundingBox().getLonEast());
+                //System.out.println("SOUTH BORDER IS " + mapView.getBoundingBox().getLatSouth());
+                //System.out.println("WEST BORDER IS " + mapView.getBoundingBox().getLonWest());
+                String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
+
+                Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
+                System.out.println(query.getColumnCount());
+
+                ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
+
+                while (query.moveToNext()) {
+                    //System.out.println("stop_name: " + query.getString(1));
+                    //System.out.println("stop_code: " + query.getInt(0));
+                    //System.out.println("stop_lat: " + query.getDouble(2) + " is less than " + north);
+                    //System.out.println("stop_lon: " + query.getDouble(3));
+                    points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
+                }
+
+                ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                    @Override
+                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onItemLongPress(int index, OverlayItem item) {
+                        return false;
+                    }
+                }, MapActivity.this);
+                itemizedOverlayWithFocus.setFocusItemsOnTap(true);
+                mapView.getOverlays().add(itemizedOverlayWithFocus);
+
+                query.close();
                 return false;
             }
 
             @Override
-            public boolean onItemLongPress(int index, OverlayItem item) {
+            public boolean onZoom(ZoomEvent event) {
                 return false;
             }
-        }, MapActivity.this);
-        itemizedOverlayWithFocus.setFocusItemsOnTap(true);
-        mapView.getOverlays().add(itemizedOverlayWithFocus);
+        });
 
-        query.close();
     }
 
     @Override
