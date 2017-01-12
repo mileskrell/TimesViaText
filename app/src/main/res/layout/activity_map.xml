@@ -10,6 +10,16 @@
         android:layout_height="match_parent"
         android:id="@+id/mapView" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#FFFFFF"
+        android:id="@+id/textViewZoomLevel" />
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

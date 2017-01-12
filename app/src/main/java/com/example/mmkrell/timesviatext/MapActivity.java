@@ -46,9 +46,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     CompassOverlay compassOverlay;
     MyLocationNewOverlay myLocationOverlay;
 
+    TextView textViewZoomLevel;
     ImageButton buttonMyLocation;
     ImageButton buttonFollowMe;
-
     TextView textViewOpenStreetMapCredit;
 
     boolean markersOverlayHasBeenAdded;
@@ -62,9 +62,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        textViewZoomLevel = (TextView) findViewById(R.id.textViewZoomLevel);
+
         buttonMyLocation = (ImageButton) findViewById(R.id.buttonMyLocation);
         buttonFollowMe = (ImageButton) findViewById(R.id.buttonFollowMe);
-        buttonFollowMe.setTag("disabled");
 
         textViewOpenStreetMapCredit = (TextView) findViewById(R.id.textViewOpenStreetMapCredit);
         textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance()); // Makes the link clickable
@@ -74,8 +76,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
         //mapView.setBuiltInZoomControls(true);
-        mapView.setMaxZoomLevel(20);
-        mapView.setMinZoomLevel(11);
+        mapView.setMaxZoomLevel(19);
+        mapView.setMinZoomLevel(17);
 
         BoundingBox boundingBox = new BoundingBox(42.06470019, -87.52569948, 41.6441576, -87.884297);
         mapView.setScrollableAreaLimitDouble(boundingBox);
@@ -97,12 +99,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //System.out.println("Clicked myLocation button");
-                //System.out.println("followMe state is " + String.valueOf(myLocationOverlay.isFollowLocationEnabled()));
-                //System.out.println("North Latitude: " + mapView.getBoundingBox().getLatNorth());
-                //System.out.println("East Longitude: " + mapView.getBoundingBox().getLonEast());
-                //System.out.println("South Latitude: " + mapView.getBoundingBox().getLatSouth());
-                //System.out.println("West Longitude: " + mapView.getBoundingBox().getLonWest());
                 if (currentLocation != null) {
                     iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 }
@@ -113,11 +109,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View v) {
                 if (myLocationOverlay.isFollowLocationEnabled()) {
-                    myLocationOverlay.disableFollowLocation();
-                    buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
+                    disableFollowMe();
                 } else {
-                    myLocationOverlay.enableFollowLocation();
-                    buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
+                    enableFollowMe();
                 }
             }
         });
@@ -131,7 +125,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         };
         selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
-        mapView.setMapListener(new DelayedMapListener(new MapListener() {
+        /*mapView.setMapListener(new DelayedMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
                 updateMarkers();
@@ -143,7 +137,23 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 updateMarkers();
                 return false;
             }
-        }));
+        }));*/
+
+        mapView.setMapListener(new MapListener() { // TODO: figure out if this uses too much processing power / battery life
+            @Override
+            public boolean onScroll(ScrollEvent event) {
+                disableFollowMe();
+                updateMarkers();
+                return false;
+            }
+
+            @Override
+            public boolean onZoom(ZoomEvent event) {
+                textViewZoomLevel.setText("Zoom level: " + event.getZoomLevel());
+                updateMarkers();
+                return false;
+            }
+        });
 
     }
 
@@ -154,8 +164,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         myLocationOverlay.enableMyLocation();
-        if (firstTime)
-            myLocationOverlay.enableFollowLocation();
+        if (firstTime || buttonFollowMe.getTag().equals("enabled"))
+            enableFollowMe();
         firstTime = false;
     }
 
@@ -164,7 +174,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         super.onPause();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.removeUpdates(this);
-        myLocationOverlay.disableFollowLocation();
+        disableFollowMe();
         myLocationOverlay.disableMyLocation();
 
     }
@@ -205,10 +215,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
 
         while (query.moveToNext()) {
-            //System.out.println("stop_name: " + query.getString(1));
-            //System.out.println("stop_code: " + query.getInt(0));
-            //System.out.println("stop_lat: " + query.getDouble(2) + " is less than " + north);
-            //System.out.println("stop_lon: " + query.getDouble(3));
             points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
         }
 
@@ -228,5 +234,17 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         markersOverlayHasBeenAdded = true;
 
         query.close();
+    }
+
+    private void enableFollowMe() {
+        myLocationOverlay.enableFollowLocation();
+        buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
+        buttonFollowMe.setTag("enabled");
+    }
+
+    private void disableFollowMe() {
+        myLocationOverlay.disableFollowLocation();
+        buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
+        buttonFollowMe.setTag("disabled");
     }
 }
