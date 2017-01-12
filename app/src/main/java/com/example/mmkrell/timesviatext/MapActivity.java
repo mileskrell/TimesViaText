@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.view.DragEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -30,6 +30,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
@@ -49,6 +50,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     ImageButton buttonFollowMe;
 
     TextView textViewOpenStreetMapCredit;
+
+    boolean markersOverlayHasBeenAdded;
+    SQLiteDatabase database;
+    String[] projection;
+    String selection;
 
     boolean firstTime = true;
 
@@ -116,60 +122,28 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             }
         });
 
-        final SQLiteDatabase database = new GTFSHelper(MapActivity.this).getReadableDatabase();
-        final String[] projection = {
+        database = new GTFSHelper(MapActivity.this).getReadableDatabase();
+        projection = new String[]{
                 "stop_code",
                 "stop_name",
                 "stop_lat",
                 "stop_lon"
         };
-        final String selection = "(stop_lat BETWEEN ? AND ?) AND (stop_lon BETWEEN ? AND ?)";
+        selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
-        mapView.setMapListener(new MapListener() {
+        mapView.setMapListener(new DelayedMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-                //System.out.println("NORTH BORDER IS " + mapView.getBoundingBox().getLatNorth());
-                //System.out.println("EAST BORDER IS " + mapView.getBoundingBox().getLonEast());
-                //System.out.println("SOUTH BORDER IS " + mapView.getBoundingBox().getLatSouth());
-                //System.out.println("WEST BORDER IS " + mapView.getBoundingBox().getLonWest());
-                String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
-
-                Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
-                System.out.println(query.getColumnCount());
-
-                ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
-
-                while (query.moveToNext()) {
-                    //System.out.println("stop_name: " + query.getString(1));
-                    //System.out.println("stop_code: " + query.getInt(0));
-                    //System.out.println("stop_lat: " + query.getDouble(2) + " is less than " + north);
-                    //System.out.println("stop_lon: " + query.getDouble(3));
-                    points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
-                }
-
-                ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onItemLongPress(int index, OverlayItem item) {
-                        return false;
-                    }
-                }, MapActivity.this);
-                itemizedOverlayWithFocus.setFocusItemsOnTap(true);
-                mapView.getOverlays().add(itemizedOverlayWithFocus);
-
-                query.close();
+                updateMarkers();
                 return false;
             }
 
             @Override
             public boolean onZoom(ZoomEvent event) {
+                updateMarkers();
                 return false;
             }
-        });
+        }));
 
     }
 
@@ -213,5 +187,46 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    private void updateMarkers() {
+        if (markersOverlayHasBeenAdded) { // If the markers overlay is already there, remove it, because we don't want its points anymore
+            for (Overlay overlay : mapView.getOverlays()) {
+                if (overlay instanceof ItemizedOverlayWithFocus) {
+                    mapView.getOverlays().remove(overlay);
+                }
+            }
+        }
+
+        String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
+
+        Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
+
+        ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
+
+        while (query.moveToNext()) {
+            //System.out.println("stop_name: " + query.getString(1));
+            //System.out.println("stop_code: " + query.getInt(0));
+            //System.out.println("stop_lat: " + query.getDouble(2) + " is less than " + north);
+            //System.out.println("stop_lon: " + query.getDouble(3));
+            points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
+        }
+
+        ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+            @Override
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                return false;
+            }
+
+            @Override
+            public boolean onItemLongPress(int index, OverlayItem item) {
+                return false;
+            }
+        }, MapActivity.this);
+        itemizedOverlayWithFocus.setFocusItemsOnTap(true);
+        mapView.getOverlays().add(itemizedOverlayWithFocus);
+        markersOverlayHasBeenAdded = true;
+
+        query.close();
     }
 }
