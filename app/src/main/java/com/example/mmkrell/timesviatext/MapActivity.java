@@ -196,7 +196,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     private void updateMarkers() {
         for (Overlay overlay : mapView.getOverlays()) {
             if (overlay instanceof ItemizedOverlayWithFocus) {
-                mapView.getOverlays().remove(overlay); // If the markers overlay is already there, remove it, because we don't want its points anymore
+                mapView.getOverlays().remove(overlay); // Remove any existing ItemizedOverlayWithFocus, because we don't want its points anymore
+                break;
             }
         }
 
