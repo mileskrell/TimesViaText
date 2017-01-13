@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.events.DelayedMapListener;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -51,12 +50,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     ImageButton buttonFollowMe;
     TextView textViewOpenStreetMapCredit;
 
-    boolean markersOverlayHasBeenAdded;
     SQLiteDatabase database;
     String[] projection;
     String selection;
 
     boolean firstTime = true;
+    boolean followMeShouldBeEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +90,17 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         mapView.getOverlays().add(compassOverlay);
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
-        myLocationOverlay.enableMyLocation();
         mapView.getOverlays().add(myLocationOverlay);
         if (currentLocation != null)
             mapView.getController().setCenter(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+        projection = new String[]{
+                "stop_code",
+                "stop_name",
+                "stop_lat",
+                "stop_lon"
+        };
+        selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,30 +122,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             }
         });
 
-        database = new GTFSHelper(MapActivity.this).getReadableDatabase();
-        projection = new String[]{
-                "stop_code",
-                "stop_name",
-                "stop_lat",
-                "stop_lon"
-        };
-        selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
-
-        /*mapView.setMapListener(new DelayedMapListener(new MapListener() {
-            @Override
-            public boolean onScroll(ScrollEvent event) {
-                updateMarkers();
-                return false;
-            }
-
-            @Override
-            public boolean onZoom(ZoomEvent event) {
-                updateMarkers();
-                return false;
-            }
-        }));*/
-
-        mapView.setMapListener(new MapListener() { // TODO: figure out if this uses too much processing power / battery life
+        mapView.setMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
                 disableFollowMe();
@@ -154,7 +137,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 return false;
             }
         });
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        database = new GTFSHelper(MapActivity.this).getReadableDatabase();
     }
 
     @Override
@@ -164,7 +152,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         myLocationOverlay.enableMyLocation();
-        if (firstTime || buttonFollowMe.getTag().equals("enabled"))
+        if (firstTime || followMeShouldBeEnabled)
             enableFollowMe();
         firstTime = false;
     }
@@ -174,9 +162,15 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         super.onPause();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.removeUpdates(this);
-        disableFollowMe();
+        myLocationOverlay.disableFollowLocation();
         myLocationOverlay.disableMyLocation();
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        database.close();
     }
 
     @Override
@@ -200,11 +194,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     }
 
     private void updateMarkers() {
-        if (markersOverlayHasBeenAdded) { // If the markers overlay is already there, remove it, because we don't want its points anymore
-            for (Overlay overlay : mapView.getOverlays()) {
-                if (overlay instanceof ItemizedOverlayWithFocus) {
-                    mapView.getOverlays().remove(overlay);
-                }
+        for (Overlay overlay : mapView.getOverlays()) {
+            if (overlay instanceof ItemizedOverlayWithFocus) {
+                mapView.getOverlays().remove(overlay); // If the markers overlay is already there, remove it, because we don't want its points anymore
             }
         }
 
@@ -231,20 +223,19 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         }, MapActivity.this);
         itemizedOverlayWithFocus.setFocusItemsOnTap(true);
         mapView.getOverlays().add(itemizedOverlayWithFocus);
-        markersOverlayHasBeenAdded = true;
 
         query.close();
     }
 
     private void enableFollowMe() {
-        myLocationOverlay.enableFollowLocation();
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
-        buttonFollowMe.setTag("enabled");
+        myLocationOverlay.enableFollowLocation();
+        followMeShouldBeEnabled = true;
     }
 
     private void disableFollowMe() {
-        myLocationOverlay.disableFollowLocation();
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
-        buttonFollowMe.setTag("disabled");
+        myLocationOverlay.disableFollowLocation();
+        followMeShouldBeEnabled = false;
     }
 }
