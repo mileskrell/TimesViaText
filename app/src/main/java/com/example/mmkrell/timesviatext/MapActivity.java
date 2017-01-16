@@ -125,7 +125,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         mapView.setMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-                disableFollowMe();
+                if (! myLocationOverlay.isFollowLocationEnabled()) // Only call disableFollowMe() if the onScroll() was triggered by the user, which would have disabled follow me
+                    disableFollowMe(); // This check prevents disableFollowMe() from being called immediately after the button is clicked
                 updateMarkers();
                 return false;
             }
