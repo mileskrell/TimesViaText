@@ -54,7 +54,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     String[] projection;
     String selection;
 
-    boolean firstTime = true;
     boolean followMeShouldBeEnabled;
 
     @Override
@@ -138,6 +137,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 return false;
             }
         });
+
+        followMeShouldBeEnabled = true;
     }
 
     @Override
@@ -153,9 +154,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         myLocationOverlay.enableMyLocation();
-        if (firstTime || followMeShouldBeEnabled)
+        if (followMeShouldBeEnabled)
             enableFollowMe();
-        firstTime = false;
     }
 
     @Override
