@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
@@ -79,10 +78,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         BoundingBox boundingBox = new BoundingBox(42.06470019, -87.52569948, 41.6441576, -87.884297);
         mapView.setScrollableAreaLimitDouble(boundingBox);
 
-        final IMapController iMapController = mapView.getController();
-        iMapController.setZoom(18);
+        mapView.getController().setZoom(18);
         GeoPoint startingPoint = new GeoPoint(41.945477, -87.690778);
-        iMapController.setCenter(startingPoint);
+        mapView.getController().setCenter(startingPoint);
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
         mapView.getOverlays().add(myLocationOverlay);
@@ -101,7 +99,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View v) {
                 if (currentLocation != null) {
-                    iMapController.animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                    mapView.getController().animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
                 }
             }
         });
