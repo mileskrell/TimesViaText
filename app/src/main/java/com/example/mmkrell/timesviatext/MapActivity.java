@@ -32,8 +32,6 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -43,7 +41,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
     Location currentLocation;
     LocationManager locationManager;
-    CompassOverlay compassOverlay;
     MyLocationNewOverlay myLocationOverlay;
     ProgressDialog locationProgressDialog;
 
@@ -86,9 +83,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         iMapController.setZoom(18);
         GeoPoint startingPoint = new GeoPoint(41.945477, -87.690778);
         iMapController.setCenter(startingPoint);
-
-        compassOverlay = new CompassOverlay(MapActivity.this, new InternalCompassOrientationProvider(getApplicationContext()), mapView);
-        mapView.getOverlays().add(compassOverlay);
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
         mapView.getOverlays().add(myLocationOverlay);
