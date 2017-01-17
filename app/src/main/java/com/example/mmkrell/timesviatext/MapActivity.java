@@ -1,6 +1,7 @@
 package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -44,6 +45,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     LocationManager locationManager;
     CompassOverlay compassOverlay;
     MyLocationNewOverlay myLocationOverlay;
+    ProgressDialog locationProgressDialog;
 
     TextView textViewZoomLevel;
     ImageButton buttonMyLocation;
@@ -139,6 +141,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         });
 
         followMeShouldBeEnabled = true;
+
+        locationProgressDialog = new ProgressDialog(MapActivity.this);
+        locationProgressDialog.setMessage("Waiting for GPS signal...");
+        locationProgressDialog.show();
     }
 
     @Override
@@ -177,6 +183,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
+        locationProgressDialog.dismiss();
     }
 
     @Override
