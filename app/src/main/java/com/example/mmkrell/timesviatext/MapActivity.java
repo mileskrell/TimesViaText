@@ -84,8 +84,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
         mapView.getOverlays().add(myLocationOverlay);
-        if (currentLocation != null)
-            mapView.getController().setCenter(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
         projection = new String[]{
                 "stop_code",
