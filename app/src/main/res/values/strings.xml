@@ -16,5 +16,7 @@
     <string name="image_button_my_location_description">Go to my location</string>
     <string name="image_button_follow_me_description">Follow my location</string>
 
+    <string name="waiting_for_gps_signal">Waiting for GPS signal…</string>
+
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
 </resources>

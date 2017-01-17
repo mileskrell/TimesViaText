@@ -137,7 +137,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         followMeShouldBeEnabled = true;
 
         locationProgressDialog = new ProgressDialog(MapActivity.this);
-        locationProgressDialog.setMessage("Waiting for GPS signal...");
+        locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
         locationProgressDialog.show();
     }
 
