@@ -1,6 +1,8 @@
 package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -53,6 +55,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     String selection;
 
     boolean followMeShouldBeEnabled;
+
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +139,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         locationProgressDialog = new ProgressDialog(MapActivity.this);
         locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
         locationProgressDialog.show();
+
+        fragmentManager = getFragmentManager();
     }
 
     @Override
@@ -211,7 +217,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+            public boolean onItemSingleTapUp(int index, OverlayItem item) { // TODO: finish this
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(item.getTitle()));
+                fragmentTransaction.commit();
                 return false;
             }
 
