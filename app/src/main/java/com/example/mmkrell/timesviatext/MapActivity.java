@@ -89,6 +89,17 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
         mapView.getOverlays().add(myLocationOverlay);
 
+        locationProgressDialog = new ProgressDialog(MapActivity.this);
+        locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
+        locationProgressDialog.show();
+
+        myLocationOverlay.runOnFirstFix(new Runnable() {
+            @Override
+            public void run() {
+                locationProgressDialog.dismiss();
+            }
+        });
+
         projection = new String[]{
                 "stop_code",
                 "stop_name",
@@ -136,10 +147,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         followMeShouldBeEnabled = true;
 
-        locationProgressDialog = new ProgressDialog(MapActivity.this);
-        locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
-        locationProgressDialog.show();
-
         fragmentManager = getFragmentManager();
     }
 
@@ -179,7 +186,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
-        locationProgressDialog.dismiss();
     }
 
     @Override
