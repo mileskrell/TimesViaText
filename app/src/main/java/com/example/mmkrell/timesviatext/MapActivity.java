@@ -33,7 +33,6 @@ import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -59,6 +58,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     boolean followMeShouldBeEnabled;
 
     FragmentManager fragmentManager;
+
+    ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +186,22 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 return false;
             }
         });
+
+        itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(new ArrayList<OverlayItem>(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+            @Override
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.valueOf(item.getSnippet()), item.getTitle()), "stopFragment");
+                fragmentTransaction.commit();
+                return false;
+            }
+
+            @Override
+            public boolean onItemLongPress(int index, OverlayItem item) {
+                return false;
+            }
+        }, MapActivity.this);
+        mapView.getOverlays().add(itemizedIconOverlay);
     }
 
     @Override
@@ -241,39 +258,15 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     }
 
     private void updateMarkers() {
-        for (Overlay overlay : mapView.getOverlays()) {
-            if (overlay instanceof ItemizedIconOverlay) {
-                mapView.getOverlays().remove(overlay); // Remove any existing ItemizedIconOverlay, because we don't want its points anymore
-                break;
-            }
-        }
+        itemizedIconOverlay.removeAllItems();
 
         String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
 
         Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
 
-        ArrayList<OverlayItem> points = new ArrayList<OverlayItem>();
-
         while (query.moveToNext()) {
-            points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
+            itemizedIconOverlay.addItem(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
         }
-
-        ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-            @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                //Log.d("DEBUG", "Marker was clicked");
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(item.getTitle()), "stopFragment");
-                fragmentTransaction.commit();
-                return false;
-            }
-
-            @Override
-            public boolean onItemLongPress(int index, OverlayItem item) {
-                return false;
-            }
-        }, MapActivity.this);
-        mapView.getOverlays().add(itemizedIconOverlay);
 
         query.close();
     }
