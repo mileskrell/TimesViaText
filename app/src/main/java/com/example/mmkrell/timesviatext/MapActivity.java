@@ -33,7 +33,6 @@ import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -243,8 +242,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
     private void updateMarkers() {
         for (Overlay overlay : mapView.getOverlays()) {
-            if (overlay instanceof ItemizedOverlayWithFocus) {
-                mapView.getOverlays().remove(overlay); // Remove any existing ItemizedOverlayWithFocus, because we don't want its points anymore
+            if (overlay instanceof ItemizedIconOverlay) {
+                mapView.getOverlays().remove(overlay); // Remove any existing ItemizedIconOverlay, because we don't want its points anymore
                 break;
             }
         }
@@ -259,7 +258,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             points.add(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
         }
 
-        ItemizedOverlayWithFocus<OverlayItem> itemizedOverlayWithFocus = new ItemizedOverlayWithFocus<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+        ItemizedIconOverlay<OverlayItem> itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(points, new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
                 //Log.d("DEBUG", "Marker was clicked");
@@ -274,8 +273,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 return false;
             }
         }, MapActivity.this);
-        itemizedOverlayWithFocus.setFocusItemsOnTap(true);
-        mapView.getOverlays().add(itemizedOverlayWithFocus);
+        mapView.getOverlays().add(itemizedIconOverlay);
 
         query.close();
     }
