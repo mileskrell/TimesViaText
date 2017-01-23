@@ -1,8 +1,6 @@
 package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
@@ -57,9 +54,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
     boolean followMeShouldBeEnabled;
 
-    FragmentManager fragmentManager;
-
     ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
+
+    float startX;
+    float startY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,38 +148,21 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         followMeShouldBeEnabled = true;
 
-        fragmentManager = getFragmentManager();
-
-        final float[] startX = {0};
-        final float[] startY = {0};
-
-        mapView.setOnTouchListener(new View.OnTouchListener() {
+        mapView.setOnTouchListener(new View.OnTouchListener() { // Used in place of an OnClickListener
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        startX[0] = event.getX();
-                        startY[0] = event.getY();
+                        startX = event.getX();
+                        startY = event.getY();
                         break;
                     case MotionEvent.ACTION_UP:
                         float endX = event.getX();
                         float endY = event.getY();
-                        if (isAClick(startX[0], startY[0], endX, endY)) {
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            Fragment testFragment = fragmentManager.findFragmentByTag("stopFragment");
-                            //Log.d("DEBUG", "MapView was clicked");
-                            //Log.d("DEBUG", "Change in x: " + String.valueOf(Math.abs(startX[0] - endX)));
-                            //Log.d("DEBUG", "Change in y: " + String.valueOf(Math.abs(startY[0] - endY)));
-                            if (testFragment != null) {
-                                Log.d("DEBUG", "The fragment was NOT null");
-                                fragmentTransaction.remove(testFragment);
-                                fragmentTransaction.commit();
-                            } else {
-                                Log.d("DEBUG", "The fragment was null");
-                            }
+                        if (Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 10) {
+                            getFragmentManager().popBackStackImmediate(); // Remove StopFragment when MapView is clicked
                         }
                         break;
-
                 }
                 return false;
             }
@@ -189,9 +170,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(new ArrayList<OverlayItem>(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.valueOf(item.getSnippet()), item.getTitle()), "stopFragment");
+            public boolean onItemSingleTapUp(int index, OverlayItem item) { // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
+                getFragmentManager().popBackStackImmediate(); // That's why this line is needed both here and in the OnTouchListener
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.valueOf(item.getSnippet()), item.getTitle()));
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 return false;
             }
@@ -281,9 +264,5 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
         myLocationOverlay.disableFollowLocation();
         followMeShouldBeEnabled = false;
-    }
-
-    private boolean isAClick(float startX, float startY, float endX, float endY) {
-        return (Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 10);
     }
 }
