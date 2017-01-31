@@ -5,10 +5,6 @@ import android.content.Context;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
-/**
- * Created by Miles on 1/4/2017.
- */
-
 class GTFSHelper extends SQLiteAssetHelper {
 
     private static final String DATABASE_NAME = "cta.db";
