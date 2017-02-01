@@ -19,7 +19,4 @@
     <string name="waiting_for_gps_signal">Waiting for GPS signal…</string>
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
