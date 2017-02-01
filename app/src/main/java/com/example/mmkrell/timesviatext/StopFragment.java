@@ -43,7 +43,6 @@ public class StopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_stop, container, false);
         stopFragmentTextView = (TextView) v.findViewById(R.id.stopFragmentTextView);
-        System.out.println("Starting at " + stopName.length());
 
         if (stopDesc.equals("")) { // If stopDesc is empty, don't try to get the direction
             stopFragmentTextView.setText(stopName + "\n" + stopCode);

@@ -171,7 +171,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) { // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
                 getFragmentManager().popBackStackImmediate(); // That's why this line is needed both here and in the OnTouchListener
-                System.out.println(item.getTitle());
                 Cursor query = database.query("stops", new String[]{"stop_code", "stop_name", "stop_desc"}, "stop_code = ?", new String[]{item.getTitle()}, null, null, null);
                 query.moveToNext();
 
