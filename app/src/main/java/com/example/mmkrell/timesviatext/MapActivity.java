@@ -1,15 +1,19 @@
 package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -90,9 +94,29 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
         mapView.getOverlays().add(myLocationOverlay);
 
-        locationProgressDialog = new ProgressDialog(MapActivity.this);
-        locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
-        locationProgressDialog.show();
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationProgressDialog = new ProgressDialog(MapActivity.this);
+            locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
+            locationProgressDialog.show();
+        } else {
+            new AlertDialog.Builder(MapActivity.this)
+                    .setMessage("GPS needs to be enabled")
+                    .setPositiveButton("Open GPS settings", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
 
         myLocationOverlay.runOnFirstFix(new Runnable() {
             @Override
@@ -200,7 +224,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         myLocationOverlay.enableMyLocation();
