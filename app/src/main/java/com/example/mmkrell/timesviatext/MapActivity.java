@@ -103,7 +103,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         projection = new String[]{
                 "stop_code",
-                "stop_name",
                 "stop_lat",
                 "stop_lon"
         };
@@ -172,10 +171,16 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) { // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
                 getFragmentManager().popBackStackImmediate(); // That's why this line is needed both here and in the OnTouchListener
+                System.out.println(item.getTitle());
+                Cursor query = database.query("stops", new String[]{"stop_code", "stop_name", "stop_desc"}, "stop_code = ?", new String[]{item.getTitle()}, null, null, null);
+                query.moveToNext();
+
                 FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.valueOf(item.getSnippet()), item.getTitle()));
+                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.parseInt(query.getString(0)), query.getString(1), query.getString(2)));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+
+                query.close();
                 return false;
             }
 
@@ -248,7 +253,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
 
         while (query.moveToNext()) {
-            itemizedIconOverlay.addItem(new OverlayItem(query.getString(1), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(2), query.getDouble(3))));
+            itemizedIconOverlay.addItem(new OverlayItem(query.getString(0), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(1), query.getDouble(2))));
         }
 
         query.close();
