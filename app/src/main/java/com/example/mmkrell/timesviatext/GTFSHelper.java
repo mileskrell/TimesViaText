@@ -1,6 +1,5 @@
 package com.example.mmkrell.timesviatext;
 
-
 import android.content.Context;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
