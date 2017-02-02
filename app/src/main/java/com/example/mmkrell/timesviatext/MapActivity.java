@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -106,7 +107,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                     .setPositiveButton("Open GPS settings", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                            Intent locationSourceSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            if (locationSourceSettingsIntent.resolveActivity(getPackageManager()) != null)
+                                startActivity(locationSourceSettingsIntent);
+                            else
+                                Toast.makeText(MapActivity.this, "Couldn't open location source settings", Toast.LENGTH_LONG).show();
                         }
                     })
                     .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
