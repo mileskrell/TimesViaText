@@ -19,4 +19,5 @@
     <string name="waiting_for_gps_signal">Waiting for GPS signal…</string>
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
+    <string name="button_get_stop_times">Get stop times</string>
 </resources>

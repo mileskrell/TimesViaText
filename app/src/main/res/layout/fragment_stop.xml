@@ -1,17 +1,43 @@
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_alignParentBottom="true"
     android:background="#FFFFFF"
+    android:orientation="horizontal"
     tools:context="com.example.mmkrell.timesviatext.StopFragment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:textSize="22sp"
-        android:id="@+id/stopFragmentTextView" />
+        android:layout_weight="2"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textColor="#00AA00"
+            android:id="@+id/stopFragmentTextViewName" />
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/stopFragmentTextViewName"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="#AA0000"
+            android:id="@+id/stopFragmentTextViewDirection" />
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:text="@string/button_get_stop_times"
+        android:id="@+id/stopFragmentButton" />
+</LinearLayout>
