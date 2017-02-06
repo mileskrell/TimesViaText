@@ -2,7 +2,6 @@ package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -188,7 +188,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                         float endX = event.getX();
                         float endY = event.getY();
                         if (Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 10) {
-                            getFragmentManager().popBackStackImmediate(); // Remove StopFragment when MapView is clicked
+                            getSupportFragmentManager().popBackStackImmediate(); // Remove StopFragment when MapView is clicked
                         }
                         break;
                 }
@@ -199,11 +199,12 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(new ArrayList<OverlayItem>(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) { // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
-                getFragmentManager().popBackStackImmediate(); // That's why this line is needed both here and in the OnTouchListener
+                getSupportFragmentManager().popBackStackImmediate(); // That's why this line is needed both here and in the OnTouchListener
                 Cursor query = database.query("stops", new String[]{"stop_code", "stop_name", "stop_desc"}, "stop_code = ?", new String[]{item.getTitle()}, null, null, null);
                 query.moveToNext();
 
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down); // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
                 fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.parseInt(query.getString(0)), query.getString(1), query.getString(2)));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
