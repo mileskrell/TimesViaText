@@ -205,7 +205,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down); // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
-                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.parseInt(query.getString(0)), query.getString(1), query.getString(2)));
+                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(query.getInt(0), query.getString(1), query.getString(2)));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
