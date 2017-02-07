@@ -54,7 +54,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     TextView textViewOpenStreetMapCredit;
 
     SQLiteDatabase database;
-    final String[] projection = new String[]{"stop_code", "stop_lat", "stop_lon"};
+    final String[] projection = {"stop_code", "stop_lat", "stop_lon"};
     final String selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
     boolean followMeShouldBeEnabled;
