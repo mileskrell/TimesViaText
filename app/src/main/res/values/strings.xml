@@ -16,4 +16,6 @@
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
     <string name="button_get_stop_times">Get stop times</string>
+
+    <string name="no_location_source_settings">Couldn\'t open location source settings</string>
 </resources>

@@ -112,7 +112,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                         if (locationSourceSettingsIntent.resolveActivity(getPackageManager()) != null)
                             startActivity(locationSourceSettingsIntent);
                         else
-                            Toast.makeText(MapActivity.this, "Couldn't open location source settings", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MapActivity.this, R.string.no_location_source_settings, Toast.LENGTH_LONG).show();
                     }
                 })
                 .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
