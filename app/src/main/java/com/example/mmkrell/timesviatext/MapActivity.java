@@ -120,7 +120,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
                     }
-                }).create();
+                }).setCancelable(false)
+                .create();
 
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
