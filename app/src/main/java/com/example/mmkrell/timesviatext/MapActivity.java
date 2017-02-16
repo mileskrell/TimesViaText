@@ -104,8 +104,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
 
         gpsDisabledAlertDialog = new AlertDialog.Builder(MapActivity.this)
-                .setMessage("GPS needs to be enabled")
-                .setPositiveButton("Open GPS settings", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.gps_disabled_title)
+                .setMessage(R.string.gps_disabled_message)
+                .setPositiveButton(R.string.open_location_source_settings, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent locationSourceSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -115,7 +116,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                             Toast.makeText(MapActivity.this, R.string.no_location_source_settings, Toast.LENGTH_LONG).show();
                     }
                 })
-                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.exit_map, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
