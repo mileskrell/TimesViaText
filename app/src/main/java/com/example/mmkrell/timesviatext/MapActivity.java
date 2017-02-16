@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
@@ -46,7 +47,9 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     Location currentLocation;
     LocationManager locationManager;
     MyLocationNewOverlay myLocationOverlay;
+
     ProgressDialog locationProgressDialog;
+    AlertDialog gpsDisabledAlertDialog;
 
     TextView textViewZoomLevel;
     ImageButton buttonMyLocation;
@@ -97,38 +100,27 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationProgressDialog = new ProgressDialog(MapActivity.this);
-            locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
-            locationProgressDialog.show();
-        } else {
-            new AlertDialog.Builder(MapActivity.this)
-                    .setMessage("GPS needs to be enabled")
-                    .setPositiveButton("Open GPS settings", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent locationSourceSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                            if (locationSourceSettingsIntent.resolveActivity(getPackageManager()) != null)
-                                startActivity(locationSourceSettingsIntent);
-                            else
-                                Toast.makeText(MapActivity.this, "Couldn't open location source settings", Toast.LENGTH_LONG).show();
-                        }
-                    })
-                    .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    })
-                    .show();
-        }
+        locationProgressDialog = new ProgressDialog(MapActivity.this);
+        locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
 
-        myLocationOverlay.runOnFirstFix(new Runnable() {
-            @Override
-            public void run() {
-                locationProgressDialog.dismiss();
-            }
-        });
+        gpsDisabledAlertDialog = new AlertDialog.Builder(MapActivity.this)
+                .setMessage("GPS needs to be enabled")
+                .setPositiveButton("Open GPS settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent locationSourceSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        if (locationSourceSettingsIntent.resolveActivity(getPackageManager()) != null)
+                            startActivity(locationSourceSettingsIntent);
+                        else
+                            Toast.makeText(MapActivity.this, "Couldn't open location source settings", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).create();
 
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,6 +217,24 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         super.onResume();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+
+        // Make sure that the GPS is enabled
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // If the location hasn't been retrieved yet, show the progress dialog
+            if (currentLocation == null) {
+                locationProgressDialog.show();
+            } else {
+                // If it's been more than a minute since the last GPS fix, show the progress dialog again
+                long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
+                int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
+                if (millisecondsSinceLastFix > (1000 * 60))
+                    locationProgressDialog.show();
+            }
+        } else {
+            // If the GPS is disabled, prompt the user to enable it
+            gpsDisabledAlertDialog.show();
+        }
+
         myLocationOverlay.enableMyLocation();
         if (followMeShouldBeEnabled)
             enableFollowMe();
@@ -238,6 +248,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         myLocationOverlay.disableFollowLocation();
         myLocationOverlay.disableMyLocation();
 
+        // Remove the dialogs, if they exist
+        if (locationProgressDialog.isShowing())
+            locationProgressDialog.dismiss();
+        if (gpsDisabledAlertDialog.isShowing())
+            gpsDisabledAlertDialog.dismiss();
     }
 
     @Override
@@ -249,6 +264,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
+        if (locationProgressDialog.isShowing())
+            locationProgressDialog.dismiss();
     }
 
     @Override
