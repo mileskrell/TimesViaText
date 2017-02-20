@@ -211,7 +211,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     protected void onStart() {
         super.onStart();
-        database = new GTFSHelper(MapActivity.this).getReadableDatabase();
+        database = new CTAHelper(MapActivity.this).getReadableDatabase();
     }
 
     @Override
