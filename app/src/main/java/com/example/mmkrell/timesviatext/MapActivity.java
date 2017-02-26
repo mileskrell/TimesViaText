@@ -247,12 +247,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         myLocationOverlay.disableFollowLocation();
         myLocationOverlay.disableMyLocation();
 
-        // Remove the dialogs, if they exist
+        // Remove the dialogs
         // Their removal is visible, but it's better than removing them in onResume()
-        if (locationProgressDialog.isShowing())
-            locationProgressDialog.dismiss();
-        if (gpsDisabledAlertDialog.isShowing())
-            gpsDisabledAlertDialog.dismiss();
+        locationProgressDialog.dismiss();
+        gpsDisabledAlertDialog.dismiss();
     }
 
     @Override
