@@ -78,13 +78,13 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         buttonFollowMe = (ImageButton) findViewById(R.id.buttonFollowMe);
 
         textViewOpenStreetMapCredit = (TextView) findViewById(R.id.textViewOpenStreetMapCredit);
-        textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance()); // Makes the link clickable
+        // Makes the link clickable
+        textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
-        //mapView.setBuiltInZoomControls(true);
         mapView.setMaxZoomLevel(19);
         mapView.setMinZoomLevel(17);
 
@@ -170,7 +170,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             }
         });
 
-        mapView.setOnTouchListener(new View.OnTouchListener() { // Used in place of an OnClickListener
+        // Used in place of an OnClickListener
+        mapView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
@@ -182,7 +183,8 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                         float endX = event.getX();
                         float endY = event.getY();
                         if (Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 10) {
-                            getSupportFragmentManager().popBackStackImmediate(); // Remove StopFragment when MapView is clicked
+                            // Remove StopFragment when MapView is clicked
+                            getSupportFragmentManager().popBackStackImmediate();
                         }
                         break;
                 }
@@ -192,13 +194,17 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(new ArrayList<OverlayItem>(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
-            public boolean onItemSingleTapUp(int index, OverlayItem item) { // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
-                getSupportFragmentManager().popBackStackImmediate(); // That's why this line is needed both here and in the OnTouchListener
+            public boolean onItemSingleTapUp(int index, OverlayItem item) {
+                // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
+                // That's why this line is needed both here and in the OnTouchListener
+                getSupportFragmentManager().popBackStackImmediate();
+
                 Cursor query = database.query("stops", new String[]{"stop_code", "stop_name", "stop_desc"}, "stop_code = ?", new String[]{item.getTitle()}, null, null, null);
                 query.moveToNext();
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down); // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
+                // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down);
                 fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(query.getInt(0), query.getString(1), query.getString(2)));
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
