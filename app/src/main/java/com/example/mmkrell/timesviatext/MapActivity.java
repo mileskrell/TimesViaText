@@ -60,7 +60,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     final String[] projection = {"stop_code", "stop_lat", "stop_lon"};
     final String selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
-    boolean followMeShouldBeEnabled;
+    boolean followMeShouldBeEnabled = true;
 
     ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
 
@@ -169,8 +169,6 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 return false;
             }
         });
-
-        followMeShouldBeEnabled = true;
 
         mapView.setOnTouchListener(new View.OnTouchListener() { // Used in place of an OnClickListener
             @Override
