@@ -192,7 +192,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             }
         });
 
-        itemizedIconOverlay = new ItemizedIconOverlay<OverlayItem>(new ArrayList<OverlayItem>(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+        itemizedIconOverlay = new ItemizedIconOverlay<>(new ArrayList<OverlayItem>(), new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
             @Override
             public boolean onItemSingleTapUp(int index, OverlayItem item) {
                 // If multiple markers are clicked, this block is run multiple times after the OnTouchListener
