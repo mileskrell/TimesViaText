@@ -147,8 +147,17 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         mapView.setMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-                if (! myLocationOverlay.isFollowLocationEnabled()) // Only call disableFollowMe() if the onScroll() was triggered by the user, which would have disabled follow me
-                    disableFollowMe(); // This check prevents disableFollowMe() from being called immediately after the button is clicked
+                // This method is called (twice!) by setCenter() in onCreate()
+
+                // First check:
+                // Make sure we've gotten a location before
+                // Otherwise, followMeShouldBeEnabled would be set to false very early on (see above)
+
+                // Second check:
+                // Only call disableFollowMe() if the onScroll() was triggered by the user, which would have disabled follow me
+                // This check prevents disableFollowMe() from being called immediately after the button is clicked
+                if (currentLocation != null && ! myLocationOverlay.isFollowLocationEnabled())
+                    disableFollowMe();
                 updateMarkers();
                 return false;
             }
@@ -217,29 +226,19 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
-        // Make sure that the GPS is enabled
+        // This check is needed because if this stuff is enabled while GPS is disabled, it won't appear
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            // If the location hasn't been retrieved yet, show the progress dialog
-            if (currentLocation == null) {
-                locationProgressDialog.show();
-            } else {
-                // If it's been more than a minute since the last GPS fix, show the progress dialog again
-                long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
-                int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
-                if (millisecondsSinceLastFix > (1000 * 60))
-                    locationProgressDialog.show();
-            }
-        } else {
-            // If the GPS is disabled, prompt the user to enable it
-            gpsDisabledAlertDialog.show();
-        }
+            myLocationOverlay.enableMyLocation();
+            if (followMeShouldBeEnabled)
+                enableFollowMe();
 
-        myLocationOverlay.enableMyLocation();
-        if (followMeShouldBeEnabled)
-            enableFollowMe();
+            if (shouldShowLocationProgressDialog())
+                locationProgressDialog.show();
+        }
     }
 
     @Override
@@ -251,6 +250,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         myLocationOverlay.disableMyLocation();
 
         // Remove the dialogs, if they exist
+        // Their removal is visible, but it's better than removing them in onResume()
         if (locationProgressDialog.isShowing())
             locationProgressDialog.dismiss();
         if (gpsDisabledAlertDialog.isShowing())
@@ -277,12 +277,23 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
+        // Now we can enable this stuff
+        myLocationOverlay.enableMyLocation();
+        if (followMeShouldBeEnabled)
+            enableFollowMe();
+
+        gpsDisabledAlertDialog.dismiss();
+        if (shouldShowLocationProgressDialog())
+            locationProgressDialog.show();
 
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        // If GPS is disabled, prompt the user to enable it
+        gpsDisabledAlertDialog.show();
+        // If GPS is disabled when requestLocationUpdates() is called in onResume(), onProviderDisabled() will be called
+        // That means that gpsDisabledAlertDialog.show() doesn't need to also be called in onResume()
     }
 
     private void updateMarkers() {
@@ -309,5 +320,16 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
         myLocationOverlay.disableFollowLocation();
         followMeShouldBeEnabled = false;
+    }
+
+    private boolean shouldShowLocationProgressDialog() {
+        // If currentLocation is null, we should obviously show the progress dialog
+        if (currentLocation == null)
+            return true;
+
+        // If it's been more than a minute since the last GPS fix, we should show the progress dialog
+        long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
+        int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
+        return millisecondsSinceLastFix > (1000 * 60);
     }
 }
