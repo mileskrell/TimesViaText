@@ -16,6 +16,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
@@ -63,6 +64,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     boolean followMeShouldBeEnabled = true;
 
     ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
+    String selectedMarker;
 
     float startX;
     float startY;
@@ -183,6 +185,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                         float endX = event.getX();
                         float endY = event.getY();
                         if (Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 10) {
+                            // Now that the StopFragment is about to be removed, set selectedMarker to 0
+                            selectedMarker = "0";
+                            // Update markers to reset the icon for the previously-selected marker
+                            updateMarkers();
                             // Remove StopFragment when MapView is clicked
                             getSupportFragmentManager().popBackStackImmediate();
                         }
@@ -201,6 +207,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
                 Cursor query = database.query("stops", new String[]{"stop_code", "stop_name", "stop_desc"}, "stop_code = ?", new String[]{item.getTitle()}, null, null, null);
                 query.moveToNext();
+
+                // Set selectedMarker to the stop code of the marker that's been tapped
+                selectedMarker = query.getString(0);
+                // Update markers to make this marker's drawable update
+                updateMarkers();
 
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
@@ -266,6 +277,15 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     }
 
     @Override
+    public void onBackPressed() {
+        // Tapping back will remove any existing StopFragment, so set selectedMarker to 0
+        selectedMarker = "0";
+        // Update markers to set the icon for the previously-selected marker back to normal
+        updateMarkers();
+        super.onBackPressed();
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
         if (locationProgressDialog.isShowing())
@@ -306,7 +326,11 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
 
         while (query.moveToNext()) {
-            itemizedIconOverlay.addItem(new OverlayItem(query.getString(0), null, new GeoPoint(query.getDouble(1), query.getDouble(2))));
+            OverlayItem marker = new OverlayItem(query.getString(0), null, new GeoPoint(query.getDouble(1), query.getDouble(2)));
+            // If the stop code matches the selected stop code, give this marker a different drawable to reflect that
+            if (marker.getTitle().equals(selectedMarker))
+                marker.setMarker(ContextCompat.getDrawable(this, R.drawable.marker_selected));
+            itemizedIconOverlay.addItem(marker);
         }
 
         query.close();
