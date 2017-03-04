@@ -2,10 +2,9 @@
     <string name="app_name">Times via Text (for CTA riders)</string>
 
     <string name="welcome_message">
-        Things that will be in the final version of the app:\n\n
-        * A proper welcome screen\n\n
-        * It\'ll download map tiles on first run (with a nice progress bar)\n\n
-        * Possibly a navigation drawer
+        If you\'re reading this, it means that you\'ve never tapped the above button before!\n\n
+        This page will be a little tutorial and will let the user download map tiles.\n\n
+        The app will also have either a navigation drawer or a bottom navigation bar.
     </string>
     <string name="button_open_map">Click here to open the map!</string>
 

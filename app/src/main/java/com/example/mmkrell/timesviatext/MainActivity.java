@@ -1,7 +1,9 @@
 package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,9 +19,18 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     Button buttonOpenMap;
     TextView textViewWelcomeMessage;
 
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        boolean hasCompletedTutorial = sharedPreferences.getBoolean("has_completed_tutorial", false);
+        // If the user has already been through the tutorial, go straight to the map
+        if (hasCompletedTutorial)
+            startActivity(new Intent(this, MapActivity.class));
+
         setContentView(R.layout.activity_main);
         buttonOpenMap = (Button) findViewById(R.id.buttonOpenMap);
         textViewWelcomeMessage = (TextView) findViewById(R.id.textViewWelcomeMessage);
@@ -27,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         buttonOpenMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sharedPreferences.edit().putBoolean("has_completed_tutorial", true).apply();
                 startActivity(new Intent(MainActivity.this, MapActivity.class));
             }
         });
