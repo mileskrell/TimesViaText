@@ -306,7 +306,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
 
         while (query.moveToNext()) {
-            itemizedIconOverlay.addItem(new OverlayItem(query.getString(0), String.valueOf(query.getInt(0)), new GeoPoint(query.getDouble(1), query.getDouble(2))));
+            itemizedIconOverlay.addItem(new OverlayItem(query.getString(0), null, new GeoPoint(query.getDouble(1), query.getDouble(2))));
         }
 
         query.close();
