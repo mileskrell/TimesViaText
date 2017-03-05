@@ -94,13 +94,20 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         mapView.setScrollableAreaLimitDouble(boundingBox);
 
         mapView.getController().setZoom(18);
-        GeoPoint startingPoint = new GeoPoint(41.945477, -87.690778);
-        mapView.getController().setCenter(startingPoint);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        Location lastKnownLocation = null;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        // Set the map center to the last known location, if available
+        if (lastKnownLocation != null)
+            mapView.getController().setCenter(new GeoPoint(lastKnownLocation));
+         else
+             mapView.getController().setCenter(new GeoPoint(41.945477, -87.690778));
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(MapActivity.this), mapView);
         mapView.getOverlays().add(myLocationOverlay);
-
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         locationProgressDialog = new ProgressDialog(MapActivity.this);
         locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
