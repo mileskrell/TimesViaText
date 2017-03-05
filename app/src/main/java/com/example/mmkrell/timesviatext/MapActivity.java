@@ -137,7 +137,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View v) {
                 if (currentLocation != null) {
-                    mapView.getController().animateTo(new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                    mapView.getController().animateTo(new GeoPoint(currentLocation));
                 }
             }
         });
