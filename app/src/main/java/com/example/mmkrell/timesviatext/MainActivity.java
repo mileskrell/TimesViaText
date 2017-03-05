@@ -57,10 +57,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        for (int x : grantResults) {
-            if (grantResults[x] == -1) {
-                finish(); // If any permission request is denied, just exit the app
-            }
-        }
+        // If any permission request is denied, just exit the app
+        for (int x : grantResults)
+            if (x == PackageManager.PERMISSION_DENIED)
+                finish();
     }
 }
