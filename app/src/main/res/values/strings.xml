@@ -3,10 +3,13 @@
 
     <string name="welcome_message">
         If you\'re reading this, it means that you\'ve never tapped the above button before!\n\n
-        This page will be a little tutorial and will let the user download map tiles.\n\n
-        The app will also have either a navigation drawer or a bottom navigation bar.
+        This page will be a little tutorial and will let the user download map tiles.
     </string>
-    <string name="button_open_map">Click here to open the map!</string>
+    <string name="button_open_map">Got it!</string>
+
+    <string name="title_favorites">Favorites</string>
+    <string name="title_map">Map</string>
+    <string name="title_routes">Routes</string>
 
     <string name="image_button_my_location_description">Go to my location</string>
     <string name="image_button_follow_me_description">Follow my location</string>

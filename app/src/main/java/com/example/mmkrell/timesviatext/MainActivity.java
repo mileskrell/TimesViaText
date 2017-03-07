@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         boolean hasCompletedTutorial = sharedPreferences.getBoolean("has_completed_tutorial", false);
         // If the user has already been through the tutorial, go straight to the map
         if (hasCompletedTutorial)
-            startActivity(new Intent(this, MapActivity.class));
+            startActivity(new Intent(this, NavigationBarActivity.class));
 
         setContentView(R.layout.activity_main);
         buttonOpenMap = (Button) findViewById(R.id.buttonOpenMap);
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             @Override
             public void onClick(View v) {
                 sharedPreferences.edit().putBoolean("has_completed_tutorial", true).apply();
-                startActivity(new Intent(MainActivity.this, MapActivity.class));
+                startActivity(new Intent(MainActivity.this, NavigationBarActivity.class));
             }
         });
 

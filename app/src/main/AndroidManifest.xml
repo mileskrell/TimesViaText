@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mmkrell.timesviatext">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -27,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MapActivity" />
+        <activity android:name=".NavigationBarActivity" />
     </application>
 
 </manifest>
