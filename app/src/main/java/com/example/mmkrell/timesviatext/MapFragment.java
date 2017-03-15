@@ -72,7 +72,7 @@ public class MapFragment extends Fragment implements LocationListener {
     float startY;
 
     public MapFragment() {
-
+        // Required empty public constructor
     }
 
     public static MapFragment newInstance() {
