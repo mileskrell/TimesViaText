@@ -9,8 +9,47 @@ import android.view.MenuItem;
 
 public class NavigationBarActivity extends AppCompatActivity {
 
-    // Only one MapFragment is used so that it doesn't have to be recreated every time the user moves between views
+    // Only one of each fragment is used so that they don't have to be recreated every time the user moves between views
+    FavoritesFragment favoritesFragment;
     MapFragment mapFragment;
+    RoutesFragment routesFragment;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            switch (item.getItemId()) {
+                case R.id.navigation_favorites:
+                    if (getSupportFragmentManager().findFragmentByTag("favorites_fragment") == null)
+                        fragmentTransaction.add(R.id.content, favoritesFragment, "favorites_fragment");
+                    fragmentTransaction.show(favoritesFragment);
+
+                    fragmentTransaction.hide(mapFragment);
+                    fragmentTransaction.hide(routesFragment);
+                    fragmentTransaction.commit();
+                    return true;
+                case R.id.navigation_map:
+                    if (getSupportFragmentManager().findFragmentByTag("map_fragment") == null)
+                        fragmentTransaction.add(R.id.content, mapFragment, "map_fragment");
+                    fragmentTransaction.show(mapFragment);
+
+                    fragmentTransaction.hide(favoritesFragment);
+                    fragmentTransaction.hide(routesFragment);
+                    fragmentTransaction.commit();
+                    return true;
+                case R.id.navigation_routes:
+                    if (getSupportFragmentManager().findFragmentByTag("routes_fragment") == null)
+                        fragmentTransaction.add(R.id.content, routesFragment, "routes_fragment");
+                    fragmentTransaction.show(routesFragment);
+
+                    fragmentTransaction.hide(favoritesFragment);
+                    fragmentTransaction.hide(mapFragment);
+                    fragmentTransaction.commit();
+                    return true;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,25 +57,14 @@ public class NavigationBarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_navigation_bar);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
-        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_favorites:
-                        return true;
-                    case R.id.navigation_map:
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        if (mapFragment == null)
-                            mapFragment = MapFragment.newInstance();
-                        fragmentTransaction.replace(R.id.content, mapFragment);
-                        fragmentTransaction.commit();
-                        return true;
-                    case R.id.navigation_routes:
-                        return true;
-                }
-                return false;
-            }
-        });
+        favoritesFragment = FavoritesFragment.newInstance();
+        mapFragment = MapFragment.newInstance();
+        routesFragment = RoutesFragment.newInstance();
+
+        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+
+        // Select the favorites fragment at startup
+        onNavigationItemSelectedListener.onNavigationItemSelected(navigation.getMenu().getItem(0));
     }
 
     @Override
