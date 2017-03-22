@@ -5,7 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class NavigationBarActivity extends AppCompatActivity {
 
@@ -65,6 +67,26 @@ public class NavigationBarActivity extends AppCompatActivity {
 
         // Select the favorites fragment at startup
         onNavigationItemSelectedListener.onNavigationItemSelected(navigation.getMenu().getItem(0));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.options_menu_settings:
+                Toast.makeText(this, "You selected Settings", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.options_menu_about:
+                Toast.makeText(this, "You selected About", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
