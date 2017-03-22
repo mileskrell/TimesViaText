@@ -1,5 +1,6 @@
 package com.example.mmkrell.timesviatext;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -79,7 +80,7 @@ public class NavigationBarActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.options_menu_settings:
-                Toast.makeText(this, "You selected Settings", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.options_menu_about:
                 Toast.makeText(this, "You selected About", Toast.LENGTH_SHORT).show();

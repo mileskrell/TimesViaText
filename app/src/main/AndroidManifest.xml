@@ -29,6 +29,10 @@
         </activity>
 
         <activity android:name=".NavigationBarActivity" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/string_settings" />
     </application>
 
 </manifest>

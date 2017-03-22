@@ -12,6 +12,10 @@
     <string name="title_routes">Routes</string>
 
     <string name="favorites_fragment_message">This will be the favorites fragment!</string>
+    <string name="routes_fragment_message">This will be the routes fragment!</string>
+
+    <string name="settings_fragment_message">This will be the settings fragment!</string>
+    <string name="string_settings">Settings</string>
 
     <string name="image_button_my_location_description">Go to my location</string>
     <string name="image_button_follow_me_description">Follow my location</string>
@@ -27,6 +31,4 @@
     <string name="button_get_stop_times">Get stop times</string>
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
-
-    <string name="routes_fragment_message">This will be the routes fragment!</string>
 </resources>
