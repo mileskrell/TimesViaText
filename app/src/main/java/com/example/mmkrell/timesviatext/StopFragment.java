@@ -22,7 +22,7 @@ public class StopFragment extends Fragment {
     Button stopFragmentButton;
 
     public StopFragment() {
-
+        // Required empty public constructor
     }
 
     public static StopFragment newInstance(int stopCode, String stopName, String stopDesc) {
