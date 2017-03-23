@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <com.kizitonwose.colorpreference.ColorPreference
+        android:key="pref_color_primary"
+        android:title="Primary Color" />
+    <com.kizitonwose.colorpreference.ColorPreference
+        android:key="pref_color_primary_dark"
+        android:title="Primary Color (Dark Variant)" />
+    <com.kizitonwose.colorpreference.ColorPreference
+        android:key="pref_color_accent"
+        android:title="Accent Color" />
 </PreferenceScreen>
