@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.kizitonwose.colorpreference.ColorPreference
         android:key="pref_color_primary"
+        app:colorChoices="@array/colors_primary"
         android:defaultValue="@color/colorPrimary"
         android:title="Primary Color" />
     <com.kizitonwose.colorpreference.ColorPreference
