@@ -9,10 +9,12 @@
         android:title="Primary Color" />
     <com.kizitonwose.colorpreference.ColorPreference
         android:key="pref_color_primary_dark"
+        app:colorChoices="@array/colors_primary_dark"
         android:defaultValue="@color/colorPrimaryDark"
         android:title="Primary Color (Dark Variant)" />
     <com.kizitonwose.colorpreference.ColorPreference
         android:key="pref_color_accent"
+        app:colorChoices="@array/colors_accent"
         android:defaultValue="@color/colorAccent"
         android:title="Accent Color" />
 </PreferenceScreen>
