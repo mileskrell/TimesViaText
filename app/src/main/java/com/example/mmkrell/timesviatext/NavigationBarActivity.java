@@ -23,8 +23,6 @@ public class NavigationBarActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_favorites:
-                    if (getSupportFragmentManager().findFragmentByTag("favorites_fragment") == null)
-                        fragmentTransaction.add(R.id.content, favoritesFragment, "favorites_fragment");
                     fragmentTransaction.show(favoritesFragment);
 
                     fragmentTransaction.hide(mapFragment);
@@ -32,8 +30,6 @@ public class NavigationBarActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_map:
-                    if (getSupportFragmentManager().findFragmentByTag("map_fragment") == null)
-                        fragmentTransaction.add(R.id.content, mapFragment, "map_fragment");
                     fragmentTransaction.show(mapFragment);
 
                     fragmentTransaction.hide(favoritesFragment);
@@ -41,8 +37,6 @@ public class NavigationBarActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_routes:
-                    if (getSupportFragmentManager().findFragmentByTag("routes_fragment") == null)
-                        fragmentTransaction.add(R.id.content, routesFragment, "routes_fragment");
                     fragmentTransaction.show(routesFragment);
 
                     fragmentTransaction.hide(favoritesFragment);
@@ -63,6 +57,12 @@ public class NavigationBarActivity extends AppCompatActivity {
         favoritesFragment = FavoritesFragment.newInstance();
         mapFragment = MapFragment.newInstance();
         routesFragment = RoutesFragment.newInstance();
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content, favoritesFragment, "favorites_fragment")
+                .add(R.id.content, mapFragment, "map_fragment")
+                .add(R.id.content, routesFragment, "routes_fragment")
+                .commit();
 
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
