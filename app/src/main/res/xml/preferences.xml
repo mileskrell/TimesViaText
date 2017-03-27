@@ -1,20 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.kizitonwose.colorpreference.ColorPreference
-        android:key="pref_color_primary"
-        app:colorChoices="@array/colors_primary"
-        android:defaultValue="@color/colorPrimary"
-        android:title="Primary Color" />
-    <com.kizitonwose.colorpreference.ColorPreference
-        android:key="pref_color_primary_dark"
-        app:colorChoices="@array/colors_primary_dark"
-        android:defaultValue="@color/colorPrimaryDark"
-        android:title="Primary Color (Dark Variant)" />
-    <com.kizitonwose.colorpreference.ColorPreference
-        android:key="pref_color_accent"
-        app:colorChoices="@array/colors_accent"
-        android:defaultValue="@color/colorAccent"
-        android:title="Accent Color" />
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
 </PreferenceScreen>
