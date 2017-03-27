@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Set the preferences accessible from SettingsFragment to their defaults
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean hasCompletedTutorial = sharedPreferences.getBoolean("has_completed_tutorial", false);
         // If the user has already been through the tutorial, go straight to the map
         if (hasCompletedTutorial)
