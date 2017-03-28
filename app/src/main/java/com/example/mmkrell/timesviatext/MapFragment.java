@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -95,6 +96,8 @@ public class MapFragment extends Fragment implements LocationListener {
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_tiles_scaled_to_dpi", true))
+            mapView.setTilesScaledToDpi(true);
         mapView.setMultiTouchControls(true);
 //        mapView.setMaxZoomLevel(19);
 //        mapView.setMinZoomLevel(17);
