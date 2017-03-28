@@ -254,6 +254,17 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (! hidden) {
+            if (! locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                gpsDisabledAlertDialog.show();
+            else if (shouldShowLocationProgressDialog())
+                locationProgressDialog.show();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -264,9 +275,6 @@ public class MapFragment extends Fragment implements LocationListener {
             myLocationOverlay.enableMyLocation();
             if (followMeShouldBeEnabled)
                 enableFollowMe();
-
-            if (shouldShowLocationProgressDialog())
-                locationProgressDialog.show();
         }
     }
 
@@ -318,7 +326,8 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
         // If GPS is disabled, prompt the user to enable it
-        gpsDisabledAlertDialog.show();
+        if (getUserVisibleHint())
+            gpsDisabledAlertDialog.show();
         // If GPS is disabled when requestLocationUpdates() is called in onResume(), onProviderDisabled() will be called
         // That means that gpsDisabledAlertDialog.show() doesn't need to also be called in onResume()
     }
