@@ -96,8 +96,8 @@ public class MapFragment extends Fragment implements LocationListener {
         mapView = (MapView) v.findViewById(R.id.map_view);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
-//        map_view.setMaxZoomLevel(19);
-//        map_view.setMinZoomLevel(17);
+//        mapView.setMaxZoomLevel(19);
+//        mapView.setMinZoomLevel(17);
 
         BoundingBox boundingBox = new BoundingBox(42.06470019, -87.52569948, 41.6441576, -87.884297);
         mapView.setScrollableAreaLimitDouble(boundingBox);
