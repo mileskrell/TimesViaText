@@ -9,7 +9,7 @@
     <org.osmdroid.views.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/mapView" />
+        android:id="@+id/map_view" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:background="#FFFFFF"
-        android:id="@+id/textViewZoomLevel" />
+        android:id="@+id/text_view_zoom_level" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -31,19 +31,19 @@
         android:src="@drawable/ic_center_map"
         android:background="#00000000"
         android:contentDescription="@string/image_button_my_location_description"
-        android:id="@+id/buttonMyLocation" />
+        android:id="@+id/button_my_location" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/buttonMyLocation"
+        android:layout_below="@+id/button_my_location"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_follow_me"
         android:background="#00000000"
         android:contentDescription="@string/image_button_follow_me_description"
-        android:id="@+id/buttonFollowMe" />
+        android:id="@+id/button_follow_me" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,5 +56,5 @@
         android:textColorLink="#0000FF"
         android:textColorHighlight="#CC00CC"
         android:background="@drawable/gray_background_rounded_corners"
-        android:id="@+id/textViewOpenStreetMapCredit" />
+        android:id="@+id/text_view_openstreetmap_credit" />
 </RelativeLayout>

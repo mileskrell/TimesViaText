@@ -20,17 +20,17 @@
             android:textAlignment="center"
             android:textSize="22sp"
             android:textColor="#00AA00"
-            android:id="@+id/stopFragmentTextViewName" />
+            android:id="@+id/stop_fragment_text_view_name" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/stopFragmentTextViewName"
+            android:layout_below="@id/stop_fragment_text_view_name"
             android:layout_centerHorizontal="true"
             android:textAlignment="center"
             android:textSize="18sp"
             android:textColor="#AA0000"
-            android:id="@+id/stopFragmentTextViewDirection" />
+            android:id="@+id/stop_fragment_text_view_direction" />
     </RelativeLayout>
 
     <Button
@@ -39,5 +39,5 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:text="@string/button_get_stop_times"
-        android:id="@+id/stopFragmentButton" />
+        android:id="@+id/stop_fragment_button" />
 </LinearLayout>

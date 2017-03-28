@@ -48,9 +48,9 @@ public class StopFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_stop, container, false);
-        stopFragmentTextViewName = (TextView) v.findViewById(R.id.stopFragmentTextViewName);
-        stopFragmentTextViewDirection = (TextView) v.findViewById(R.id.stopFragmentTextViewDirection);
-        stopFragmentButton = (Button) v.findViewById(R.id.stopFragmentButton);
+        stopFragmentTextViewName = (TextView) v.findViewById(R.id.stop_fragment_text_view_name);
+        stopFragmentTextViewDirection = (TextView) v.findViewById(R.id.stop_fragment_text_view_direction);
+        stopFragmentButton = (Button) v.findViewById(R.id.stop_fragment_button);
 
         stopFragmentTextViewName.setText(stopName);
 

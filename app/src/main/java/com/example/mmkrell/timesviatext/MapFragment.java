@@ -83,21 +83,21 @@ public class MapFragment extends Fragment implements LocationListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
-        textViewZoomLevel = (TextView) v.findViewById(R.id.textViewZoomLevel);
+        textViewZoomLevel = (TextView) v.findViewById(R.id.text_view_zoom_level);
 
-        buttonMyLocation = (ImageButton) v.findViewById(R.id.buttonMyLocation);
-        buttonFollowMe = (ImageButton) v.findViewById(R.id.buttonFollowMe);
+        buttonMyLocation = (ImageButton) v.findViewById(R.id.button_my_location);
+        buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
 
-        textViewOpenStreetMapCredit = (TextView) v.findViewById(R.id.textViewOpenStreetMapCredit);
+        textViewOpenStreetMapCredit = (TextView) v.findViewById(R.id.text_view_openstreetmap_credit);
         // Makes the link clickable
         textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
-        mapView = (MapView) v.findViewById(R.id.mapView);
+        mapView = (MapView) v.findViewById(R.id.map_view);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
         mapView.setMultiTouchControls(true);
-//        mapView.setMaxZoomLevel(19);
-//        mapView.setMinZoomLevel(17);
+//        map_view.setMaxZoomLevel(19);
+//        map_view.setMinZoomLevel(17);
 
         BoundingBox boundingBox = new BoundingBox(42.06470019, -87.52569948, 41.6441576, -87.884297);
         mapView.setScrollableAreaLimitDouble(boundingBox);

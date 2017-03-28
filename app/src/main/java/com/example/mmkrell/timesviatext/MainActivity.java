@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
             startActivity(new Intent(this, NavigationBarActivity.class));
 
         setContentView(R.layout.activity_main);
-        buttonOpenMap = (Button) findViewById(R.id.buttonOpenMap);
-        textViewWelcomeMessage = (TextView) findViewById(R.id.textViewWelcomeMessage);
+        buttonOpenMap = (Button) findViewById(R.id.button_open_map);
+        textViewWelcomeMessage = (TextView) findViewById(R.id.text_view_welcome_message);
 
         buttonOpenMap.setOnClickListener(new View.OnClickListener() {
             @Override
