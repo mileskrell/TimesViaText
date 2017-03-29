@@ -115,8 +115,7 @@ public class NavigationBarActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().findFragmentByTag("map_fragment") != null)
-            mapFragment.deselectMarker();
+        mapFragment.deselectMarker();
         super.onBackPressed();
     }
 }
