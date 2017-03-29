@@ -1,7 +1,9 @@
 package com.example.mmkrell.timesviatext;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -16,6 +18,8 @@ public class NavigationBarActivity extends AppCompatActivity {
     FavoritesFragment favoritesFragment;
     MapFragment mapFragment;
     RoutesFragment routesFragment;
+
+    SharedPreferences sharedPreferences;
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -77,6 +81,13 @@ public class NavigationBarActivity extends AppCompatActivity {
 
         // Select the favorites fragment at startup
         onNavigationItemSelectedListener.onNavigationItemSelected(navigation.getMenu().getItem(0));
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        // Have the user download map tiles, if they haven't before
+        if (! sharedPreferences.getBoolean("has_downloaded_tiles", false)) {
+            startActivity(new Intent(this, DownloadMapTilesActivity.class));
+        }
     }
 
     @Override
@@ -88,6 +99,9 @@ public class NavigationBarActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.options_menu_download_tiles:
+                startActivity(new Intent(this, DownloadMapTilesActivity.class));
+                return true;
             case R.id.options_menu_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;

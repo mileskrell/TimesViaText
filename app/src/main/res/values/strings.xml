@@ -7,6 +7,8 @@
     </string>
     <string name="button_open_map">Got it!</string>
 
+    <string name="download_map_tiles_activity_explanation">For the map to work offline, you must download the map tiles, which are the images that make up the map.</string>
+
     <string name="title_favorites">Favorites</string>
     <string name="title_map">Map</string>
     <string name="title_routes">Routes</string>

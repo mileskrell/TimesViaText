@@ -31,6 +31,10 @@
         <activity android:name=".NavigationBarActivity" />
 
         <activity
+            android:name=".DownloadMapTilesActivity"
+            android:label="@string/download_map_tiles" />
+
+        <activity
             android:name=".SettingsActivity"
             android:label="@string/settings" />
     </application>
