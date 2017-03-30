@@ -113,9 +113,18 @@ public class NavigationBarActivity extends AppCompatActivity {
         }
     }
 
+    // Without this override, onBackPressed() would remove
+    // any StopFragment even if the user wasn't viewing it.
+    // This means that, if the user wasn't viewing MapFragment but a StopFragment existed,
+    // finish() wouldn't be called until the back button was pressed twice.
     @Override
     public void onBackPressed() {
-        mapFragment.deselectMarker();
-        super.onBackPressed();
+        if (mapFragment.getUserVisibleHint()) {
+            mapFragment.deselectMarker();
+            super.onBackPressed();
+            return;
+        }
+
+        finish();
     }
 }
