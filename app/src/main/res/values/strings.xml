@@ -20,6 +20,8 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
 
+    <string name="credits">Times via Text\n\nAn app by Miles Krell</string>
+
     <string name="favorites_fragment_message">This will be the favorites fragment!</string>
     <string name="routes_fragment_message">This will be the routes fragment!</string>
 
