@@ -2,12 +2,15 @@
     <string name="app_name">Times via Text (for CTA riders)</string>
 
     <string name="welcome_message">
-        If you\'re reading this, it means that you\'ve never tapped the above button before!\n\n
-        This page will be a little tutorial and will let the user download map tiles.
+        Thanks for downloading this app!\n\n
+        For the app to work, you\'ll have to grant a couple of permissions.
     </string>
-    <string name="button_open_map">Got it!</string>
+    <string name="button_from_main_activity">Got it!</string>
 
-    <string name="download_map_tiles_activity_explanation">For the map to work offline, you must download the map tiles, which are the images that make up the map.</string>
+    <string name="download_map_tiles_activity_explanation">
+        For the map to work offline, you must download the map tiles, which are the images that make up the map.\n\n
+        (This hasn\'t been set up yet)
+    </string>
 
     <string name="title_favorites">Favorites</string>
     <string name="title_map">Map</string>

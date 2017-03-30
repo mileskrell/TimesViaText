@@ -12,19 +12,20 @@
     android:orientation="vertical"
     tools:context="com.example.mmkrell.timesviatext.MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/button_open_map"
-        android:id="@+id/button_open_map" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
         android:textSize="18sp"
+        android:textAlignment="center"
         android:text="@string/welcome_message"
         android:id="@+id/text_view_welcome_message" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:text="@string/button_from_main_activity"
+        android:id="@+id/button_open_map" />
 </LinearLayout>
