@@ -338,7 +338,12 @@ public class MapFragment extends Fragment implements LocationListener {
     private void updateMarkers() {
         itemizedIconOverlay.removeAllItems();
 
-        String[] selectionArgs = {String.valueOf(mapView.getBoundingBox().getLatNorth()), String.valueOf(mapView.getBoundingBox().getLatSouth()), String.valueOf(mapView.getBoundingBox().getLonEast()), String.valueOf(mapView.getBoundingBox().getLonWest())};
+        double north = mapView.getBoundingBox().getLatNorth() + mapView.getBoundingBox().getLatitudeSpan() / 10;
+        double south = mapView.getBoundingBox().getLatSouth() - mapView.getBoundingBox().getLatitudeSpan() / 10;
+        double east = mapView.getBoundingBox().getLonEast() + mapView.getBoundingBox().getLongitudeSpan() / 10;
+        double west = mapView.getBoundingBox().getLonWest() - mapView.getBoundingBox().getLongitudeSpan() / 10;
+
+        String[] selectionArgs = {String.valueOf(north), String.valueOf(south), String.valueOf(east), String.valueOf(west)};
 
         Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
 
