@@ -46,7 +46,9 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class MapFragment extends Fragment implements LocationListener {
 
-    MapView mapView;
+    // These are static so they can be accessed from DownloadMapTilesActivity
+    static MapView mapView;
+    static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
 
     Location currentLocation;
     LocationManager locationManager;
@@ -95,17 +97,18 @@ public class MapFragment extends Fragment implements LocationListener {
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
+        mapView.setUseDataConnection(false);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
+
+        mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);
+        mapView.setMinZoomLevel(15);
+        mapView.setMaxZoomLevel(18);
+        mapView.getController().setZoom(18);
+
         if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_tiles_scaled_to_dpi", true))
             mapView.setTilesScaledToDpi(true);
+
         mapView.setMultiTouchControls(true);
-//        mapView.setMaxZoomLevel(19);
-//        mapView.setMinZoomLevel(17);
-
-        BoundingBox boundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
-        mapView.setScrollableAreaLimitDouble(boundingBox);
-
-        mapView.getController().setZoom(18);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 

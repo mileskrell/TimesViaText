@@ -7,10 +7,9 @@
     </string>
     <string name="button_from_main_activity">Got it!</string>
 
-    <string name="download_map_tiles_activity_explanation">
-        For the map to work offline, you must download the map tiles, which are the images that make up the map.\n\n
-        (This hasn\'t been set up yet)
-    </string>
+    <string name="download_map_tiles_activity_explanation">Before you can use the map offline, you have to download the map tiles, which are the images that make up the map.</string>
+    <string name="downloading_map_tiles">Downloading map tiles…</string>
+    <string name="cancel">Cancel</string>
 
     <string name="title_favorites">Favorites</string>
     <string name="title_map">Map</string>
