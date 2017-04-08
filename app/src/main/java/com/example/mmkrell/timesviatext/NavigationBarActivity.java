@@ -14,11 +14,11 @@ import android.view.MenuItem;
 public class NavigationBarActivity extends AppCompatActivity {
 
     // Only one of each fragment is used so that they don't have to be recreated every time the user moves between views
-    FavoritesFragment favoritesFragment;
-    MapFragment mapFragment;
-    RoutesFragment routesFragment;
+    private FavoritesFragment favoritesFragment;
+    private MapFragment mapFragment;
+    private RoutesFragment routesFragment;
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override

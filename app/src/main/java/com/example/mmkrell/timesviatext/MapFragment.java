@@ -50,29 +50,29 @@ public class MapFragment extends Fragment implements LocationListener {
     static MapView mapView;
     static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
 
-    Location currentLocation;
-    LocationManager locationManager;
-    MyLocationNewOverlay myLocationOverlay;
+    private Location currentLocation;
+    private LocationManager locationManager;
+    private MyLocationNewOverlay myLocationOverlay;
 
-    ProgressDialog locationProgressDialog;
-    AlertDialog gpsDisabledAlertDialog;
+    private ProgressDialog locationProgressDialog;
+    private AlertDialog gpsDisabledAlertDialog;
 
-    TextView textViewZoomLevel;
-    ImageButton buttonMyLocation;
-    ImageButton buttonFollowMe;
-    TextView textViewOpenStreetMapCredit;
+    private TextView textViewZoomLevel;
+    private ImageButton buttonMyLocation;
+    private ImageButton buttonFollowMe;
+    private TextView textViewOpenStreetMapCredit;
 
-    SQLiteDatabase database;
-    final String[] projection = {"stop_code", "stop_lat", "stop_lon"};
-    final String selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
+    private SQLiteDatabase database;
+    private final String[] projection = {"stop_code", "stop_lat", "stop_lon"};
+    private final String selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
-    boolean followMeShouldBeEnabled = true;
+    private boolean followMeShouldBeEnabled = true;
 
-    ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
-    String selectedMarker;
+    private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
+    private String selectedMarker;
 
-    float startX;
-    float startY;
+    private float startX;
+    private float startY;
 
     public MapFragment() {
         // Required empty public constructor
@@ -384,7 +384,7 @@ public class MapFragment extends Fragment implements LocationListener {
         return millisecondsSinceLastFix > (1000 * 60);
     }
 
-    protected void deselectMarker() {
+    void deselectMarker() {
         // Now that the StopFragment is about to be removed, set selectedMarker to 0
         selectedMarker = "0";
         // Update markers to reset the icon for the previously-selected marker

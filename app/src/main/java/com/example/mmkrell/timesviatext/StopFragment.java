@@ -17,9 +17,9 @@ public class StopFragment extends Fragment {
     private String stopName;
     private String stopDesc;
 
-    TextView stopFragmentTextViewName;
-    TextView stopFragmentTextViewDirection;
-    Button stopFragmentButton;
+    private TextView stopFragmentTextViewName;
+    private TextView stopFragmentTextViewDirection;
+    private Button stopFragmentButton;
 
     public StopFragment() {
         // Required empty public constructor

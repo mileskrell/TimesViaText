@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    Button buttonOpenMap;
-    TextView textViewWelcomeMessage;
+    private Button buttonOpenMap;
+    private TextView textViewWelcomeMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
