@@ -20,7 +20,8 @@
 
         <activity
             android:name=".MainActivity"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,19 +29,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".NavigationBarActivity" />
+        <activity
+            android:name=".NavigationBarActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".DownloadMapTilesActivity"
-            android:label="@string/download_map_tiles" />
+            android:label="@string/download_map_tiles"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/settings" />
+            android:label="@string/settings"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".AboutActivity"
-            android:label="@string/about" />
+            android:label="@string/about"
+            android:screenOrientation="portrait" />
     </application>
-
 </manifest>
