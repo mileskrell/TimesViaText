@@ -381,7 +381,7 @@ public class MapFragment extends Fragment implements LocationListener {
         // If it's been more than a minute since the last GPS fix, we should show the progress dialog
         long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
         int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
-        return millisecondsSinceLastFix > (1000 * 60);
+        return millisecondsSinceLastFix > 60000;
     }
 
     void deselectMarker() {

@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         // Set the preferences accessible from SettingsFragment to their defaults
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        boolean permissionsAlreadyGranted =
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        final boolean permissionsAlreadyGranted =
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
         // If the user has already been through the tutorial, go straight to the map
         if (permissionsAlreadyGranted)
@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         buttonOpenMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ((ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) |
-                        (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+                if (! permissionsAlreadyGranted) {
                     ActivityCompat.requestPermissions(MainActivity.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                 }
             }
@@ -64,6 +63,6 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
         if (permissionDenied)
             finish();
         else
-            startActivity(new Intent(MainActivity.this, NavigationBarActivity.class));
+            startActivity(new Intent(this, NavigationBarActivity.class));
     }
 }
