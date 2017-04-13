@@ -14,9 +14,9 @@ import android.view.MenuItem;
 public class NavigationBarActivity extends AppCompatActivity {
 
     // Only one of each fragment is used so that they don't have to be recreated every time the user moves between views
-    private FavoritesFragment favoritesFragment;
     private MapFragment mapFragment;
     private RoutesFragment routesFragment;
+    private FavoritesFragment favoritesFragment;
 
     private SharedPreferences sharedPreferences;
 
@@ -25,6 +25,26 @@ public class NavigationBarActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
+                case R.id.navigation_map:
+                    fragmentTransaction.show(mapFragment);
+                    mapFragment.setUserVisibleHint(true);
+
+                    fragmentTransaction.hide(routesFragment);
+                    routesFragment.setUserVisibleHint(false);
+                    fragmentTransaction.hide(favoritesFragment);
+                    favoritesFragment.setUserVisibleHint(false);
+                    fragmentTransaction.commit();
+                    return true;
+                case R.id.navigation_routes:
+                    fragmentTransaction.show(routesFragment);
+                    routesFragment.setUserVisibleHint(true);
+
+                    fragmentTransaction.hide(mapFragment);
+                    mapFragment.setUserVisibleHint(false);
+                    fragmentTransaction.hide(favoritesFragment);
+                    favoritesFragment.setUserVisibleHint(false);
+                    fragmentTransaction.commit();
+                    return true;
                 case R.id.navigation_favorites:
                     fragmentTransaction.show(favoritesFragment);
                     favoritesFragment.setUserVisibleHint(true);
@@ -33,26 +53,6 @@ public class NavigationBarActivity extends AppCompatActivity {
                     mapFragment.setUserVisibleHint(false);
                     fragmentTransaction.hide(routesFragment);
                     routesFragment.setUserVisibleHint(false);
-                    fragmentTransaction.commit();
-                    return true;
-                case R.id.navigation_map:
-                    fragmentTransaction.show(mapFragment);
-                    mapFragment.setUserVisibleHint(true);
-
-                    fragmentTransaction.hide(favoritesFragment);
-                    favoritesFragment.setUserVisibleHint(false);
-                    fragmentTransaction.hide(routesFragment);
-                    routesFragment.setUserVisibleHint(false);
-                    fragmentTransaction.commit();
-                    return true;
-                case R.id.navigation_routes:
-                    fragmentTransaction.show(routesFragment);
-                    routesFragment.setUserVisibleHint(true);
-
-                    fragmentTransaction.hide(favoritesFragment);
-                    favoritesFragment.setUserVisibleHint(false);
-                    fragmentTransaction.hide(mapFragment);
-                    mapFragment.setUserVisibleHint(false);
                     fragmentTransaction.commit();
                     return true;
             }
@@ -71,14 +71,14 @@ public class NavigationBarActivity extends AppCompatActivity {
         routesFragment = RoutesFragment.newInstance();
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.content, favoritesFragment, "favorites_fragment")
                 .add(R.id.content, mapFragment, "map_fragment")
                 .add(R.id.content, routesFragment, "routes_fragment")
+                .add(R.id.content, favoritesFragment, "favorites_fragment")
                 .commit();
 
         navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
-        // Select the favorites fragment at startup
+        // Select the map fragment at startup
         onNavigationItemSelectedListener.onNavigationItemSelected(navigation.getMenu().getItem(0));
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
