@@ -54,7 +54,7 @@ public class StopFragment extends Fragment {
 
         stopFragmentTextViewName.setText(stopName);
 
-        if (stopDesc.equals("")) { // If stopDesc is empty, hide the TextView that displays the direction
+        if (stopDesc.isEmpty()) { // If stopDesc is empty, hide the TextView that displays the direction
             stopFragmentTextViewDirection.setVisibility(View.GONE);
         } else {
             int startPos = stopName.length() + 2; // Start at beginning of direction
