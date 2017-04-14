@@ -1,5 +1,6 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
@@ -11,7 +12,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
+        android:layout_weight="8"
         android:gravity="center_vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -33,10 +34,19 @@
             android:id="@+id/stop_fragment_text_view_direction" />
     </RelativeLayout>
 
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:layout_gravity="center_vertical"
+        android:padding="10dp"
+        android:contentDescription="@string/favorite_button_content_description"
+        app:srcCompat="@drawable/ic_favorite_border_red_24dp"
+        android:id="@+id/stop_fragment_button_favorite" />
     <Button
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="3"
         android:layout_gravity="center_vertical"
         android:text="@string/button_get_stop_times"
         android:id="@+id/stop_fragment_button_write_text" />

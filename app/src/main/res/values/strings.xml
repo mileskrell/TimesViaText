@@ -35,6 +35,7 @@
     <string name="no_location_source_settings">Couldn\'t open location source settings</string>
     <string name="exit_map">Exit</string>
 
+    <string name="favorite_button_content_description">Add or remove favorite stop</string>
     <string name="button_get_stop_times">Get stop times</string>
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
