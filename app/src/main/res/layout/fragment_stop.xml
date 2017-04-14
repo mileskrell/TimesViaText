@@ -39,5 +39,5 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:text="@string/button_get_stop_times"
-        android:id="@+id/stop_fragment_button" />
+        android:id="@+id/stop_fragment_button_write_text" />
 </LinearLayout>

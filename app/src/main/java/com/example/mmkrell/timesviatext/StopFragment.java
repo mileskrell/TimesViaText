@@ -17,10 +17,6 @@ public class StopFragment extends Fragment {
     private String stopName;
     private String stopDesc;
 
-    private TextView stopFragmentTextViewName;
-    private TextView stopFragmentTextViewDirection;
-    private Button stopFragmentButton;
-
     public StopFragment() {
         // Required empty public constructor
     }
@@ -48,22 +44,22 @@ public class StopFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_stop, container, false);
-        stopFragmentTextViewName = (TextView) v.findViewById(R.id.stop_fragment_text_view_name);
-        stopFragmentTextViewDirection = (TextView) v.findViewById(R.id.stop_fragment_text_view_direction);
-        stopFragmentButton = (Button) v.findViewById(R.id.stop_fragment_button);
+        TextView textViewName = (TextView) v.findViewById(R.id.stop_fragment_text_view_name);
+        TextView textViewDirection = (TextView) v.findViewById(R.id.stop_fragment_text_view_direction);
+        Button buttonWriteText = (Button) v.findViewById(R.id.stop_fragment_button_write_text);
 
-        stopFragmentTextViewName.setText(stopName);
+        textViewName.setText(stopName);
 
         if (stopDesc.isEmpty()) { // If stopDesc is empty, hide the TextView that displays the direction
-            stopFragmentTextViewDirection.setVisibility(View.GONE);
+            textViewDirection.setVisibility(View.GONE);
         } else {
             int startPos = stopName.length() + 2; // Start at beginning of direction
             int endPos = stopDesc.indexOf(",", startPos); // End once the second comma is found
             String stopDirection = stopDesc.substring(startPos, endPos);
-            stopFragmentTextViewDirection.setText(stopDirection);
+            textViewDirection.setText(stopDirection);
         }
 
-        stopFragmentButton.setOnClickListener(new View.OnClickListener() {
+        buttonWriteText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getStopTimesIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:41411"));
