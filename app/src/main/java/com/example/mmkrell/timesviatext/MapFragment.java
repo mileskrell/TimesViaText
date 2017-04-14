@@ -95,6 +95,7 @@ public class MapFragment extends Fragment implements LocationListener {
         // Makes the link clickable
         textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 
+        Configuration.getInstance().setExpirationOverrideDuration(Long.MAX_VALUE);
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
         mapView.setUseDataConnection(false);
