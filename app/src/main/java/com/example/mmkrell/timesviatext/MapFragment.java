@@ -95,19 +95,18 @@ public class MapFragment extends Fragment implements LocationListener {
         // Makes the link clickable
         textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 
-        Configuration.getInstance().setExpirationOverrideDuration(Long.MAX_VALUE);
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
         mapView.setUseDataConnection(false);
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_tiles_scaled_to_dpi", true))
+            mapView.setTilesScaledToDpi(true);
+
         mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);
         mapView.setMinZoomLevel(15);
         mapView.setMaxZoomLevel(18);
         mapView.getController().setZoom(18);
-
-        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_tiles_scaled_to_dpi", true))
-            mapView.setTilesScaledToDpi(true);
 
         mapView.setMultiTouchControls(true);
 
