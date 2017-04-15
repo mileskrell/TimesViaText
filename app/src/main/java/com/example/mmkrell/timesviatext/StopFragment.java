@@ -25,8 +25,6 @@ public class StopFragment extends Fragment {
     private String stopName;
     private String stopDesc;
 
-    private String stopDirection;
-
     private boolean checked;
     private SharedPreferences sharedPreferences;
     private HashSet<String> favoritesSet;
@@ -74,7 +72,7 @@ public class StopFragment extends Fragment {
         } else {
             int startPos = stopName.length() + 2; // Start at beginning of direction
             int endPos = stopDesc.indexOf(",", startPos); // End once the second comma is found
-            stopDirection = stopDesc.substring(startPos, endPos);
+            String stopDirection = stopDesc.substring(startPos, endPos);
             textViewDirection.setText(stopDirection);
         }
 
@@ -82,17 +80,11 @@ public class StopFragment extends Fragment {
 
         favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
-        if (stopDirection != null) {
-            if (favoritesSet.contains(stopName + "\n" + stopDirection))
-                checked = true;
-        } else {
-            if (favoritesSet.contains(stopName))
-                checked = true;
-        }
-
         // If this stop is a favorite, make the heart filled to represent that
-        if (checked)
+        if (favoritesSet.contains(String.valueOf(stopCode))) {
+            checked = true;
             buttonFavorite.setImageDrawable(checkedFavorite);
+        }
 
         buttonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,17 +96,11 @@ public class StopFragment extends Fragment {
                 if (checked) {
                     // Set image to filled heart and add stop to favorites
                     buttonFavorite.setImageDrawable(checkedFavorite);
-                    if (stopDirection != null)
-                        favoritesSet.add(stopName + "\n" + stopDirection);
-                    else
-                        favoritesSet.add(stopName);
+                    favoritesSet.add(String.valueOf(stopCode));
                 } else {
                     // Set image to empty heart and remove stop from favorites
                     buttonFavorite.setImageDrawable(uncheckedFavorite);
-                    if (stopDirection != null)
-                        favoritesSet.remove(stopName + "\n" + stopDirection);
-                    else
-                        favoritesSet.remove(stopName);
+                    favoritesSet.remove(String.valueOf(stopCode));
                 }
 
                 editor.putStringSet("favorites", favoritesSet);
