@@ -26,7 +26,7 @@ public class StopFragment extends Fragment {
 
     private boolean checked;
     private SharedPreferences sharedPreferences;
-    private HashSet<String> favorites;
+    private HashSet<String> favoritesSet;
 
     public StopFragment() {
         // Required empty public constructor
@@ -77,10 +77,10 @@ public class StopFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        favorites = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
+        favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
         // If this stop is a favorite, make the heart filled to represent that
-        if (favorites.contains(stopName)) {
+        if (favoritesSet.contains(stopName)) {
             checked = true;
             buttonFavorite.setImageDrawable(checkedFavorite);
         }
@@ -95,15 +95,15 @@ public class StopFragment extends Fragment {
                 if (checked) {
                     // Set image to filled heart and add stop to favorites
                     buttonFavorite.setImageDrawable(checkedFavorite);
-                    favorites.add(stopName);
+                    favoritesSet.add(stopName);
 
                 } else {
                     // Set image to empty heart and remove stop from favorites
                     buttonFavorite.setImageDrawable(uncheckedFavorite);
-                    favorites.remove(stopName);
+                    favoritesSet.remove(stopName);
                 }
 
-                editor.putStringSet("favorites", favorites);
+                editor.putStringSet("favorites", favoritesSet);
                 editor.apply();
             }
         });
