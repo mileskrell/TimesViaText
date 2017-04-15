@@ -39,7 +39,7 @@ public class FavoritesFragment extends Fragment {
         String[] favoritesArray = favoritesSet.toArray(new String[]{});
         Arrays.sort(favoritesArray);
 
-        adapter = new MyAdapter(favoritesArray);
+        adapter = new MyAdapter(getContext(), favoritesArray);
         recyclerView.setAdapter(adapter);
 
         return v;
