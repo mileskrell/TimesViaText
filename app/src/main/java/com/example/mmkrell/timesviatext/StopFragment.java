@@ -24,6 +24,8 @@ public class StopFragment extends Fragment {
     private String stopName;
     private String stopDesc;
 
+    private String stopDirection;
+
     private boolean checked;
     private SharedPreferences sharedPreferences;
     private HashSet<String> favoritesSet;
@@ -71,7 +73,7 @@ public class StopFragment extends Fragment {
         } else {
             int startPos = stopName.length() + 2; // Start at beginning of direction
             int endPos = stopDesc.indexOf(",", startPos); // End once the second comma is found
-            String stopDirection = stopDesc.substring(startPos, endPos);
+            stopDirection = stopDesc.substring(startPos, endPos);
             textViewDirection.setText(stopDirection);
         }
 
@@ -79,11 +81,17 @@ public class StopFragment extends Fragment {
 
         favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
-        // If this stop is a favorite, make the heart filled to represent that
-        if (favoritesSet.contains(stopName)) {
-            checked = true;
-            buttonFavorite.setImageDrawable(checkedFavorite);
+        if (stopDirection != null) {
+            if (favoritesSet.contains(stopName + "\n" + stopDirection))
+                checked = true;
+        } else {
+            if (favoritesSet.contains(stopName))
+                checked = true;
         }
+
+        // If this stop is a favorite, make the heart filled to represent that
+        if (checked)
+            buttonFavorite.setImageDrawable(checkedFavorite);
 
         buttonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +103,17 @@ public class StopFragment extends Fragment {
                 if (checked) {
                     // Set image to filled heart and add stop to favorites
                     buttonFavorite.setImageDrawable(checkedFavorite);
-                    favoritesSet.add(stopName);
-
+                    if (stopDirection != null)
+                        favoritesSet.add(stopName + "\n" + stopDirection);
+                    else
+                        favoritesSet.add(stopName);
                 } else {
                     // Set image to empty heart and remove stop from favorites
                     buttonFavorite.setImageDrawable(uncheckedFavorite);
-                    favoritesSet.remove(stopName);
+                    if (stopDirection != null)
+                        favoritesSet.remove(stopName + "\n" + stopDirection);
+                    else
+                        favoritesSet.remove(stopName);
                 }
 
                 editor.putStringSet("favorites", favoritesSet);
