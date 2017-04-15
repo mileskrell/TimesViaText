@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 public class StopFragment extends Fragment {
@@ -118,6 +119,15 @@ public class StopFragment extends Fragment {
 
                 editor.putStringSet("favorites", favoritesSet);
                 editor.apply();
+
+                // Now, update the RecyclerView with the new data
+                String[] favoritesArray = favoritesSet.toArray(new String[] {});
+                Arrays.sort(favoritesArray);
+
+                FavoritesFragment favoritesFragment = (FavoritesFragment) getActivity()
+                        .getSupportFragmentManager().findFragmentByTag("favorites_fragment");
+
+                favoritesFragment.getAdapter().swap(favoritesArray);
             }
         });
 
