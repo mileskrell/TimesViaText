@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 
 public class FavoritesFragment extends Fragment {
@@ -36,8 +37,14 @@ public class FavoritesFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         HashSet<String> favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
-        String[] favoritesArray = favoritesSet.toArray(new String[]{});
-        Arrays.sort(favoritesArray);
+        String[] favoritesArray = favoritesSet.toArray(new String[] {});
+        // TODO: sort by stop name instead of stop code
+        Arrays.sort(favoritesArray, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
+            }
+        });
 
         adapter = new MyAdapter(getContext(), favoritesArray);
         recyclerView.setAdapter(adapter);

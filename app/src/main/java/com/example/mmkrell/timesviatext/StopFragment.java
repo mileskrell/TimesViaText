@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 
 public class StopFragment extends Fragment {
@@ -108,7 +109,13 @@ public class StopFragment extends Fragment {
 
                 // Now, update the RecyclerView with the new data
                 String[] favoritesArray = favoritesSet.toArray(new String[] {});
-                Arrays.sort(favoritesArray);
+                // TODO: sort by stop name instead of stop code
+                Arrays.sort(favoritesArray, new Comparator<String>() {
+                    @Override
+                    public int compare(String o1, String o2) {
+                        return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
+                    }
+                });
 
                 FavoritesFragment favoritesFragment = (FavoritesFragment) getActivity()
                         .getSupportFragmentManager().findFragmentByTag("favorites_fragment");
