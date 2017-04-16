@@ -207,9 +207,8 @@ public class MapFragment extends Fragment implements LocationListener {
                         float endX = event.getX();
                         float endY = event.getY();
                         if (Math.abs(startX - endX) < 10 && Math.abs(startY - endY) < 10) {
-                            deselectMarker();
-                            // Remove StopFragment when MapView is clicked
-                            getActivity().getSupportFragmentManager().popBackStackImmediate();
+                            // Deselect marker and remove StopFragment when MapView is clicked
+                            deselectMarkerAndRemoveStopFragment(true);
                         }
                         break;
                 }
@@ -384,10 +383,24 @@ public class MapFragment extends Fragment implements LocationListener {
         return millisecondsSinceLastFix > 60000;
     }
 
-    void deselectMarker() {
-        // Now that the StopFragment is about to be removed, set selectedMarker to 0
+    // Returns true if StopFragment was removed
+    boolean deselectMarkerAndRemoveStopFragment(boolean animate) {
+        if (! animate)
+            StopFragment.enableAnimations = false;
+
+        // Remove StopFragment
+        boolean removed = getActivity().getSupportFragmentManager().popBackStackImmediate();
+
+        StopFragment.enableAnimations = true;
+
+        if (! removed)
+            return false;
+
+        // Now that the StopFragment has been removed, set selectedMarker to 0
         selectedMarker = "0";
         // Update markers to reset the icon for the previously-selected marker
         updateMarkers();
+
+        return true;
     }
 }

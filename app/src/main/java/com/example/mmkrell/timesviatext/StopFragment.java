@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 public class StopFragment extends Fragment {
+
+    public static boolean enableAnimations;
 
     private int stopCode;
     private String stopName;
@@ -136,5 +139,16 @@ public class StopFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    // See http://stackoverflow.com/a/11253987
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enableAnimations)
+            return super.onCreateAnimation(transit, enter, nextAnim);
+
+        Animation a = new Animation() {};
+        a.setDuration(0);
+        return a;
     }
 }

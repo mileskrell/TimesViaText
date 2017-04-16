@@ -118,12 +118,15 @@ public class NavigationBarActivity extends AppCompatActivity {
     // finish() wouldn't be called until the back button was pressed twice.
     @Override
     public void onBackPressed() {
+        // If MapFragment is visible, try to remove StopFragment
         if (mapFragment.getUserVisibleHint()) {
-            mapFragment.deselectMarker();
-            super.onBackPressed();
+            if (! mapFragment.deselectMarkerAndRemoveStopFragment(true))
+                // If nothing was removed, call onBackPressed()
+                super.onBackPressed();
             return;
         }
 
+        // MapFragment isn't visible, so just call finish()
         finish();
     }
 }
