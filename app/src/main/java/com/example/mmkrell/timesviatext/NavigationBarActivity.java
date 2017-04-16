@@ -79,7 +79,7 @@ public class NavigationBarActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
         // Select the map fragment at startup
-        onNavigationItemSelectedListener.onNavigationItemSelected(bottomNavigationView.getMenu().getItem(0));
+        bottomNavigationView.setSelectedItemId(R.id.navigation_map);
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
