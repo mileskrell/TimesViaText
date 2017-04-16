@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class FavoritesFragment extends Fragment {
 
     private MyAdapter adapter;
+    private SharedPreferences sharedPreferences;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -34,7 +36,7 @@ public class FavoritesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         HashSet<String> favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
         String[] favoritesArray = sortStopCodesByNameAndDirection(favoritesSet);
@@ -55,19 +57,31 @@ public class FavoritesFragment extends Fragment {
         Cursor query = database.query("stops", new String[] {"stop_code"}, null, null, null, null, "stop_desc");
         query.moveToNext();
 
-        String[] favoritesArray = new String[favoritesSet.size()];
+        ArrayList<String> favoritesArrayList = new ArrayList<>(favoritesSet.size());
 
         // Sort list of stop codes by corresponding stop names and directions
         int i = 0;
-        while (i < favoritesArray.length) {
+        while (i < favoritesSet.size()) {
             if (favoritesSet.contains(query.getString(0))) {
-                favoritesArray[i] = query.getString(0);
+                favoritesArrayList.add(query.getString(0));
                 i ++;
             }
-            query.moveToNext();
+            if (! query.moveToNext()) {
+                // At this point, we've looked at every stop and added every one that's a favorite.
+                // However, we still haven't added as many as we should have added.
+                // This means that one or more of our favorites were never found in the database;
+                // maybe the stops used to exist but don't anymore.
+
+                // We'll replace the stored favorites with our list of "verified" favorites
+                // so this doesn't happen again.
+                sharedPreferences.edit()
+                        .putStringSet("favorites", new HashSet<>(favoritesArrayList))
+                        .apply();
+                break;
+            }
         }
         query.close();
 
-        return favoritesArray;
+        return favoritesArrayList.toArray(new String[] {});
     }
 }
