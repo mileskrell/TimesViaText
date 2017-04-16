@@ -45,7 +45,7 @@ public class FavoritesFragment extends Fragment {
         return v;
     }
 
-    public MyAdapter getAdapter() {
+    MyAdapter getAdapter() {
         return adapter;
     }
 

@@ -18,8 +18,6 @@ public class NavigationBarActivity extends AppCompatActivity {
     private RoutesFragment routesFragment;
     private FavoritesFragment favoritesFragment;
 
-    private SharedPreferences sharedPreferences;
-
     private BottomNavigationView bottomNavigationView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -83,12 +81,11 @@ public class NavigationBarActivity extends AppCompatActivity {
         // Select the map fragment at startup
         bottomNavigationView.setSelectedItemId(R.id.navigation_map);
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         // Have the user download map tiles, if they haven't before
-        if (! sharedPreferences.getBoolean("has_downloaded_tiles", false)) {
+        if (! sharedPreferences.getBoolean("has_downloaded_tiles", false))
             startActivity(new Intent(this, DownloadMapTilesActivity.class));
-        }
     }
 
     @Override
@@ -132,11 +129,7 @@ public class NavigationBarActivity extends AppCompatActivity {
         finish();
     }
 
-    public BottomNavigationView getBottomNavigationView() {
+    BottomNavigationView getBottomNavigationView() {
         return bottomNavigationView;
-    }
-
-    public BottomNavigationView.OnNavigationItemSelectedListener getOnNavigationItemSelectedListener() {
-        return onNavigationItemSelectedListener;
     }
 }

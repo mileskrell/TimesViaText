@@ -346,6 +346,17 @@ public class MapFragment extends Fragment implements LocationListener {
         query.close();
     }
 
+    private boolean shouldShowLocationProgressDialog() {
+        // If currentLocation is null, we should obviously show the progress dialog
+        if (currentLocation == null)
+            return true;
+
+        // If it's been more than a minute since the last GPS fix, we should show the progress dialog
+        long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
+        int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
+        return millisecondsSinceLastFix > 60000;
+    }
+
     private void enableFollowMe() {
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
         myLocationOverlay.enableFollowLocation();
@@ -356,17 +367,6 @@ public class MapFragment extends Fragment implements LocationListener {
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
         myLocationOverlay.disableFollowLocation();
         followMeShouldBeEnabled = false;
-    }
-
-    private boolean shouldShowLocationProgressDialog() {
-        // If currentLocation is null, we should obviously show the progress dialog
-        if (currentLocation == null)
-            return true;
-
-        // If it's been more than a minute since the last GPS fix, we should show the progress dialog
-        long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
-        int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
-        return millisecondsSinceLastFix > 60000;
     }
 
     void selectMarkerAndAddStopFragment(String stopCode) {
