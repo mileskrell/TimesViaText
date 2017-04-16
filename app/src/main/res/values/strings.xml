@@ -19,7 +19,8 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
 
-    <string name="credits">Times via Text\n\nAn app by Miles Krell</string>
+    <string name="about_name">Times via Text</string>
+    <string name="about_credits">An app by Miles Krell\n\nLast updated April 2017</string>
 
     <string name="routes_fragment_message">This will be the routes fragment!</string>
 
