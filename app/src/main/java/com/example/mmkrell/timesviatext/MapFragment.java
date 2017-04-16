@@ -223,22 +223,8 @@ public class MapFragment extends Fragment implements LocationListener {
                 // That's why this line is needed both here and in the OnTouchListener
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
 
-                Cursor query = database.query("stops", new String[]{"stop_code", "stop_name", "stop_desc"}, "stop_code = ?", new String[]{item.getTitle()}, null, null, null);
-                query.moveToNext();
+                selectMarkerAndAddStopFragment(item.getTitle());
 
-                // Set selectedMarker to the stop code of the marker that's been tapped
-                selectedMarker = query.getString(0);
-                // Update markers to make this marker's drawable update
-                updateMarkers();
-
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down);
-                fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(query.getInt(0), query.getString(1), query.getString(2)));
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-                query.close();
                 return false;
             }
 
@@ -381,6 +367,25 @@ public class MapFragment extends Fragment implements LocationListener {
         long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
         int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
         return millisecondsSinceLastFix > 60000;
+    }
+
+    void selectMarkerAndAddStopFragment(String stopCode) {
+        Cursor query = database.query("stops", new String[]{"stop_name", "stop_desc"}, "stop_code = ?", new String[]{stopCode}, null, null, null);
+        query.moveToNext();
+
+        // Set selectedMarker to the stop code of the marker that's been tapped
+        selectedMarker = stopCode;
+        // Update markers to make this marker's drawable update
+        updateMarkers();
+
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down);
+        fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.parseInt(stopCode), query.getString(0), query.getString(1)));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+        query.close();
     }
 
     // Returns true if StopFragment was removed
