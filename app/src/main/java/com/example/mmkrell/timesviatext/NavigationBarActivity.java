@@ -64,7 +64,7 @@ public class NavigationBarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_bar);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
         favoritesFragment = FavoritesFragment.newInstance();
         mapFragment = MapFragment.newInstance();
@@ -76,10 +76,10 @@ public class NavigationBarActivity extends AppCompatActivity {
                 .add(R.id.content, favoritesFragment, "favorites_fragment")
                 .commit();
 
-        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+        bottomNavigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
 
         // Select the map fragment at startup
-        onNavigationItemSelectedListener.onNavigationItemSelected(navigation.getMenu().getItem(0));
+        onNavigationItemSelectedListener.onNavigationItemSelected(bottomNavigationView.getMenu().getItem(0));
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
