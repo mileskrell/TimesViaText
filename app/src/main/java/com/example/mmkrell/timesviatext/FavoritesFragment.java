@@ -46,7 +46,7 @@ public class FavoritesFragment extends Fragment {
             }
         });
 
-        adapter = new MyAdapter(getContext(), favoritesArray);
+        adapter = new MyAdapter((NavigationBarActivity) getActivity(), favoritesArray);
         recyclerView.setAdapter(adapter);
 
         return v;

@@ -20,6 +20,8 @@ public class NavigationBarActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
 
+    private BottomNavigationView bottomNavigationView;
+
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -64,7 +66,7 @@ public class NavigationBarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_bar);
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
         favoritesFragment = FavoritesFragment.newInstance();
         mapFragment = MapFragment.newInstance();
@@ -128,5 +130,13 @@ public class NavigationBarActivity extends AppCompatActivity {
 
         // MapFragment isn't visible, so just call finish()
         finish();
+    }
+
+    public BottomNavigationView getBottomNavigationView() {
+        return bottomNavigationView;
+    }
+
+    public BottomNavigationView.OnNavigationItemSelectedListener getOnNavigationItemSelectedListener() {
+        return onNavigationItemSelectedListener;
     }
 }

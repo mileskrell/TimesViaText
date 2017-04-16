@@ -352,7 +352,7 @@ public class MapFragment extends Fragment implements LocationListener {
         followMeShouldBeEnabled = true;
     }
 
-    private void disableFollowMe() {
+    void disableFollowMe() {
         buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
         myLocationOverlay.disableFollowLocation();
         followMeShouldBeEnabled = false;
@@ -407,5 +407,14 @@ public class MapFragment extends Fragment implements LocationListener {
         updateMarkers();
 
         return true;
+    }
+
+    void animateToMarker(String stopCode) {
+        Cursor query = database.query("stops", new String[]{"stop_lat", "stop_lon"}, "stop_code = ?", new String[] {stopCode}, null, null, null);
+        query.moveToNext();
+
+        mapView.getController().animateTo(new GeoPoint(Double.valueOf(query.getString(0)), Double.valueOf(query.getString(1))));
+
+        query.close();
     }
 }
