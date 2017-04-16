@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Times via Text (for CTA riders)</string>
 
-    <string name="welcome_message">
-        Thanks for downloading this app!\n\n
-        For the app to work, you\'ll have to grant a couple of permissions.
+    <string name="permissions_message">
+        For the app to work, you\'ll have to grant a couple of permissions.\n\n
+        If you don\'t grant the permissions, the app will close. You can come back if you change your mind later.
     </string>
     <string name="button_from_main_activity">Got it!</string>
 

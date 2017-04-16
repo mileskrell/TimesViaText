@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:textSize="18sp"
         android:textAlignment="center"
-        android:text="@string/welcome_message"
+        android:text="@string/permissions_message"
         android:id="@+id/text_view_welcome_message" />
 
     <Button
