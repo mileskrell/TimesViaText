@@ -1,6 +1,8 @@
 package com.example.mmkrell.timesviatext;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -10,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashSet;
 
 public class FavoritesFragment extends Fragment {
@@ -37,14 +37,7 @@ public class FavoritesFragment extends Fragment {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         HashSet<String> favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
-        String[] favoritesArray = favoritesSet.toArray(new String[] {});
-        // TODO: sort by stop name instead of stop code
-        Arrays.sort(favoritesArray, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
-            }
-        });
+        String[] favoritesArray = sortStopCodesByNameAndDirection(favoritesSet);
 
         adapter = new MyAdapter((NavigationBarActivity) getActivity(), favoritesArray);
         recyclerView.setAdapter(adapter);
@@ -54,5 +47,27 @@ public class FavoritesFragment extends Fragment {
 
     public MyAdapter getAdapter() {
         return adapter;
+    }
+
+    String[] sortStopCodesByNameAndDirection(HashSet<String> favoritesSet) {
+        SQLiteDatabase database = new CTAHelper(getContext()).getReadableDatabase();
+        // Get a list of all stops, sorted by stop name and direction (stop_desc includes both)
+        Cursor query = database.query("stops", new String[] {"stop_code"}, null, null, null, null, "stop_desc");
+        query.moveToNext();
+
+        String[] favoritesArray = new String[favoritesSet.size()];
+
+        // Sort list of stop codes by corresponding stop names and directions
+        int i = 0;
+        while (i < favoritesArray.length) {
+            if (favoritesSet.contains(query.getString(0))) {
+                favoritesArray[i] = query.getString(0);
+                i ++;
+            }
+            query.moveToNext();
+        }
+        query.close();
+
+        return favoritesArray;
     }
 }
