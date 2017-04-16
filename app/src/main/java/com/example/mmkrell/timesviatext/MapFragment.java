@@ -287,8 +287,7 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
-        if (locationProgressDialog.isShowing())
-            locationProgressDialog.dismiss();
+        locationProgressDialog.dismiss();
     }
 
     @Override
