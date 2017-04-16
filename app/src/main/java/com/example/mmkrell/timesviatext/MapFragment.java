@@ -171,16 +171,9 @@ public class MapFragment extends Fragment implements LocationListener {
         mapView.setMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-                // This method is called (twice!) by setCenter() in onCreate()
-
-                // First check:
-                // Make sure we've gotten a location before
-                // Otherwise, followMeShouldBeEnabled would be set to false very early on (see above)
-
-                // Second check:
                 // Only call disableFollowMe() if the onScroll() was triggered by the user, which would have disabled follow me
                 // This check prevents disableFollowMe() from being called immediately after the button is clicked
-                if (currentLocation != null && ! myLocationOverlay.isFollowLocationEnabled())
+                if (! myLocationOverlay.isFollowLocationEnabled())
                     disableFollowMe();
                 updateMarkers();
                 return false;
