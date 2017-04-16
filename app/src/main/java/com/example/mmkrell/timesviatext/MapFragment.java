@@ -259,6 +259,8 @@ public class MapFragment extends Fragment implements LocationListener {
             myLocationOverlay.enableMyLocation();
             if (followMeShouldBeEnabled)
                 enableFollowMe();
+            if (shouldShowLocationProgressDialog())
+                locationProgressDialog.show();
         }
     }
 
