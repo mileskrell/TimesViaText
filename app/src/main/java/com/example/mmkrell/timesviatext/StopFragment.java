@@ -2,12 +2,11 @@ package com.example.mmkrell.timesviatext;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +63,8 @@ public class StopFragment extends Fragment {
         final ImageView buttonFavorite = (ImageView) v.findViewById(R.id.stop_fragment_button_favorite);
         Button buttonWriteText = (Button) v.findViewById(R.id.stop_fragment_button_write_text);
 
-        final Drawable uncheckedFavorite =  ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_border_red_24dp);
-        final Drawable checkedFavorite = ContextCompat.getDrawable(getContext(), R.drawable.ic_favorite_red_24dp);
+        final VectorDrawableCompat uncheckedFavorite = VectorDrawableCompat.create(getResources(), R.drawable.ic_favorite_border_red_24dp, null);
+        final VectorDrawableCompat checkedFavorite = VectorDrawableCompat.create(getResources(), R.drawable.ic_favorite_red_24dp, null);
 
         textViewName.setText(stopName);
 
