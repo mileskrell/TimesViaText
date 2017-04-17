@@ -21,6 +21,27 @@
         android:background="#FFFFFF"
         android:id="@+id/text_view_zoom_level" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:background="@drawable/background_waiting_for_gps_signal"
+        android:visibility="invisible"
+        android:id="@+id/view_waiting_for_gps_signal">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/waiting_for_gps_signal"/>
+    </LinearLayout>
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,6 +76,6 @@
         android:text="@string/openstreetmap_credit"
         android:textColorLink="#0000FF"
         android:textColorHighlight="#CC00CC"
-        android:background="@drawable/gray_background_rounded_corners"
+        android:background="@drawable/background_openstreetmap_copyright"
         android:id="@+id/text_view_openstreetmap_credit" />
 </RelativeLayout>

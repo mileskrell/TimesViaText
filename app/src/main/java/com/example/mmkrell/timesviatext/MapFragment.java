@@ -2,7 +2,6 @@ package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -54,7 +53,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private MyLocationNewOverlay myLocationOverlay;
 
-    private ProgressDialog locationProgressDialog;
+    private View viewWaitingForGpsSignal;
     private AlertDialog gpsDisabledAlertDialog;
 
     private TextView textViewZoomLevel;
@@ -87,6 +86,7 @@ public class MapFragment extends Fragment implements LocationListener {
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
         textViewZoomLevel = (TextView) v.findViewById(R.id.text_view_zoom_level);
+        viewWaitingForGpsSignal = v.findViewById(R.id.view_waiting_for_gps_signal);
 
         buttonMyLocation = (ImageButton) v.findViewById(R.id.button_my_location);
         buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
@@ -123,9 +123,6 @@ public class MapFragment extends Fragment implements LocationListener {
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()), mapView);
         mapView.getOverlays().add(myLocationOverlay);
-
-        locationProgressDialog = new ProgressDialog(getContext());
-        locationProgressDialog.setMessage(getString(R.string.waiting_for_gps_signal));
 
         gpsDisabledAlertDialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.gps_disabled_title)
@@ -243,8 +240,8 @@ public class MapFragment extends Fragment implements LocationListener {
         if (! hidden) {
             if (! locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
                 gpsDisabledAlertDialog.show();
-            else if (shouldShowLocationProgressDialog())
-                locationProgressDialog.show();
+            else if (shouldShowWaitingForGpsSignalView())
+                viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
         }
     }
 
@@ -259,8 +256,8 @@ public class MapFragment extends Fragment implements LocationListener {
             myLocationOverlay.enableMyLocation();
             if (followMeShouldBeEnabled)
                 enableFollowMe();
-            if (shouldShowLocationProgressDialog())
-                locationProgressDialog.show();
+            if (shouldShowWaitingForGpsSignalView())
+                viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
         }
     }
 
@@ -272,9 +269,9 @@ public class MapFragment extends Fragment implements LocationListener {
         myLocationOverlay.disableFollowLocation();
         myLocationOverlay.disableMyLocation();
 
-        // Remove the dialogs
+        // Remove the GPS messages
         // Their removal is visible, but it's better than removing them in onResume()
-        locationProgressDialog.dismiss();
+        viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
         gpsDisabledAlertDialog.dismiss();
     }
 
@@ -287,7 +284,7 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
-        locationProgressDialog.dismiss();
+        viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -303,13 +300,15 @@ public class MapFragment extends Fragment implements LocationListener {
             enableFollowMe();
 
         gpsDisabledAlertDialog.dismiss();
-        if (shouldShowLocationProgressDialog())
-            locationProgressDialog.show();
+        if (shouldShowWaitingForGpsSignalView())
+            viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onProviderDisabled(String provider) {
+        // Hide "waiting for GPS signal" view
+        viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
         // If GPS is disabled, prompt the user to enable it
         if (getUserVisibleHint())
             gpsDisabledAlertDialog.show();
@@ -340,12 +339,12 @@ public class MapFragment extends Fragment implements LocationListener {
         query.close();
     }
 
-    private boolean shouldShowLocationProgressDialog() {
-        // If currentLocation is null, we should obviously show the progress dialog
+    private boolean shouldShowWaitingForGpsSignalView() {
+        // If currentLocation is null, we should obviously show the view
         if (currentLocation == null)
             return true;
 
-        // If it's been more than a minute since the last GPS fix, we should show the progress dialog
+        // If it's been more than a minute since the last GPS fix, we should show the view
         long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
         int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
         return millisecondsSinceLastFix > 60000;
