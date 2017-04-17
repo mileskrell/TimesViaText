@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
+        android:padding="10dp"
         android:gravity="center"
         android:background="@drawable/background_waiting_for_gps_signal"
         android:visibility="invisible"
@@ -39,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@string/waiting_for_gps_signal"/>
+            android:text="@string/waiting_for_gps_signal" />
     </LinearLayout>
 
     <ImageButton
