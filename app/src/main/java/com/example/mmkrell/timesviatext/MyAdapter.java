@@ -52,7 +52,12 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         query.moveToNext();
 
         holder.textViewName.setText(query.getString(0));
-        holder.textViewDirection.setText(getDirection(query.getString(0), query.getString(1)));
+
+        String direction = getDirection(query.getString(0), query.getString(1));
+        if (direction == null)
+            holder.textViewDirection.setVisibility(View.GONE);
+        else
+            holder.textViewDirection.setText(direction);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
