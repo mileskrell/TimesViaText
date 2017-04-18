@@ -210,17 +210,6 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (! hidden) {
-            if (! locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                viewGpsDisabled.setVisibility(View.VISIBLE);
-            else if (shouldShowWaitingForGpsSignalView())
-                viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)

@@ -30,29 +30,23 @@ public class NavigationBarActivity extends AppCompatActivity {
                     mapFragment.setUserVisibleHint(true);
 
                     fragmentTransaction.hide(routesFragment);
-                    routesFragment.setUserVisibleHint(false);
                     fragmentTransaction.hide(favoritesFragment);
-                    favoritesFragment.setUserVisibleHint(false);
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_routes:
                     fragmentTransaction.show(routesFragment);
-                    routesFragment.setUserVisibleHint(true);
 
                     fragmentTransaction.hide(mapFragment);
                     mapFragment.setUserVisibleHint(false);
                     fragmentTransaction.hide(favoritesFragment);
-                    favoritesFragment.setUserVisibleHint(false);
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_favorites:
                     fragmentTransaction.show(favoritesFragment);
-                    favoritesFragment.setUserVisibleHint(true);
 
                     fragmentTransaction.hide(mapFragment);
                     mapFragment.setUserVisibleHint(false);
                     fragmentTransaction.hide(routesFragment);
-                    routesFragment.setUserVisibleHint(false);
                     fragmentTransaction.commit();
                     return true;
             }
