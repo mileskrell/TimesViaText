@@ -1,10 +1,7 @@
 package com.example.mmkrell.timesviatext;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,7 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -54,7 +49,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private MyLocationNewOverlay myLocationOverlay;
 
     private View viewWaitingForGpsSignal;
-    private AlertDialog gpsDisabledAlertDialog;
+    private View viewGpsDisabled;
 
     private TextView textViewZoomLevel;
     private ImageButton buttonMyLocation;
@@ -87,6 +82,7 @@ public class MapFragment extends Fragment implements LocationListener {
 
         textViewZoomLevel = (TextView) v.findViewById(R.id.text_view_zoom_level);
         viewWaitingForGpsSignal = v.findViewById(R.id.view_waiting_for_gps_signal);
+        viewGpsDisabled = v.findViewById(R.id.view_gps_disabled);
 
         buttonMyLocation = (ImageButton) v.findViewById(R.id.button_my_location);
         buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
@@ -123,27 +119,6 @@ public class MapFragment extends Fragment implements LocationListener {
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()), mapView);
         mapView.getOverlays().add(myLocationOverlay);
-
-        gpsDisabledAlertDialog = new AlertDialog.Builder(getContext())
-                .setTitle(R.string.gps_disabled_title)
-                .setMessage(R.string.gps_disabled_message)
-                .setPositiveButton(R.string.open_location_source_settings, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent locationSourceSettingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        if (locationSourceSettingsIntent.resolveActivity(getActivity().getPackageManager()) != null)
-                            startActivity(locationSourceSettingsIntent);
-                        else
-                            Toast.makeText(getContext(), R.string.no_location_source_settings, Toast.LENGTH_LONG).show();
-                    }
-                })
-                .setNegativeButton(R.string.exit_map, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        getActivity().finish();
-                    }
-                }).setCancelable(false)
-                .create();
 
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +214,7 @@ public class MapFragment extends Fragment implements LocationListener {
         super.onHiddenChanged(hidden);
         if (! hidden) {
             if (! locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
-                gpsDisabledAlertDialog.show();
+                viewGpsDisabled.setVisibility(View.VISIBLE);
             else if (shouldShowWaitingForGpsSignalView())
                 viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
         }
@@ -272,7 +247,7 @@ public class MapFragment extends Fragment implements LocationListener {
         // Remove the GPS messages
         // Their removal is visible, but it's better than removing them in onResume()
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
-        gpsDisabledAlertDialog.dismiss();
+        viewGpsDisabled.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -299,7 +274,7 @@ public class MapFragment extends Fragment implements LocationListener {
         if (followMeShouldBeEnabled)
             enableFollowMe();
 
-        gpsDisabledAlertDialog.dismiss();
+        viewGpsDisabled.setVisibility(View.INVISIBLE);
         if (shouldShowWaitingForGpsSignalView())
             viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
 
@@ -310,10 +285,9 @@ public class MapFragment extends Fragment implements LocationListener {
         // Hide "waiting for GPS signal" view
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
         // If GPS is disabled, prompt the user to enable it
-        if (getUserVisibleHint())
-            gpsDisabledAlertDialog.show();
+        viewGpsDisabled.setVisibility(View.VISIBLE);
         // If GPS is disabled when requestLocationUpdates() is called in onResume(), onProviderDisabled() will be called
-        // That means that gpsDisabledAlertDialog.show() doesn't need to also be called in onResume()
+        // That means that viewGpsDisabled.setVisibility(View.VISIBLE) doesn't need to also be called in onResume()
     }
 
     private void updateMarkers() {
