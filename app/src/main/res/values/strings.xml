@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Times via Text (for CTA riders)</string>
+    <string name="app_name">Times via Text</string>
 
     <string name="permissions_message">
         For the app to work, you\'ll have to grant a couple of permissions.\n\n
