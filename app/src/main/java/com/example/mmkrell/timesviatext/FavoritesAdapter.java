@@ -48,7 +48,7 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
         Cursor query = database.query("stops", new String[] {"stop_name", "stop_desc"},
-                "stop_code = ?", new String[] {favorites[position]}, null, null, null);
+                "stop_id = ?", new String[] {favorites[position]}, null, null, null);
         query.moveToNext();
 
         holder.textViewName.setText(query.getString(0));

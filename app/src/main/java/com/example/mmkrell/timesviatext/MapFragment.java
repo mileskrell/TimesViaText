@@ -57,7 +57,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private TextView textViewOpenStreetMapCredit;
 
     private SQLiteDatabase database;
-    private final String[] projection = {"stop_code", "stop_lat", "stop_lon"};
+    private final String[] projection = {"stop_id", "stop_lat", "stop_lon"};
     private final String selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
     private boolean followMeShouldBeEnabled = true;
@@ -326,7 +326,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void selectMarkerAndAddStopFragment(String stopCode) {
-        Cursor query = database.query("stops", new String[]{"stop_name", "stop_desc"}, "stop_code = ?", new String[]{stopCode}, null, null, null);
+        Cursor query = database.query("stops", new String[]{"stop_name", "stop_desc"}, "stop_id = ?", new String[]{stopCode}, null, null, null);
         query.moveToNext();
 
         // Set selectedMarker to the stop code of the marker that's been tapped
@@ -366,7 +366,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void animateToMarker(String stopCode) {
-        Cursor query = database.query("stops", new String[]{"stop_lat", "stop_lon"}, "stop_code = ?", new String[] {stopCode}, null, null, null);
+        Cursor query = database.query("stops", new String[]{"stop_lat", "stop_lon"}, "stop_id = ?", new String[] {stopCode}, null, null, null);
         query.moveToNext();
 
         mapView.getController().animateTo(new GeoPoint(Double.valueOf(query.getString(0)), Double.valueOf(query.getString(1))));
