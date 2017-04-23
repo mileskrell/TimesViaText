@@ -17,7 +17,7 @@ import java.util.HashSet;
 
 public class FavoritesFragment extends Fragment {
 
-    private MyAdapter adapter;
+    private FavoritesAdapter adapter;
     private SharedPreferences sharedPreferences;
 
     public FavoritesFragment() {
@@ -41,13 +41,13 @@ public class FavoritesFragment extends Fragment {
 
         String[] favoritesArray = sortStopCodesByNameAndDirection(favoritesSet);
 
-        adapter = new MyAdapter((NavigationBarActivity) getActivity(), favoritesArray);
+        adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArray);
         recyclerView.setAdapter(adapter);
 
         return v;
     }
 
-    MyAdapter getAdapter() {
+    FavoritesAdapter getAdapter() {
         return adapter;
     }
 

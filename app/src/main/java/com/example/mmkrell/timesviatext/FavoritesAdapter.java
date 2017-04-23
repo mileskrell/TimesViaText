@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
     private String[] favorites;
     private NavigationBarActivity navigationBarActivity;
@@ -30,7 +30,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
 
-    MyAdapter(NavigationBarActivity navigationBarActivity, String[] favorites) {
+    FavoritesAdapter(NavigationBarActivity navigationBarActivity, String[] favorites) {
         this.favorites = favorites;
         this.navigationBarActivity = navigationBarActivity;
         this.mapFragment = (MapFragment) navigationBarActivity.getSupportFragmentManager().findFragmentByTag("map_fragment");
@@ -38,7 +38,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FavoritesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_favorite, parent, false);
 
@@ -46,7 +46,7 @@ class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final MyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
         Cursor query = database.query("stops", new String[] {"stop_name", "stop_desc"},
                 "stop_code = ?", new String[] {favorites[position]}, null, null, null);
         query.moveToNext();
