@@ -34,4 +34,7 @@
 
     <string name="tiles_scaled_to_dpi">Tiles scaled to DPI</string>
     <string name="tiles_scaled_to_dpi_summary">Makes map more pixelated, but easier to read\nRestart the app for this to take effect</string>
+
+    <string name="offline_mode">Offline mode</string>
+    <string name="offline_mode_summary">Keeps new tiles from being downloaded</string>
 </resources>

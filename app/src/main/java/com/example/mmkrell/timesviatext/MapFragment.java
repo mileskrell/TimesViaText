@@ -40,7 +40,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class MapFragment extends Fragment implements LocationListener {
 
-    private MapView mapView;
+    private static MapView mapView;
     private static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
 
     private Location currentLocation;
@@ -92,6 +92,10 @@ public class MapFragment extends Fragment implements LocationListener {
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
+
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_offline_mode", false))
+            mapView.setUseDataConnection(false);
+
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
         if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_tiles_scaled_to_dpi", true))
@@ -370,5 +374,9 @@ public class MapFragment extends Fragment implements LocationListener {
         mapView.getController().animateTo(new GeoPoint(Double.valueOf(query.getString(0)), Double.valueOf(query.getString(1))));
 
         query.close();
+    }
+
+    static MapView getMapView() {
+        return mapView;
     }
 }

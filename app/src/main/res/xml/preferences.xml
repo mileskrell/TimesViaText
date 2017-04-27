@@ -6,4 +6,10 @@
         android:defaultValue="true"
         android:title="@string/tiles_scaled_to_dpi"
         android:summary="@string/tiles_scaled_to_dpi_summary" />
+
+    <SwitchPreference
+        android:key="pref_offline_mode"
+        android:defaultValue="false"
+        android:title="@string/offline_mode"
+        android:summary="@string/offline_mode_summary" />
 </PreferenceScreen>

@@ -1,6 +1,7 @@
 package com.example.mmkrell.timesviatext;
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
 
@@ -20,5 +21,12 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
+        findPreference("pref_offline_mode").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                MapFragment.getMapView().setUseDataConnection(! (boolean) newValue);
+                return true;
+            }
+        });
     }
 }
