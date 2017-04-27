@@ -34,11 +34,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".DownloadMapTilesActivity"
-            android:label="@string/download_map_tiles"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
             android:screenOrientation="portrait" />
