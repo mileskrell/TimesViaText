@@ -47,14 +47,14 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
-        Cursor query = database.query("stops", new String[] {"stop_name", "stop_desc"},
+        Cursor query = database.query("stops", new String[] {"stop_name", "stop_dir"},
                 "stop_id = ?", new String[] {favorites[position]}, null, null, null);
         query.moveToNext();
 
         holder.textViewName.setText(query.getString(0));
 
-        String direction = getDirection(query.getString(0), query.getString(1));
-        if (direction == null)
+        String direction = query.getString(1);
+        if (direction.isEmpty())
             holder.textViewDirection.setVisibility(View.GONE);
         else
             holder.textViewDirection.setText(direction);
@@ -79,17 +79,6 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
     @Override
     public int getItemCount() {
         return favorites.length;
-    }
-
-    // Modified from code in StopFragment
-    private String getDirection(String stopName, String stopDesc) {
-        if (stopDesc.isEmpty()) {
-            return null;
-        } else {
-            int startPos = stopName.length() + 2;
-            int endPos = stopDesc.indexOf(",", startPos);
-            return stopDesc.substring(startPos, endPos);
-        }
     }
 
     void swap(String[] newFavorites) {

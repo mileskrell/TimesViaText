@@ -24,7 +24,7 @@ public class StopFragment extends Fragment {
 
     private int stopCode;
     private String stopName;
-    private String stopDesc;
+    private String stopDir;
 
     private boolean checked;
     private SharedPreferences sharedPreferences;
@@ -34,12 +34,12 @@ public class StopFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static StopFragment newInstance(int stopCode, String stopName, String stopDesc) {
+    public static StopFragment newInstance(int stopCode, String stopName, String stopDir) {
         StopFragment stopFragment = new StopFragment();
         Bundle args = new Bundle();
         args.putInt("stopCode", stopCode);
         args.putString("stopName", stopName);
-        args.putString("stopDesc", stopDesc);
+        args.putString("stopDir", stopDir);
         stopFragment.setArguments(args);
         return stopFragment;
     }
@@ -50,7 +50,7 @@ public class StopFragment extends Fragment {
         if (getArguments() != null) {
             stopCode = getArguments().getInt("stopCode");
             stopName = getArguments().getString("stopName");
-            stopDesc = getArguments().getString("stopDesc");
+            stopDir = getArguments().getString("stopDir");
         }
     }
 
@@ -68,13 +68,10 @@ public class StopFragment extends Fragment {
 
         textViewName.setText(stopName);
 
-        if (stopDesc.isEmpty()) { // If stopDesc is empty, hide the TextView that displays the direction
+        if (stopDir.isEmpty()) { // If stopDir is empty, hide the TextView that displays the direction
             textViewDirection.setVisibility(View.GONE);
         } else {
-            int startPos = stopName.length() + 2; // Start at beginning of direction
-            int endPos = stopDesc.indexOf(",", startPos); // End once the second comma is found
-            String stopDirection = stopDesc.substring(startPos, endPos);
-            textViewDirection.setText(stopDirection);
+            textViewDirection.setText(stopDir);
         }
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());

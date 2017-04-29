@@ -328,7 +328,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void selectMarkerAndAddStopFragment(String stopCode) {
-        Cursor query = database.query("stops", new String[]{"stop_name", "stop_desc"}, "stop_id = ?", new String[]{stopCode}, null, null, null);
+        Cursor query = database.query("stops", new String[]{"stop_name", "stop_dir"}, "stop_id = ?", new String[]{stopCode}, null, null, null);
         query.moveToNext();
 
         // Set selectedMarker to the stop code of the marker that's been tapped
