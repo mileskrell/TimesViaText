@@ -34,7 +34,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
     RoutesAdapter(Context context) {
         database = new CTAHelper(context).getReadableDatabase();
         routes = new ArrayList<>();
-        Cursor query = database.rawQuery("SELECT route_id FROM routes", null);
+        Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
         while (query.moveToNext()) {
             routes.add(query.getString(0));
         }
