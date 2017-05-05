@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
@@ -11,6 +12,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="18sp"
         android:textColor="#00AA00"
+        tools:text="Addison &amp; Forest Preserve Avenue"
         android:id="@+id/favorite_text_view_stop_name" />
 
     <TextView
@@ -20,5 +22,6 @@
         android:layout_below="@id/favorite_text_view_stop_name"
         android:textSize="14sp"
         android:textColor="#AA0000"
+        tools:text="Westbound"
         android:id="@+id/favorite_text_view_stop_direction" />
 </RelativeLayout>
