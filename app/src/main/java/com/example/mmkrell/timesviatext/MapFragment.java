@@ -56,8 +56,6 @@ public class MapFragment extends Fragment implements LocationListener {
     private TextView textViewOpenStreetMapCredit;
 
     private SQLiteDatabase database;
-    private final String[] projection = {"stop_id", "stop_lat", "stop_lon"};
-    private final String selection = "(stop_lat < ?) AND (stop_lat > ?) AND (stop_lon < ?) AND (stop_lon > ?)";
 
     private boolean followMeShouldBeEnabled = true;
 
@@ -291,7 +289,9 @@ public class MapFragment extends Fragment implements LocationListener {
 
         String[] selectionArgs = {String.valueOf(north), String.valueOf(south), String.valueOf(east), String.valueOf(west)};
 
-        Cursor query = database.query("stops", projection, selection, selectionArgs, null, null, null);
+        Cursor query = database.rawQuery("SELECT stop_id, stop_lat, stop_lon FROM stops " +
+                "WHERE stop_lat < ? AND stop_lat > ? AND stop_lon < ? AND stop_lon > ?",
+                selectionArgs);
 
         while (query.moveToNext()) {
             OverlayItem marker = new OverlayItem(query.getString(0), null, new GeoPoint(query.getDouble(1), query.getDouble(2)));
@@ -328,7 +328,8 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void selectMarkerAndAddStopFragment(String stopCode) {
-        Cursor query = database.query("stops", new String[]{"stop_name", "stop_dir"}, "stop_id = ?", new String[]{stopCode}, null, null, null);
+        Cursor query = database.rawQuery("SELECT stop_name, stop_dir FROM stops WHERE stop_id = ?",
+                new String[] {stopCode});
         query.moveToNext();
 
         // Set selectedMarker to the stop code of the marker that's been tapped
@@ -368,7 +369,8 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     void animateToMarker(String stopCode) {
-        Cursor query = database.query("stops", new String[]{"stop_lat", "stop_lon"}, "stop_id = ?", new String[] {stopCode}, null, null, null);
+        Cursor query = database.rawQuery("SELECT stop_lat, stop_lon FROM stops WHERE stop_id = ?",
+                new String[] {stopCode});
         query.moveToNext();
 
         mapView.getController().animateTo(new GeoPoint(Double.valueOf(query.getString(0)), Double.valueOf(query.getString(1))));

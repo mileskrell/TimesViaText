@@ -54,7 +54,8 @@ public class FavoritesFragment extends Fragment {
     String[] sortStopCodesByNameAndDirection(HashSet<String> favoritesSet) {
         SQLiteDatabase database = new CTAHelper(getContext()).getReadableDatabase();
         // Get a list of all stops, sorted by stop name and direction
-        Cursor query = database.query("stops", new String[] {"stop_id"}, null, null, null, null, "stop_name || stop_dir");
+        Cursor query = database.rawQuery("SELECT stop_id FROM stops ORDER BY stop_name || stop_dir",
+                null);
         query.moveToNext();
 
         ArrayList<String> favoritesArrayList = new ArrayList<>(favoritesSet.size());
