@@ -6,7 +6,6 @@
     android:layout_height="100dp"
     android:layout_alignParentBottom="true"
     android:background="?android:attr/windowBackground"
-    android:orientation="horizontal"
     tools:context="com.example.mmkrell.timesviatext.StopFragment">
 
     <RelativeLayout
