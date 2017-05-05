@@ -11,9 +11,9 @@ import android.widget.TextView;
 class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
     private String[] favorites;
-    private NavigationBarActivity navigationBarActivity;
-    private MapFragment mapFragment;
-    private SQLiteDatabase database;
+    private final NavigationBarActivity navigationBarActivity;
+    private final MapFragment mapFragment;
+    private final SQLiteDatabase database;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
