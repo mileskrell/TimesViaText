@@ -17,16 +17,16 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewName;
-        TextView textViewDirection;
+        TextView textViewStopName;
+        TextView textViewStopDirection;
 
         View itemView;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            textViewName = (TextView) itemView.findViewById(R.id.favorite_text_view_name);
-            textViewDirection = (TextView) itemView.findViewById(R.id.favorite_text_view_direction);
+            textViewStopName = (TextView) itemView.findViewById(R.id.favorite_text_view_stop_name);
+            textViewStopDirection = (TextView) itemView.findViewById(R.id.favorite_text_view_stop_direction);
         }
     }
 
@@ -51,13 +51,13 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
                 "stop_id = ?", new String[] {favorites[position]}, null, null, null);
         query.moveToNext();
 
-        holder.textViewName.setText(query.getString(0));
+        holder.textViewStopName.setText(query.getString(0));
 
-        String direction = query.getString(1);
-        if (direction.isEmpty())
-            holder.textViewDirection.setVisibility(View.GONE);
+        String stopDirection = query.getString(1);
+        if (stopDirection.isEmpty())
+            holder.textViewStopDirection.setVisibility(View.GONE);
         else
-            holder.textViewDirection.setText(direction);
+            holder.textViewStopDirection.setText(stopDirection);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
