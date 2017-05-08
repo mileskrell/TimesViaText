@@ -27,7 +27,7 @@ public class RoutesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerView.setAdapter(new RoutesAdapter(getContext()));
+        recyclerView.setAdapter(new RoutesAdapter(recyclerView));
 
         return v;
     }

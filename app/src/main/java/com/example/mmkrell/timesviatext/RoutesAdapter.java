@@ -1,6 +1,5 @@
 package com.example.mmkrell.timesviatext;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
@@ -31,8 +30,8 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         }
     }
 
-    RoutesAdapter(Context context) {
-        database = new CTAHelper(context).getReadableDatabase();
+    RoutesAdapter(RecyclerView recyclerView) {
+        database = new CTAHelper(recyclerView.getContext()).getReadableDatabase();
         routes = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
         while (query.moveToNext()) {
