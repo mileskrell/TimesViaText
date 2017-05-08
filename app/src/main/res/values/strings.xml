@@ -7,9 +7,9 @@
     </string>
     <string name="button_from_main_activity">Got it!</string>
 
-    <string name="title_favorites">Favorites</string>
     <string name="title_map">Map</string>
     <string name="title_routes">Routes</string>
+    <string name="title_favorites">Favorites</string>
 
     <string name="download_map_tiles">Download map tiles</string>
     <string name="settings">Settings</string>

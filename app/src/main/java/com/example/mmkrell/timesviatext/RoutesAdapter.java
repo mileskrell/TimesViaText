@@ -14,6 +14,10 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     private final ArrayList<String> routes;
     private final SQLiteDatabase database;
+    private final NavigationBarActivity navigationBarActivity;
+    private final RecyclerView recyclerView;
+
+    static String selectedRouteName;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -30,7 +34,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         }
     }
 
-    RoutesAdapter(RecyclerView recyclerView) {
+    RoutesAdapter(NavigationBarActivity navigationBarActivity, RecyclerView recyclerView) {
         database = new CTAHelper(recyclerView.getContext()).getReadableDatabase();
         routes = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
@@ -38,6 +42,8 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
             routes.add(query.getString(0));
         }
         query.close();
+        this.navigationBarActivity = navigationBarActivity;
+        this.recyclerView = recyclerView;
     }
 
     @Override
@@ -54,8 +60,29 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
                 new String[] {routes.get(position)});
         query.moveToNext();
 
-        holder.textViewRouteID.setText(routes.get(position));
-        holder.textViewRouteName.setText(query.getString(0));
+        final String routeID = routes.get(position);
+        final String routeName = query.getString(0);
+        holder.textViewRouteID.setText(routeID);
+        holder.textViewRouteName.setText(routeName);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setAdapter(new DirectionsAdapter(recyclerView, routeID));
+
+                // Update our position, as stored in the global variables
+                // TODO: Do we really need both of these variables?
+                RoutesFragment.currentAdapterName = "DirectionsAdapter";
+                NavigationBarActivity.userLocation = RoutesFragment.currentAdapterName;
+
+                // Modify the action bar to reflect where we are
+                navigationBarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                // TODO: Do we really need this variable?
+                selectedRouteName = routeName;
+                navigationBarActivity.getSupportActionBar().setTitle(selectedRouteName);
+
+            }
+        });
 
         query.close();
     }

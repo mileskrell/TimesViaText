@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 public class NavigationBarActivity extends AppCompatActivity {
 
+    static String userLocation;
+
     // Only one of each fragment is used so that they don't have to be recreated every time the user moves between views
     private MapFragment mapFragment;
     private RoutesFragment routesFragment;
@@ -24,26 +26,43 @@ public class NavigationBarActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_map:
+                    userLocation = "MapFragment";
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    getSupportActionBar().setTitle(R.string.title_map);
                     fragmentTransaction.show(mapFragment);
-                    mapFragment.setUserVisibleHint(true);
 
                     fragmentTransaction.hide(routesFragment);
                     fragmentTransaction.hide(favoritesFragment);
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_routes:
+                    userLocation = RoutesFragment.currentAdapterName;
+
+                    // If viewing DirectionsAdapter or StopsAdapter, display the back button
+                    switch (userLocation) {
+                        case "RoutesAdapter":
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                            getSupportActionBar().setTitle(R.string.title_routes);
+                            break;
+                        case "DirectionsAdapter":
+                            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                            getSupportActionBar().setTitle(RoutesAdapter.selectedRouteName);
+                            break;
+                    }
+
                     fragmentTransaction.show(routesFragment);
 
                     fragmentTransaction.hide(mapFragment);
-                    mapFragment.setUserVisibleHint(false);
                     fragmentTransaction.hide(favoritesFragment);
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_favorites:
+                    userLocation = "FavoritesFragment";
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    getSupportActionBar().setTitle(R.string.title_favorites);
                     fragmentTransaction.show(favoritesFragment);
 
                     fragmentTransaction.hide(mapFragment);
-                    mapFragment.setUserVisibleHint(false);
                     fragmentTransaction.hide(routesFragment);
                     fragmentTransaction.commit();
                     return true;
@@ -83,6 +102,9 @@ public class NavigationBarActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.options_menu_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
@@ -94,22 +116,33 @@ public class NavigationBarActivity extends AppCompatActivity {
         }
     }
 
-    // Without this override, onBackPressed() would remove
-    // any StopFragment even if the user wasn't viewing it.
-    // This means that, if the user wasn't viewing MapFragment but a StopFragment existed,
-    // finish() wouldn't be called until the back button was pressed twice.
+    // Handle when the back button is pressed depending on where the user is
     @Override
     public void onBackPressed() {
-        // If MapFragment is visible, try to remove StopFragment
-        if (mapFragment.getUserVisibleHint()) {
-            if (! mapFragment.deselectMarkerAndRemoveStopFragment(true))
-                // If nothing was removed, call onBackPressed()
-                super.onBackPressed();
-            return;
+
+        switch (userLocation) {
+            case "RoutesAdapter":
+                finish();
+                return;
+            case "DirectionsAdapter":
+                routesFragment.getRecyclerView().setAdapter(
+                        new RoutesAdapter(this, routesFragment.getRecyclerView()));
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setTitle(R.string.title_routes);
+                RoutesFragment.currentAdapterName = "RoutesAdapter";
+                NavigationBarActivity.userLocation = RoutesFragment.currentAdapterName;
+                return;
+            case "FavoritesFragment":
+                finish();
+                return;
         }
 
-        // MapFragment isn't visible, so just call finish()
-        finish();
+        // If we've gotten this far, the user must be viewing MapFragment
+
+        // Try to remove StopFragment
+        if (! mapFragment.deselectMarkerAndRemoveStopFragment(true))
+            // If nothing was removed, call onBackPressed()
+            super.onBackPressed();
     }
 
     BottomNavigationView getBottomNavigationView() {

@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 
 public class RoutesFragment extends Fragment {
 
+    static String currentAdapterName;
+
+    private RecyclerView recyclerView;
+
     public RoutesFragment() {
         // Required empty public constructor
     }
@@ -23,12 +27,17 @@ public class RoutesFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_routes, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.routes_recycler_view);
+        recyclerView = (RecyclerView) v.findViewById(R.id.routes_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerView.setAdapter(new RoutesAdapter(recyclerView));
+        recyclerView.setAdapter(new RoutesAdapter((NavigationBarActivity) getActivity(), recyclerView));
+        currentAdapterName = "RoutesAdapter";
 
         return v;
+    }
+
+    RecyclerView getRecyclerView() {
+        return recyclerView;
     }
 }
