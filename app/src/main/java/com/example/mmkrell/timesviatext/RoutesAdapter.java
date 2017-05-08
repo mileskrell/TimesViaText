@@ -25,8 +25,8 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            textViewRouteName = (TextView) itemView.findViewById(R.id.favorite_text_view_route_name);
-            textViewRouteID = (TextView) itemView.findViewById(R.id.favorite_text_view_route_id);
+            textViewRouteName = (TextView) itemView.findViewById(R.id.route_text_view_route_name);
+            textViewRouteID = (TextView) itemView.findViewById(R.id.route_text_view_route_id);
         }
     }
 
