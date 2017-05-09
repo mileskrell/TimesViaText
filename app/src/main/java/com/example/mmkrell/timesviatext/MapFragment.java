@@ -88,6 +88,8 @@ public class MapFragment extends Fragment implements LocationListener {
         // Makes the link clickable
         textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 
+        database = CTAHelper.getDatabaseInstance();
+
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
 
@@ -204,12 +206,6 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        database = new CTAHelper(getContext()).getReadableDatabase();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -237,12 +233,6 @@ public class MapFragment extends Fragment implements LocationListener {
         // Their removal is visible, but it's better than removing them in onResume()
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
         viewGpsDisabled.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        database.close();
     }
 
     @Override

@@ -77,6 +77,9 @@ public class NavigationBarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_navigation_bar);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
 
+        // Initialize the database
+        CTAHelper.setDatabaseInstance(new CTAHelper(getApplicationContext()).getReadableDatabase());
+
         favoritesFragment = FavoritesFragment.newInstance();
         mapFragment = MapFragment.newInstance();
         routesFragment = RoutesFragment.newInstance();
@@ -147,5 +150,12 @@ public class NavigationBarActivity extends AppCompatActivity {
 
     BottomNavigationView getBottomNavigationView() {
         return bottomNavigationView;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Close the database since the activity is being destroyed
+        CTAHelper.getDatabaseInstance().close();
     }
 }

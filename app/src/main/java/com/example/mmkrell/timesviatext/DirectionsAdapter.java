@@ -29,8 +29,8 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
         }
     }
 
-    DirectionsAdapter(RecyclerView recyclerView, String routeId) {
-        database = new CTAHelper(recyclerView.getContext()).getReadableDatabase();
+    DirectionsAdapter(String routeId) {
+        database = CTAHelper.getDatabaseInstance();
         directions = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT DISTINCT direction_id " +
                         "FROM route_" + routeId + "_stop_list ORDER BY direction_id", null);

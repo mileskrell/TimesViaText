@@ -52,7 +52,7 @@ public class FavoritesFragment extends Fragment {
     }
 
     String[] sortStopCodesByNameAndDirection(HashSet<String> favoritesSet) {
-        SQLiteDatabase database = new CTAHelper(getContext()).getReadableDatabase();
+        SQLiteDatabase database = CTAHelper.getDatabaseInstance();
         // Get a list of all stops, sorted by stop name and direction
         Cursor query = database.rawQuery("SELECT stop_id FROM stops ORDER BY stop_name || stop_dir",
                 null);

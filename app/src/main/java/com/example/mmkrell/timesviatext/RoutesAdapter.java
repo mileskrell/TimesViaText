@@ -35,7 +35,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
     }
 
     RoutesAdapter(NavigationBarActivity navigationBarActivity, RecyclerView recyclerView) {
-        database = new CTAHelper(recyclerView.getContext()).getReadableDatabase();
+        database = CTAHelper.getDatabaseInstance();
         routes = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
         while (query.moveToNext()) {
@@ -68,7 +68,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(new DirectionsAdapter(recyclerView, routeID));
+                recyclerView.setAdapter(new DirectionsAdapter(routeID));
 
                 // Update our position, as stored in the global variables
                 // TODO: Do we really need both of these variables?

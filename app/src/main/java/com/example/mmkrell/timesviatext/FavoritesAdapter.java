@@ -34,7 +34,7 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
         this.favorites = favorites;
         this.navigationBarActivity = navigationBarActivity;
         this.mapFragment = (MapFragment) navigationBarActivity.getSupportFragmentManager().findFragmentByTag("map_fragment");
-        database = new CTAHelper(navigationBarActivity).getReadableDatabase();
+        database = CTAHelper.getDatabaseInstance();
     }
 
     @Override
