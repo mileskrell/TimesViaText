@@ -46,7 +46,7 @@ public class NavigationBarActivity extends AppCompatActivity {
                             break;
                         case "DirectionsAdapter":
                             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                            getSupportActionBar().setTitle(RoutesAdapter.selectedRouteName);
+                            getSupportActionBar().setTitle(RoutesAdapter.selectedRouteTitle);
                             break;
                     }
 

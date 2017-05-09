@@ -9,6 +9,7 @@
 
     <string name="title_map">Map</string>
     <string name="title_routes">Routes</string>
+    <string name="title_directions_route">Route</string>
     <string name="title_favorites">Favorites</string>
 
     <string name="download_map_tiles">Download map tiles</string>

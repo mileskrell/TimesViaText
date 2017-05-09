@@ -17,7 +17,8 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
     private final NavigationBarActivity navigationBarActivity;
     private final RecyclerView recyclerView;
 
-    static String selectedRouteName;
+    // Used as the title of NavigationBarActivity while this adapter is visible
+    static String selectedRouteTitle;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -61,7 +62,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         query.moveToNext();
 
         final String routeID = routes.get(position);
-        final String routeName = query.getString(0);
+        String routeName = query.getString(0);
         holder.textViewRouteID.setText(routeID);
         holder.textViewRouteName.setText(routeName);
 
@@ -77,9 +78,9 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
                 // Modify the action bar to reflect where we are
                 navigationBarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                // TODO: Do we really need this variable?
-                selectedRouteName = routeName;
-                navigationBarActivity.getSupportActionBar().setTitle(selectedRouteName);
+                selectedRouteTitle = navigationBarActivity
+                        .getString(R.string.title_directions_route) + " " + routeID;
+                navigationBarActivity.getSupportActionBar().setTitle(selectedRouteTitle);
 
             }
         });
