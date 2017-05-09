@@ -22,7 +22,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewRouteID;
+        TextView textViewRouteId;
         TextView textViewRouteName;
 
         View itemView;
@@ -31,7 +31,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
             super(itemView);
             this.itemView = itemView;
             textViewRouteName = (TextView) itemView.findViewById(R.id.route_text_view_route_name);
-            textViewRouteID = (TextView) itemView.findViewById(R.id.route_text_view_route_id);
+            textViewRouteId = (TextView) itemView.findViewById(R.id.route_text_view_route_id);
         }
     }
 
@@ -61,15 +61,15 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
                 new String[] {routes.get(position)});
         query.moveToNext();
 
-        final String routeID = routes.get(position);
+        final String routeId = routes.get(position);
         String routeName = query.getString(0);
-        holder.textViewRouteID.setText(routeID);
+        holder.textViewRouteId.setText(routeId);
         holder.textViewRouteName.setText(routeName);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(new DirectionsAdapter(routeID));
+                recyclerView.setAdapter(new DirectionsAdapter(routeId));
 
                 // Update our position, as stored in the global variables
                 // TODO: Do we really need both of these variables?
@@ -79,7 +79,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
                 // Modify the action bar to reflect where we are
                 navigationBarActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 selectedRouteTitle = navigationBarActivity
-                        .getString(R.string.title_directions_route) + " " + routeID;
+                        .getString(R.string.title_directions_route) + " " + routeId;
                 navigationBarActivity.getSupportActionBar().setTitle(selectedRouteTitle);
 
             }
