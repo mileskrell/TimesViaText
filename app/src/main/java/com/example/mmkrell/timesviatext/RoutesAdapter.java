@@ -15,7 +15,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
     private final ArrayList<String> routes;
     private final SQLiteDatabase database;
     private final NavigationBarActivity navigationBarActivity;
-    private final RecyclerView recyclerView;
+    private final PositionSavingRecyclerView positionSavingRecyclerView;
 
     // Used as the title of NavigationBarActivity while this adapter is visible
     static String selectedRouteTitle;
@@ -35,7 +35,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         }
     }
 
-    RoutesAdapter(NavigationBarActivity navigationBarActivity, RecyclerView recyclerView) {
+    RoutesAdapter(NavigationBarActivity navigationBarActivity, PositionSavingRecyclerView positionSavingRecyclerView) {
         database = CTAHelper.getDatabaseInstance();
         routes = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
@@ -44,7 +44,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         }
         query.close();
         this.navigationBarActivity = navigationBarActivity;
-        this.recyclerView = recyclerView;
+        this.positionSavingRecyclerView = positionSavingRecyclerView;
     }
 
     @Override
@@ -69,7 +69,11 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(new DirectionsAdapter(routeId));
+
+                // Save position of RecyclerView
+                positionSavingRecyclerView.onSaveInstanceState();
+
+                positionSavingRecyclerView.setAdapter(new DirectionsAdapter(routeId));
 
                 // Update our position, as stored in the global variables
                 // TODO: Do we really need both of these variables?

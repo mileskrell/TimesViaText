@@ -1,6 +1,6 @@
-<android.support.v7.widget.RecyclerView
+<com.example.mmkrell.timesviatext.PositionSavingRecyclerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    android:id="@+id/routes_recycler_view" />
+    android:id="@+id/routes_position_saving_recycler_view" />

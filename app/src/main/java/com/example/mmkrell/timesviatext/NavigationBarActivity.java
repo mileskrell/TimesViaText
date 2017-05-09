@@ -128,8 +128,13 @@ public class NavigationBarActivity extends AppCompatActivity {
                 finish();
                 return;
             case "DirectionsAdapter":
-                routesFragment.getRecyclerView().setAdapter(
-                        new RoutesAdapter(this, routesFragment.getRecyclerView()));
+                routesFragment.getPositionSavingRecyclerView().setAdapter(
+                        new RoutesAdapter(this, routesFragment.getPositionSavingRecyclerView()));
+
+                // Restore scroll position of Routes list
+                routesFragment.getPositionSavingRecyclerView()
+                        .onRestoreInstanceState(PositionSavingRecyclerView.routesAdapterState);
+
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 getSupportActionBar().setTitle(R.string.title_routes);
                 RoutesFragment.currentAdapterName = "RoutesAdapter";

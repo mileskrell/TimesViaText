@@ -12,7 +12,7 @@ public class RoutesFragment extends Fragment {
 
     static String currentAdapterName;
 
-    private RecyclerView recyclerView;
+    private PositionSavingRecyclerView positionSavingRecyclerView;
 
     public RoutesFragment() {
         // Required empty public constructor
@@ -27,17 +27,17 @@ public class RoutesFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_routes, container, false);
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.routes_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        positionSavingRecyclerView = (PositionSavingRecyclerView) v.findViewById(R.id.routes_position_saving_recycler_view);
+        positionSavingRecyclerView.setHasFixedSize(true);
+        positionSavingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        recyclerView.setAdapter(new RoutesAdapter((NavigationBarActivity) getActivity(), recyclerView));
+        positionSavingRecyclerView.setAdapter(new RoutesAdapter((NavigationBarActivity) getActivity(), positionSavingRecyclerView));
         currentAdapterName = "RoutesAdapter";
 
         return v;
     }
 
-    RecyclerView getRecyclerView() {
-        return recyclerView;
+    PositionSavingRecyclerView getPositionSavingRecyclerView() {
+        return positionSavingRecyclerView;
     }
 }
