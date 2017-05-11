@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
-    private final ArrayList<String> routes;
+    private final ArrayList<String> routeIds;
     private final SQLiteDatabase database;
     private final NavigationBarActivity navigationBarActivity;
     private final PositionSavingRecyclerView positionSavingRecyclerView;
@@ -37,10 +37,10 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     RoutesAdapter(NavigationBarActivity navigationBarActivity, PositionSavingRecyclerView positionSavingRecyclerView) {
         database = CTAHelper.getDatabaseInstance();
-        routes = new ArrayList<>();
+        routeIds = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
         while (query.moveToNext()) {
-            routes.add(query.getString(0));
+            routeIds.add(query.getString(0));
         }
         query.close();
         this.navigationBarActivity = navigationBarActivity;
@@ -58,10 +58,10 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Cursor query = database.rawQuery("SELECT route_long_name FROM routes WHERE route_id = ?",
-                new String[] {routes.get(position)});
+                new String[] {routeIds.get(position)});
         query.moveToNext();
 
-        final String routeId = routes.get(position);
+        final String routeId = routeIds.get(position);
         String routeName = query.getString(0);
         holder.textViewRouteId.setText(routeId);
         holder.textViewRouteName.setText(routeName);
@@ -94,6 +94,6 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return routes.size();
+        return routeIds.size();
     }
 }
