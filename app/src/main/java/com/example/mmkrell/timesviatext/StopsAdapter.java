@@ -60,7 +60,7 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
         int stopId = stopIds.get(position);
 
         Cursor query = database.rawQuery("SELECT stop_name FROM stops " +
-                        "WHERE stop_id = " + stopId, null);
+                "WHERE stop_id = " + stopId, null);
         query.moveToNext();
         holder.textViewStopName.setText(query.getString(0));
 

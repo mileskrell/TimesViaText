@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder> {
 
-    private String[] favorites;
+    private ArrayList<Integer> favorites;
     private final NavigationBarActivity navigationBarActivity;
     private final SQLiteDatabase database;
 
@@ -29,7 +31,7 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
         }
     }
 
-    FavoritesAdapter(NavigationBarActivity navigationBarActivity, String[] favorites) {
+    FavoritesAdapter(NavigationBarActivity navigationBarActivity, ArrayList<Integer> favorites) {
         this.favorites = favorites;
         this.navigationBarActivity = navigationBarActivity;
         database = CTAHelper.getDatabaseInstance();
@@ -45,8 +47,8 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(final FavoritesAdapter.ViewHolder holder, int position) {
-        Cursor query = database.rawQuery("SELECT stop_name, stop_dir FROM stops WHERE stop_id = ?",
-                new String[] {favorites[position]});
+        Cursor query = database.rawQuery("SELECT stop_name, stop_dir FROM stops " +
+                "WHERE stop_id = " + favorites.get(position), null);
         query.moveToNext();
 
         holder.textViewStopName.setText(query.getString(0));
@@ -69,19 +71,19 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
                 navigationBarActivity.getBottomNavigationView().setSelectedItemId(R.id.navigation_map);
 
                 mapFragment.deselectMarkerAndRemoveStopFragment(false);
-                mapFragment.selectMarkerAndAddStopFragment(favorites[holder.getAdapterPosition()]);
+                mapFragment.selectMarkerAndAddStopFragment(favorites.get(holder.getAdapterPosition()));
 
-                mapFragment.animateToMarker(favorites[holder.getAdapterPosition()]);
+                mapFragment.animateToMarker(favorites.get(holder.getAdapterPosition()));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return favorites.length;
+        return favorites.size();
     }
 
-    void swap(String[] newFavorites) {
+    void swap(ArrayList<Integer> newFavorites) {
         favorites = newFavorites;
         notifyDataSetChanged();
     }

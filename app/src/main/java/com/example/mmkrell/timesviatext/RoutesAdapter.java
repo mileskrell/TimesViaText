@@ -55,8 +55,8 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Cursor query = database.rawQuery("SELECT route_long_name FROM routes WHERE route_id = ?",
-                new String[] {routeIds.get(position)});
+        Cursor query = database.rawQuery("SELECT route_long_name FROM routes " +
+                "WHERE route_id = ?", new String[] {routeIds.get(position)});
         query.moveToNext();
 
         final String routeId = routeIds.get(position);

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class StopFragment extends Fragment {
@@ -76,7 +77,8 @@ public class StopFragment extends Fragment {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
+        favoritesSet = new HashSet<>(sharedPreferences
+                .getStringSet("favorites", new HashSet<String>()));
 
         // If this stop is a favorite, make the heart filled to represent that
         if (favoritesSet.contains(String.valueOf(stopId))) {
@@ -108,10 +110,11 @@ public class StopFragment extends Fragment {
                         .getSupportFragmentManager().findFragmentByTag("favorites_fragment");
 
                 // Sort the array by stop name and direction
-                String[] favoritesArray = favoritesFragment.sortStopIdsByNameAndDirection(favoritesSet);
+                ArrayList<Integer> favoritesArrayList = favoritesFragment
+                        .sortStopIdsByNameAndDirection(favoritesSet);
 
                 // Update the RecyclerView with the new data
-                favoritesFragment.getAdapter().swap(favoritesArray);
+                favoritesFragment.getAdapter().swap(favoritesArrayList);
             }
         });
 

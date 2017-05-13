@@ -60,7 +60,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private boolean followMeShouldBeEnabled = true;
 
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
-    private String selectedMarker;
+    private int selectedMarker;
 
     private float startX;
     private float startY;
@@ -190,7 +190,7 @@ public class MapFragment extends Fragment implements LocationListener {
                 // That's why this line is needed both here and in the OnTouchListener
                 getActivity().getSupportFragmentManager().popBackStackImmediate();
 
-                selectMarkerAndAddStopFragment(item.getTitle());
+                selectMarkerAndAddStopFragment(Integer.parseInt(item.getTitle()));
 
                 return false;
             }
@@ -286,7 +286,7 @@ public class MapFragment extends Fragment implements LocationListener {
         while (query.moveToNext()) {
             OverlayItem marker = new OverlayItem(query.getString(0), null, new GeoPoint(query.getDouble(1), query.getDouble(2)));
             // If the stop code matches the selected stop code, give this marker a different drawable to reflect that
-            if (marker.getTitle().equals(selectedMarker))
+            if (marker.getTitle().equals(String.valueOf(selectedMarker)))
                 marker.setMarker(ContextCompat.getDrawable(getContext(), R.drawable.marker_selected));
             itemizedIconOverlay.addItem(marker);
         }
@@ -317,9 +317,9 @@ public class MapFragment extends Fragment implements LocationListener {
         followMeShouldBeEnabled = false;
     }
 
-    void selectMarkerAndAddStopFragment(String stopId) {
-        Cursor query = database.rawQuery("SELECT stop_name, stop_dir FROM stops WHERE stop_id = ?",
-                new String[] {stopId});
+    void selectMarkerAndAddStopFragment(int stopId) {
+        Cursor query = database.rawQuery("SELECT stop_name, stop_dir FROM stops " +
+                "WHERE stop_id = ?", new String[] {String.valueOf(stopId)});
         query.moveToNext();
 
         // Set selectedMarker to the stop code of the marker that's been tapped
@@ -330,7 +330,7 @@ public class MapFragment extends Fragment implements LocationListener {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         // Set custom animations for both normal and "pop" (e.g. popBackStack()) fragment additions and removals
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down, R.anim.slide_in_up, R.anim.slide_out_down);
-        fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(Integer.parseInt(stopId), query.getString(0), query.getString(1)));
+        fragmentTransaction.add(R.id.activity_map, StopFragment.newInstance(stopId, query.getString(0), query.getString(1)));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
@@ -351,16 +351,16 @@ public class MapFragment extends Fragment implements LocationListener {
             return false;
 
         // Now that the StopFragment has been removed, set selectedMarker to 0
-        selectedMarker = "0";
+        selectedMarker = 0;
         // Update markers to reset the icon for the previously-selected marker
         updateMarkers();
 
         return true;
     }
 
-    void animateToMarker(String stopId) {
-        Cursor query = database.rawQuery("SELECT stop_lat, stop_lon FROM stops WHERE stop_id = ?",
-                new String[] {stopId});
+    void animateToMarker(int stopId) {
+        Cursor query = database.rawQuery("SELECT stop_lat, stop_lon FROM stops " +
+                "WHERE stop_id = ?", new String[] {String.valueOf(stopId)});
         query.moveToNext();
 
         mapView.getController().animateTo(new GeoPoint(query.getDouble(0), query.getDouble(1)));

@@ -39,9 +39,9 @@ public class FavoritesFragment extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         HashSet<String> favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
-        String[] favoritesArray = sortStopIdsByNameAndDirection(favoritesSet);
+        ArrayList<Integer> favoritesArrayList = sortStopIdsByNameAndDirection(favoritesSet);
 
-        adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArray);
+        adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArrayList);
         recyclerView.setAdapter(adapter);
 
         return v;
@@ -51,7 +51,7 @@ public class FavoritesFragment extends Fragment {
         return adapter;
     }
 
-    String[] sortStopIdsByNameAndDirection(HashSet<String> favoritesSet) {
+    ArrayList<Integer> sortStopIdsByNameAndDirection(HashSet<String> favoritesSet) {
         SQLiteDatabase database = CTAHelper.getDatabaseInstance();
         // Get a list of all stops, sorted by stop name and direction
         Cursor query = database.rawQuery("SELECT stop_id FROM stops ORDER BY stop_name || stop_dir",
@@ -83,6 +83,15 @@ public class FavoritesFragment extends Fragment {
         }
         query.close();
 
-        return favoritesArrayList.toArray(new String[] {});
+        // Android wants to store HashSets of Strings, but we really just want to store ints.
+        // Within this method, we deal with the favorites like they're Strings,
+        // but we turn them into ints before passing them anywhere else.
+
+        ArrayList<Integer> convertedFavoritesArrayList = new ArrayList<>(favoritesArrayList.size());
+        for (i = 0; i < favoritesArrayList.size(); i ++) {
+            convertedFavoritesArrayList.add(Integer.parseInt(favoritesArrayList.get(i)));
+        }
+
+        return convertedFavoritesArrayList;
     }
 }
