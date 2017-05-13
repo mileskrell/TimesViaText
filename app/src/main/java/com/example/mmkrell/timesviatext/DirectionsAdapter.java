@@ -66,7 +66,7 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(new StopsAdapter(routeId, direction));
+                recyclerView.setAdapter(new StopsAdapter(routeId, direction, navigationBarActivity));
 
                 // Update our position
                 RoutesFragment.currentAdapterName = "StopsAdapter";

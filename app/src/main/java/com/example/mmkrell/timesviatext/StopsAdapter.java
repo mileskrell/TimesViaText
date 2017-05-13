@@ -15,6 +15,7 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
 
     private final ArrayList<Integer> stopIds;
     private final SQLiteDatabase database;
+    private final NavigationBarActivity navigationBarActivity;
 
     private static String direction;
 
@@ -31,8 +32,9 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
         }
     }
 
-    StopsAdapter(String routeId, String direction) {
+    StopsAdapter(String routeId, String direction, NavigationBarActivity navigationBarActivity) {
         StopsAdapter.direction = direction;
+        this.navigationBarActivity = navigationBarActivity;
 
         database = CTAHelper.getDatabaseInstance();
         stopIds = new ArrayList<>();
@@ -55,7 +57,7 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        int stopId = stopIds.get(position);
+        final int stopId = stopIds.get(position);
 
         Cursor query = database.rawQuery("SELECT stop_name FROM stops " +
                 "WHERE stop_id = " + stopId, null);
@@ -67,7 +69,16 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MapFragment mapFragment = (MapFragment) navigationBarActivity
+                        .getSupportFragmentManager().findFragmentByTag("map_fragment");
+                mapFragment.disableFollowMe();
 
+                navigationBarActivity.getBottomNavigationView().setSelectedItemId(R.id.navigation_map);
+
+                mapFragment.deselectMarkerAndRemoveStopFragment(false);
+                mapFragment.selectMarkerAndAddStopFragment(stopId);
+
+                mapFragment.animateToMarker(stopId);
             }
         });
     }
