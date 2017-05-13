@@ -363,7 +363,7 @@ public class MapFragment extends Fragment implements LocationListener {
                 new String[] {stopId});
         query.moveToNext();
 
-        mapView.getController().animateTo(new GeoPoint(Double.valueOf(query.getString(0)), Double.valueOf(query.getString(1))));
+        mapView.getController().animateTo(new GeoPoint(query.getDouble(0), query.getDouble(1)));
 
         query.close();
     }
