@@ -39,7 +39,7 @@ public class FavoritesFragment extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         HashSet<String> favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
-        String[] favoritesArray = sortStopCodesByNameAndDirection(favoritesSet);
+        String[] favoritesArray = sortStopIdsByNameAndDirection(favoritesSet);
 
         adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArray);
         recyclerView.setAdapter(adapter);
@@ -51,7 +51,7 @@ public class FavoritesFragment extends Fragment {
         return adapter;
     }
 
-    String[] sortStopCodesByNameAndDirection(HashSet<String> favoritesSet) {
+    String[] sortStopIdsByNameAndDirection(HashSet<String> favoritesSet) {
         SQLiteDatabase database = CTAHelper.getDatabaseInstance();
         // Get a list of all stops, sorted by stop name and direction
         Cursor query = database.rawQuery("SELECT stop_id FROM stops ORDER BY stop_name || stop_dir",

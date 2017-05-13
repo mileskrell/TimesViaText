@@ -22,7 +22,7 @@ public class StopFragment extends Fragment {
 
     public static boolean enableAnimations;
 
-    private int stopCode;
+    private int stopId;
     private String stopName;
     private String stopDir;
 
@@ -34,10 +34,10 @@ public class StopFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static StopFragment newInstance(int stopCode, String stopName, String stopDir) {
+    public static StopFragment newInstance(int stopId, String stopName, String stopDir) {
         StopFragment stopFragment = new StopFragment();
         Bundle args = new Bundle();
-        args.putInt("stopCode", stopCode);
+        args.putInt("stopId", stopId);
         args.putString("stopName", stopName);
         args.putString("stopDir", stopDir);
         stopFragment.setArguments(args);
@@ -48,7 +48,7 @@ public class StopFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            stopCode = getArguments().getInt("stopCode");
+            stopId = getArguments().getInt("stopId");
             stopName = getArguments().getString("stopName");
             stopDir = getArguments().getString("stopDir");
         }
@@ -79,7 +79,7 @@ public class StopFragment extends Fragment {
         favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
 
         // If this stop is a favorite, make the heart filled to represent that
-        if (favoritesSet.contains(String.valueOf(stopCode))) {
+        if (favoritesSet.contains(String.valueOf(stopId))) {
             checked = true;
             buttonFavorite.setImageDrawable(checkedFavorite);
         }
@@ -94,11 +94,11 @@ public class StopFragment extends Fragment {
                 if (checked) {
                     // Set image to filled heart and add stop to favorites
                     buttonFavorite.setImageDrawable(checkedFavorite);
-                    favoritesSet.add(String.valueOf(stopCode));
+                    favoritesSet.add(String.valueOf(stopId));
                 } else {
                     // Set image to empty heart and remove stop from favorites
                     buttonFavorite.setImageDrawable(uncheckedFavorite);
-                    favoritesSet.remove(String.valueOf(stopCode));
+                    favoritesSet.remove(String.valueOf(stopId));
                 }
 
                 editor.putStringSet("favorites", favoritesSet);
@@ -108,7 +108,7 @@ public class StopFragment extends Fragment {
                         .getSupportFragmentManager().findFragmentByTag("favorites_fragment");
 
                 // Sort the array by stop name and direction
-                String[] favoritesArray = favoritesFragment.sortStopCodesByNameAndDirection(favoritesSet);
+                String[] favoritesArray = favoritesFragment.sortStopIdsByNameAndDirection(favoritesSet);
 
                 // Update the RecyclerView with the new data
                 favoritesFragment.getAdapter().swap(favoritesArray);
@@ -119,7 +119,7 @@ public class StopFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent getStopTimesIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:41411"));
-                getStopTimesIntent.putExtra("sms_body", "CTABUS " + stopCode);
+                getStopTimesIntent.putExtra("sms_body", "CTABUS " + stopId);
                 if (getStopTimesIntent.resolveActivity(getActivity().getPackageManager()) != null)
                     startActivity(getStopTimesIntent);
                 else
