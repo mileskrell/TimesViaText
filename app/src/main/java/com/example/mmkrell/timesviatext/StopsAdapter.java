@@ -16,7 +16,6 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
     private final ArrayList<Integer> stopIds;
     private final SQLiteDatabase database;
 
-    private static String routeId;
     private static String direction;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,7 +32,6 @@ class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.ViewHolder> {
     }
 
     StopsAdapter(String routeId, String direction) {
-        StopsAdapter.routeId = routeId;
         StopsAdapter.direction = direction;
 
         database = CTAHelper.getDatabaseInstance();
