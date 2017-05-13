@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 public class RoutesFragment extends Fragment {
 
+    // Used when clicking on RouteFragment icon
     static String currentAdapterName;
 
     private PositionSavingRecyclerView positionSavingRecyclerView;

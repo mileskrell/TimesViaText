@@ -1,5 +1,6 @@
 package com.example.mmkrell.timesviatext;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,12 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
 
     private final ArrayList<String> directions;
     private final SQLiteDatabase database;
-    private final String routeId;
+
+    // This is used in getTitle() and when returning to a DirectionsAdapter
+    static String routeId;
+
+    private final NavigationBarActivity navigationBarActivity;
+    private final RecyclerView recyclerView;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,7 +35,11 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
         }
     }
 
-    DirectionsAdapter(String routeId) {
+    DirectionsAdapter(String routeId, NavigationBarActivity navigationBarActivity, RecyclerView recyclerView) {
+        DirectionsAdapter.routeId = routeId;
+        this.navigationBarActivity = navigationBarActivity;
+        this.recyclerView = recyclerView;
+
         database = CTAHelper.getDatabaseInstance();
         directions = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT DISTINCT direction " +
@@ -38,7 +48,6 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
             directions.add(query.getString(0));
         }
         query.close();
-        this.routeId = routeId;
     }
 
     @Override
@@ -50,12 +59,30 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.textViewDirection.setText(directions.get(position));
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final String direction = directions.get(position);
+        holder.textViewDirection.setText(direction);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setAdapter(new StopsAdapter(routeId, direction));
+
+                // Update our position
+                RoutesFragment.currentAdapterName = "StopsAdapter";
+
+                // Update the action bar's title
+                navigationBarActivity.updateTitleAndUserLocation("StopsAdapter");
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return directions.size();
+    }
+
+    static String getTitle(Context context) {
+        return context.getString(R.string.route) + " " + routeId;
     }
 }

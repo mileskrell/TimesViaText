@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 public class NavigationBarActivity extends AppCompatActivity {
 
+    // Used in onBackPressed()
     static String userLocation;
 
     // Only one of each fragment is used so that they don't have to be recreated every time the user moves between views
@@ -26,9 +27,7 @@ public class NavigationBarActivity extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_map:
-                    userLocation = "MapFragment";
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    getSupportActionBar().setTitle(R.string.title_map);
+                    updateTitleAndUserLocation("MapFragment");
                     fragmentTransaction.show(mapFragment);
 
                     fragmentTransaction.hide(routesFragment);
@@ -36,20 +35,7 @@ public class NavigationBarActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_routes:
-                    userLocation = RoutesFragment.currentAdapterName;
-
-                    // If viewing DirectionsAdapter or StopsAdapter, display the back button
-                    switch (userLocation) {
-                        case "RoutesAdapter":
-                            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                            getSupportActionBar().setTitle(R.string.title_routes);
-                            break;
-                        case "DirectionsAdapter":
-                            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                            getSupportActionBar().setTitle(RoutesAdapter.selectedRouteTitle);
-                            break;
-                    }
-
+                    updateTitleAndUserLocation(RoutesFragment.currentAdapterName);
                     fragmentTransaction.show(routesFragment);
 
                     fragmentTransaction.hide(mapFragment);
@@ -57,9 +43,7 @@ public class NavigationBarActivity extends AppCompatActivity {
                     fragmentTransaction.commit();
                     return true;
                 case R.id.navigation_favorites:
-                    userLocation = "FavoritesFragment";
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                    getSupportActionBar().setTitle(R.string.title_favorites);
+                    updateTitleAndUserLocation("FavoritesFragment");
                     fragmentTransaction.show(favoritesFragment);
 
                     fragmentTransaction.hide(mapFragment);
@@ -128,6 +112,7 @@ public class NavigationBarActivity extends AppCompatActivity {
                 finish();
                 return;
             case "DirectionsAdapter":
+                // Return to a RoutesAdapter
                 routesFragment.getPositionSavingRecyclerView().setAdapter(
                         new RoutesAdapter(this, routesFragment.getPositionSavingRecyclerView()));
 
@@ -135,10 +120,16 @@ public class NavigationBarActivity extends AppCompatActivity {
                 routesFragment.getPositionSavingRecyclerView()
                         .onRestoreInstanceState(PositionSavingRecyclerView.routesAdapterState);
 
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                getSupportActionBar().setTitle(R.string.title_routes);
                 RoutesFragment.currentAdapterName = "RoutesAdapter";
-                NavigationBarActivity.userLocation = RoutesFragment.currentAdapterName;
+                updateTitleAndUserLocation("RoutesAdapter");
+                return;
+            case "StopsAdapter":
+                // Return to a DirectionsAdapter
+                routesFragment.getPositionSavingRecyclerView().setAdapter(
+                        new DirectionsAdapter(DirectionsAdapter.routeId, this,
+                                routesFragment.getPositionSavingRecyclerView()));
+                RoutesFragment.currentAdapterName = "DirectionsAdapter";
+                updateTitleAndUserLocation("DirectionsAdapter");
                 return;
             case "FavoritesFragment":
                 finish();
@@ -162,5 +153,32 @@ public class NavigationBarActivity extends AppCompatActivity {
         super.onDestroy();
         // Close the database since the activity is being destroyed
         CTAHelper.getDatabaseInstance().close();
+    }
+
+    void updateTitleAndUserLocation(String newLocation) {
+        userLocation = newLocation;
+        switch (newLocation) {
+            case "MapFragment":
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setTitle(R.string.title_map);
+                return;
+            case "RoutesAdapter":
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setTitle(R.string.title_routes);
+                return;
+            case "DirectionsAdapter":
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle(DirectionsAdapter
+                        .getTitle(getApplicationContext()));
+                return;
+            case "StopsAdapter":
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setTitle(StopsAdapter
+                        .getTitle(getApplicationContext()));
+                return;
+            case "FavoritesFragment":
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setTitle(R.string.title_favorites);
+        }
     }
 }
