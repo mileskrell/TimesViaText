@@ -12,7 +12,6 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
 
     private String[] favorites;
     private final NavigationBarActivity navigationBarActivity;
-    private final MapFragment mapFragment;
     private final SQLiteDatabase database;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -33,7 +32,6 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
     FavoritesAdapter(NavigationBarActivity navigationBarActivity, String[] favorites) {
         this.favorites = favorites;
         this.navigationBarActivity = navigationBarActivity;
-        this.mapFragment = (MapFragment) navigationBarActivity.getSupportFragmentManager().findFragmentByTag("map_fragment");
         database = CTAHelper.getDatabaseInstance();
     }
 
@@ -59,9 +57,13 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
         else
             holder.textViewStopDirection.setText(stopDirection);
 
+        query.close();
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MapFragment mapFragment = (MapFragment) navigationBarActivity
+                        .getSupportFragmentManager().findFragmentByTag("map_fragment");
                 mapFragment.disableFollowMe();
 
                 navigationBarActivity.getBottomNavigationView().setSelectedItemId(R.id.navigation_map);
@@ -72,8 +74,6 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
                 mapFragment.animateToMarker(favorites[holder.getAdapterPosition()]);
             }
         });
-
-        query.close();
     }
 
     @Override
