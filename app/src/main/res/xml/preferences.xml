@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:key="pref_tiles_scaled_to_dpi"
+    <CheckBoxPreference
+        android:key="pref_scale_tiles_to_dpi"
         android:defaultValue="true"
-        android:title="@string/tiles_scaled_to_dpi"
-        android:summary="@string/tiles_scaled_to_dpi_summary" />
+        android:title="@string/scale_tiles_to_dpi"
+        android:summary="@string/scale_tiles_to_dpi_summary" />
 
-    <SwitchPreference
-        android:key="pref_offline_mode"
-        android:defaultValue="false"
-        android:title="@string/offline_mode"
-        android:summary="@string/offline_mode_summary" />
+    <CheckBoxPreference
+        android:key="pref_download_new_tiles"
+        android:defaultValue="true"
+        android:title="@string/download_missing_tiles"
+        android:summary="@string/download_missing_tiles_summary" />
 </PreferenceScreen>

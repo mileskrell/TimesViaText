@@ -93,12 +93,12 @@ public class MapFragment extends Fragment implements LocationListener {
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
 
-        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_offline_mode", false))
+        if (! PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_download_new_tiles", true))
             mapView.setUseDataConnection(false);
 
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
-        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_tiles_scaled_to_dpi", true))
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_scale_tiles_to_dpi", true))
             mapView.setTilesScaledToDpi(true);
 
         mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);

@@ -21,10 +21,10 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
-        findPreference("pref_offline_mode").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+        findPreference("pref_download_new_tiles").setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                MapFragment.getMapView().setUseDataConnection(! (boolean) newValue);
+                MapFragment.getMapView().setUseDataConnection((boolean) newValue);
                 return true;
             }
         });
