@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -13,6 +14,9 @@ public class NavigationBarActivity extends AppCompatActivity {
 
     // Used in onBackPressed()
     static String userLocation;
+
+    // Used in SettingsFragment
+    static FragmentManager supportFragmentManager;
 
     // Only one of each fragment is used so that they don't have to be recreated every time the user moves between views
     private MapFragment mapFragment;
@@ -24,7 +28,7 @@ public class NavigationBarActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = supportFragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_map:
                     updateTitleAndUserLocation("MapFragment");
@@ -68,7 +72,9 @@ public class NavigationBarActivity extends AppCompatActivity {
         mapFragment = MapFragment.newInstance();
         routesFragment = RoutesFragment.newInstance();
 
-        getSupportFragmentManager().beginTransaction()
+        supportFragmentManager = getSupportFragmentManager();
+
+        supportFragmentManager.beginTransaction()
                 .add(R.id.content, mapFragment, "map_fragment")
                 .add(R.id.content, routesFragment, "routes_fragment")
                 .add(R.id.content, favoritesFragment, "favorites_fragment")

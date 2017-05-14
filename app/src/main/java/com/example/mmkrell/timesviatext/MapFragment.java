@@ -40,8 +40,10 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class MapFragment extends Fragment implements LocationListener {
 
-    private static MapView mapView;
-    private static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
+    private MapView mapView;
+
+    // Accessed from SettingsFragment
+    static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
 
     private Location currentLocation;
     private LocationManager locationManager;
@@ -57,7 +59,8 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private SQLiteDatabase database;
 
-    private boolean followMeShouldBeEnabled = true;
+    // Accessed from SettingsFragment
+    boolean followMeShouldBeEnabled = true;
 
     private ItemizedIconOverlay<OverlayItem> itemizedIconOverlay;
     private int selectedMarker;
@@ -135,9 +138,9 @@ public class MapFragment extends Fragment implements LocationListener {
             @Override
             public void onClick(View v) {
                 if (myLocationOverlay.isFollowLocationEnabled()) {
-                    disableFollowMe();
+                    setFollowMeState(false);
                 } else {
-                    enableFollowMe();
+                    setFollowMeState(true);
                 }
             }
         });
@@ -148,7 +151,7 @@ public class MapFragment extends Fragment implements LocationListener {
                 // Only call disableFollowMe() if the onScroll() was triggered by the user, which would have disabled follow me
                 // This check prevents disableFollowMe() from being called immediately after the button is clicked
                 if (! myLocationOverlay.isFollowLocationEnabled())
-                    disableFollowMe();
+                    setFollowMeState(false);
                 updateMarkers();
                 return false;
             }
@@ -215,7 +218,7 @@ public class MapFragment extends Fragment implements LocationListener {
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             myLocationOverlay.enableMyLocation();
             if (followMeShouldBeEnabled)
-                enableFollowMe();
+                setFollowMeState(true);
             if (shouldShowWaitingForGpsSignalView())
                 viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
         }
@@ -251,7 +254,7 @@ public class MapFragment extends Fragment implements LocationListener {
         // Now we can enable this stuff
         myLocationOverlay.enableMyLocation();
         if (followMeShouldBeEnabled)
-            enableFollowMe();
+            setFollowMeState(true);
 
         viewGpsDisabled.setVisibility(View.INVISIBLE);
         if (shouldShowWaitingForGpsSignalView())
@@ -305,16 +308,16 @@ public class MapFragment extends Fragment implements LocationListener {
         return millisecondsSinceLastFix > 60000;
     }
 
-    private void enableFollowMe() {
-        buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
-        myLocationOverlay.enableFollowLocation();
-        followMeShouldBeEnabled = true;
-    }
-
-    void disableFollowMe() {
-        buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
-        myLocationOverlay.disableFollowLocation();
-        followMeShouldBeEnabled = false;
+    void setFollowMeState(boolean enabled) {
+        if (enabled) {
+            buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
+            myLocationOverlay.enableFollowLocation();
+            followMeShouldBeEnabled = true;
+        } else {
+            buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
+            myLocationOverlay.disableFollowLocation();
+            followMeShouldBeEnabled = false;
+        }
     }
 
     void selectMarkerAndAddStopFragment(int stopId) {
@@ -368,7 +371,8 @@ public class MapFragment extends Fragment implements LocationListener {
         query.close();
     }
 
-    static MapView getMapView() {
+    // Used in SettingsFragment
+    MapView getMapView() {
         return mapView;
     }
 }

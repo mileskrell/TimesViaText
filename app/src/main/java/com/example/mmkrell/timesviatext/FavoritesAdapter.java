@@ -66,7 +66,7 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
             public void onClick(View v) {
                 MapFragment mapFragment = (MapFragment) navigationBarActivity
                         .getSupportFragmentManager().findFragmentByTag("map_fragment");
-                mapFragment.disableFollowMe();
+                mapFragment.setFollowMeState(false);
 
                 navigationBarActivity.getBottomNavigationView().setSelectedItemId(R.id.navigation_map);
 

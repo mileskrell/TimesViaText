@@ -32,7 +32,7 @@
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
 
     <string name="scale_tiles_to_dpi">Scale tiles to DPI</string>
-    <string name="scale_tiles_to_dpi_summary">Typically makes map more pixelated, but easier to read.\nRestart app for changes to take effect.</string>
+    <string name="scale_tiles_to_dpi_summary">Typically makes map more pixelated, but easier to read.</string>
 
     <string name="download_missing_tiles">Download missing tiles</string>
     <string name="download_missing_tiles_summary">This WILL use mobile data if available!</string>
