@@ -61,21 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/ic_center_map"
-        android:background="#00000000"
-        android:contentDescription="@string/image_button_my_location_description"
-        android:id="@+id/button_my_location" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/button_my_location"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_follow_me"
         android:background="#00000000"
         android:contentDescription="@string/image_button_follow_me_description"

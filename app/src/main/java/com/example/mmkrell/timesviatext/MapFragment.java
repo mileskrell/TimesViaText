@@ -53,7 +53,6 @@ public class MapFragment extends Fragment implements LocationListener {
     private View viewGpsDisabled;
 
     private TextView textViewZoomLevel;
-    private ImageButton buttonMyLocation;
     private ImageButton buttonFollowMe;
     private TextView textViewOpenStreetMapCredit;
 
@@ -84,7 +83,6 @@ public class MapFragment extends Fragment implements LocationListener {
         viewWaitingForGpsSignal = v.findViewById(R.id.view_waiting_for_gps_signal);
         viewGpsDisabled = v.findViewById(R.id.view_gps_disabled);
 
-        buttonMyLocation = (ImageButton) v.findViewById(R.id.button_my_location);
         buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
 
         textViewOpenStreetMapCredit = (TextView) v.findViewById(R.id.text_view_openstreetmap_credit);
@@ -124,15 +122,6 @@ public class MapFragment extends Fragment implements LocationListener {
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()), mapView);
         mapView.getOverlays().add(myLocationOverlay);
-
-        buttonMyLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentLocation != null) {
-                    mapView.getController().animateTo(new GeoPoint(currentLocation));
-                }
-            }
-        });
 
         buttonFollowMe.setOnClickListener(new View.OnClickListener() {
             @Override
