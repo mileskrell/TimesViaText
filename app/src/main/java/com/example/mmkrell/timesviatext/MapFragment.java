@@ -49,6 +49,8 @@ public class MapFragment extends Fragment implements LocationListener {
     private LocationManager locationManager;
     private MyLocationNewOverlay myLocationOverlay;
 
+    private boolean paused;
+
     private View viewWaitingForGpsSignal;
     private View viewGpsDisabled;
 
@@ -137,10 +139,15 @@ public class MapFragment extends Fragment implements LocationListener {
         mapView.setMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-                // Only call disableFollowMe() if the onScroll() was triggered by the user, which would have disabled follow me
-                // This check prevents disableFollowMe() from being called immediately after the button is clicked
-                if (! myLocationOverlay.isFollowLocationEnabled())
+                // Only disable follow me if the onScroll() was triggered by the user, which would have disabled follow me
+                // This check prevents follow me from being disabled immediately after the button is clicked
+
+                // Also, make sure that MapFragment is visible
+                // This keeps follow me from being disabled when resuming
+                // if the location had changed while it was paused
+                if (! myLocationOverlay.isFollowLocationEnabled() && ! paused) {
                     setFollowMeState(false);
+                }
                 updateMarkers();
                 return false;
             }
@@ -211,11 +218,13 @@ public class MapFragment extends Fragment implements LocationListener {
             if (shouldShowWaitingForGpsSignalView())
                 viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
         }
+        paused = false;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        paused = true;
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager.removeUpdates(this);
         myLocationOverlay.disableFollowLocation();
