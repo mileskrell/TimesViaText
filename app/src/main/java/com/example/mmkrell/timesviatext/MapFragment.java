@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -48,6 +49,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private Location currentLocation;
     private LocationManager locationManager;
     private MyLocationNewOverlay myLocationOverlay;
+    private Thread fixIsAging;
 
     private boolean paused;
 
@@ -215,8 +217,11 @@ public class MapFragment extends Fragment implements LocationListener {
             myLocationOverlay.enableMyLocation();
             if (followMeShouldBeEnabled)
                 setFollowMeState(true);
-            if (shouldShowWaitingForGpsSignalView())
+            if (lastGpsFixIsOld()) {
                 viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
+                myLocationOverlay.setPersonIcon(BitmapFactory
+                        .decodeResource(getResources(), R.drawable.person_icon_old_location));
+            }
         }
         paused = false;
     }
@@ -240,6 +245,31 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onLocationChanged(Location location) {
         currentLocation = location;
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
+        myLocationOverlay.setPersonIcon(BitmapFactory.decodeResource(getResources(),
+                org.osmdroid.library.R.drawable.person));
+
+        if (fixIsAging != null) {
+            fixIsAging.interrupt();
+        }
+
+        fixIsAging = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Sleep for 10 seconds
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    // If this is interrupted, it means we've received a new Location
+                    // Return to end the thread
+                    return;
+                }
+                // Make person icon gray
+                myLocationOverlay.setPersonIcon(BitmapFactory
+                        .decodeResource(getResources(), R.drawable.person_icon_old_location));
+            }
+        });
+
+        fixIsAging.start();
     }
 
     @Override
@@ -255,8 +285,11 @@ public class MapFragment extends Fragment implements LocationListener {
             setFollowMeState(true);
 
         viewGpsDisabled.setVisibility(View.INVISIBLE);
-        if (shouldShowWaitingForGpsSignalView())
+        if (lastGpsFixIsOld()) {
             viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
+            myLocationOverlay.setPersonIcon(BitmapFactory
+                    .decodeResource(getResources(), R.drawable.person_icon_old_location));
+        }
 
     }
 
@@ -295,12 +328,12 @@ public class MapFragment extends Fragment implements LocationListener {
         query.close();
     }
 
-    private boolean shouldShowWaitingForGpsSignalView() {
-        // If currentLocation is null, we should obviously show the view
+    private boolean lastGpsFixIsOld() {
+        // If currentLocation is null, the last fix is obviously "old"
         if (currentLocation == null)
             return true;
 
-        // If it's been more than a minute since the last GPS fix, we should show the view
+        // If it's been more than a minute since the last GPS fix, the last fix is old
         long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
         int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
         return millisecondsSinceLastFix > 60000;
