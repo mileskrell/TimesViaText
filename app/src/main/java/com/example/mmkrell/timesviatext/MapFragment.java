@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -46,7 +46,6 @@ public class MapFragment extends Fragment implements LocationListener {
     // Accessed from SettingsFragment
     static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
 
-    private Location currentLocation;
     private LocationManager locationManager;
     private MyLocationNewOverlay myLocationOverlay;
     private Thread fixIsAging;
@@ -71,6 +70,11 @@ public class MapFragment extends Fragment implements LocationListener {
     private float startX;
     private float startY;
 
+    private Bitmap personBitmap;
+    private Bitmap directionArrowBitmap;
+    private Bitmap grayPersonBitmap;
+    private Bitmap grayDirectionArrowBitmap;
+
     public MapFragment() {
         // Required empty public constructor
     }
@@ -88,6 +92,15 @@ public class MapFragment extends Fragment implements LocationListener {
         viewGpsDisabled = v.findViewById(R.id.view_gps_disabled);
 
         buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
+
+        personBitmap = BitmapFactory.decodeResource(getResources(),
+                org.osmdroid.library.R.drawable.person);
+        directionArrowBitmap = BitmapFactory.decodeResource(getResources(),
+                org.osmdroid.library.R.drawable.direction_arrow);
+        grayPersonBitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.gray_person_icon);
+        grayDirectionArrowBitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.gray_direction_arrow);
 
         textViewOpenStreetMapCredit = (TextView) v.findViewById(R.id.text_view_openstreetmap_credit);
         // Makes the link clickable
@@ -217,10 +230,12 @@ public class MapFragment extends Fragment implements LocationListener {
             myLocationOverlay.enableMyLocation();
             if (followMeShouldBeEnabled)
                 setFollowMeState(true);
-            if (lastGpsFixIsOld()) {
+
+            // If the thread is null, no Location has been received yet.
+            // If this thread isn't running, then it's been over ten seconds since the last fix.
+            if (fixIsAging == null || ! fixIsAging.isAlive()) {
                 viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
-                myLocationOverlay.setPersonIcon(BitmapFactory
-                        .decodeResource(getResources(), R.drawable.person_icon_old_location));
+                myLocationOverlay.setPersonIcon(grayPersonBitmap);
             }
         }
         paused = false;
@@ -243,10 +258,8 @@ public class MapFragment extends Fragment implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        currentLocation = location;
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
-        myLocationOverlay.setPersonIcon(BitmapFactory.decodeResource(getResources(),
-                org.osmdroid.library.R.drawable.person));
+        myLocationOverlay.setDirectionArrow(personBitmap, directionArrowBitmap);
 
         if (fixIsAging != null) {
             fixIsAging.interrupt();
@@ -259,13 +272,18 @@ public class MapFragment extends Fragment implements LocationListener {
                     // Sleep for 10 seconds
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
-                    // If this is interrupted, it means we've received a new Location
-                    // Return to end the thread
+                    // If this is interrupted, it means we've received a new Location,
+                    // so we return to end the thread
                     return;
                 }
-                // Make person icon gray
-                myLocationOverlay.setPersonIcon(BitmapFactory
-                        .decodeResource(getResources(), R.drawable.person_icon_old_location));
+                // Make person icon gray and show "waiting for GPS signal" view
+                myLocationOverlay.setDirectionArrow(grayPersonBitmap, grayDirectionArrowBitmap);
+                viewWaitingForGpsSignal.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
+                    }
+                });
             }
         });
 
@@ -285,19 +303,22 @@ public class MapFragment extends Fragment implements LocationListener {
             setFollowMeState(true);
 
         viewGpsDisabled.setVisibility(View.INVISIBLE);
-        if (lastGpsFixIsOld()) {
-            viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
-            myLocationOverlay.setPersonIcon(BitmapFactory
-                    .decodeResource(getResources(), R.drawable.person_icon_old_location));
-        }
-
+        viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
+        // Kill the thread so "waiting for GPS signal" view doesn't pop up while GPS is disabled
+        if (fixIsAging != null) {
+            fixIsAging.interrupt();
+        }
+
+        // The displayed location will probably be wrong really soon, so make the icon gray
+        myLocationOverlay.setDirectionArrow(grayPersonBitmap, grayDirectionArrowBitmap);
+
         // Hide "waiting for GPS signal" view
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
-        // If GPS is disabled, prompt the user to enable it
+        // Show "Gps disabled" view
         viewGpsDisabled.setVisibility(View.VISIBLE);
         // If GPS is disabled when requestLocationUpdates() is called in onResume(), onProviderDisabled() will be called
         // That means that viewGpsDisabled.setVisibility(View.VISIBLE) doesn't need to also be called in onResume()
@@ -326,17 +347,6 @@ public class MapFragment extends Fragment implements LocationListener {
         }
 
         query.close();
-    }
-
-    private boolean lastGpsFixIsOld() {
-        // If currentLocation is null, the last fix is obviously "old"
-        if (currentLocation == null)
-            return true;
-
-        // If it's been more than a minute since the last GPS fix, the last fix is old
-        long nanosecondsSinceLastFix = SystemClock.elapsedRealtimeNanos() - currentLocation.getElapsedRealtimeNanos();
-        int millisecondsSinceLastFix = (int) (nanosecondsSinceLastFix / 1000000);
-        return millisecondsSinceLastFix > 60000;
     }
 
     void setFollowMeState(boolean enabled) {
