@@ -351,11 +351,11 @@ public class MapFragment extends Fragment implements LocationListener {
 
     void setFollowMeState(boolean enabled) {
         if (enabled) {
-            buttonFollowMe.setImageResource(R.drawable.ic_follow_me_on);
+            buttonFollowMe.setImageResource(org.osmdroid.library.R.drawable.osm_ic_follow_me_on);
             myLocationOverlay.enableFollowLocation();
             followMeShouldBeEnabled = true;
         } else {
-            buttonFollowMe.setImageResource(R.drawable.ic_follow_me);
+            buttonFollowMe.setImageResource(org.osmdroid.library.R.drawable.osm_ic_follow_me);
             myLocationOverlay.disableFollowLocation();
             followMeShouldBeEnabled = false;
         }
