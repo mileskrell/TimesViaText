@@ -54,6 +54,7 @@ public class MapFragment extends Fragment implements LocationListener {
 
     private View viewWaitingForGpsSignal;
     private View viewGpsDisabled;
+    private View viewOutsideOfChicago;
 
     private TextView textViewZoomLevel;
     private ImageButton buttonFollowMe;
@@ -90,6 +91,7 @@ public class MapFragment extends Fragment implements LocationListener {
         textViewZoomLevel = (TextView) v.findViewById(R.id.text_view_zoom_level);
         viewWaitingForGpsSignal = v.findViewById(R.id.view_waiting_for_gps_signal);
         viewGpsDisabled = v.findViewById(R.id.view_gps_disabled);
+        viewOutsideOfChicago = v.findViewById(R.id.view_outside_of_chicago);
 
         buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
 
@@ -265,6 +267,12 @@ public class MapFragment extends Fragment implements LocationListener {
             fixIsAging.interrupt();
         }
 
+        if (chicagoBoundingBox.contains(new GeoPoint(location))) {
+            viewOutsideOfChicago.setVisibility(View.INVISIBLE);
+        } else {
+            viewOutsideOfChicago.setVisibility(View.VISIBLE);
+        }
+
         fixIsAging = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -281,6 +289,9 @@ public class MapFragment extends Fragment implements LocationListener {
                 viewWaitingForGpsSignal.post(new Runnable() {
                     @Override
                     public void run() {
+                        // Since it's been ten seconds since the last fix, we don't know if
+                        // the person is still outside of Chicago (if they had been before)
+                        viewOutsideOfChicago.setVisibility(View.INVISIBLE);
                         viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
                     }
                 });
@@ -318,6 +329,10 @@ public class MapFragment extends Fragment implements LocationListener {
 
         // Hide "waiting for GPS signal" view
         viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
+
+        // Hide "outside of Chicago" view
+        viewOutsideOfChicago.setVisibility(View.INVISIBLE);
+
         // Show "Gps disabled" view
         viewGpsDisabled.setVisibility(View.VISIBLE);
         // If GPS is disabled when requestLocationUpdates() is called in onResume(), onProviderDisabled() will be called

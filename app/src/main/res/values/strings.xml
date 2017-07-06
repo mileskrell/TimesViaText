@@ -22,8 +22,8 @@
     <string name="image_button_follow_me_description">Follow my location</string>
 
     <string name="waiting_for_gps_signal">Waiting for GPS signal…</string>
-
     <string name="gps_disabled">GPS is disabled</string>
+    <string name="outside_of_chicago">Outside of Chicago</string>
 
     <string name="favorite_button_content_description">Add or remove favorite stop</string>
     <string name="button_get_stop_times">Get stop times</string>

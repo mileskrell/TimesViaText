@@ -57,6 +57,20 @@
         android:visibility="invisible"
         android:id="@+id/view_gps_disabled" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        android:gravity="center"
+        android:background="@drawable/background_gps_messages"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:text="@string/outside_of_chicago"
+        android:visibility="invisible"
+        android:id="@+id/view_outside_of_chicago" />
+
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
