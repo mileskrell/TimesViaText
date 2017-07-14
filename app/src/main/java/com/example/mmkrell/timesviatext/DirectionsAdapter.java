@@ -43,7 +43,7 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
         database = CTAHelper.getDatabaseInstance();
         directions = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT DISTINCT direction " +
-                        "FROM route_" + routeId + "_stops ORDER BY direction", null);
+                "FROM route_" + routeId + "_stops ORDER BY direction", null);
         while (query.moveToNext()) {
             directions.add(query.getString(0));
         }
