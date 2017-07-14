@@ -11,13 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class FavoritesFragment extends Fragment {
 
-    private FavoritesAdapter adapter;
+    private RecyclerView recyclerView;
+    private TextView textViewNoFavorites;
+
     private SharedPreferences sharedPreferences;
 
     public FavoritesFragment() {
@@ -32,7 +35,9 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_favorites, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.favorites_recycler_view);
+        recyclerView = (RecyclerView) v.findViewById(R.id.favorites_recycler_view);
+        textViewNoFavorites = (TextView) v.findViewById(R.id.text_view_no_favorites);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -41,14 +46,26 @@ public class FavoritesFragment extends Fragment {
 
         ArrayList<Integer> favoritesArrayList = sortStopIdsByNameAndDirection(favoritesSet);
 
-        adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArrayList);
+        if (favoritesArrayList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            textViewNoFavorites.setVisibility(View.VISIBLE);
+        }
+
+        FavoritesAdapter adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArrayList);
         recyclerView.setAdapter(adapter);
 
         return v;
     }
 
-    FavoritesAdapter getAdapter() {
-        return adapter;
+    void updateFavorites(ArrayList<Integer> newFavorites) {
+        if (newFavorites.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            textViewNoFavorites.setVisibility(View.VISIBLE);
+        } else {
+            ((FavoritesAdapter) recyclerView.getAdapter()).swap(newFavorites);
+            textViewNoFavorites.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     ArrayList<Integer> sortStopIdsByNameAndDirection(HashSet<String> favoritesSet) {

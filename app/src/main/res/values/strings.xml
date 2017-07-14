@@ -30,6 +30,8 @@
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
 
+    <string name="no_favorite_stops">To add a favorite stop, select it from one of the other tabs and tap the heart!</string>
+
     <string name="scale_tiles_to_dpi">Scale tiles to DPI</string>
     <string name="scale_tiles_to_dpi_summary">Typically makes map more pixelated, but easier to read.</string>
 

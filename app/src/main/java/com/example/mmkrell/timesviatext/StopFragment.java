@@ -114,7 +114,7 @@ public class StopFragment extends Fragment {
                         .sortStopIdsByNameAndDirection(favoritesSet);
 
                 // Update the RecyclerView with the new data
-                favoritesFragment.getAdapter().swap(favoritesArrayList);
+                favoritesFragment.updateFavorites(favoritesArrayList);
             }
         });
 
