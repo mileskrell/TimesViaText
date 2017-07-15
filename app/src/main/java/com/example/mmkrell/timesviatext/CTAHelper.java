@@ -15,6 +15,9 @@ class CTAHelper extends SQLiteAssetHelper {
 
     CTAHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        // Whenever DATABASE_VERSION is incremented, any existing database
+        // will be overwritten with the latest version
+        setForcedUpgrade();
     }
 
     static void setDatabaseInstance(SQLiteDatabase databaseInstance) {
