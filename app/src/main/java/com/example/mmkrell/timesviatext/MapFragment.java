@@ -24,12 +24,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.config.IConfigurationProvider;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
+import org.osmdroid.tileprovider.modules.SqlTileWriter;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
@@ -86,6 +89,15 @@ public class MapFragment extends Fragment implements LocationListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        IConfigurationProvider config = Configuration.getInstance();
+
+        config.setUserAgentValue(BuildConfig.APPLICATION_ID);
+
+        long freeSpace = config.getOsmdroidTileCache().getFreeSpace();
+        long cacheSize = new File(config.getOsmdroidTileCache().getAbsolutePath() + File.separator + SqlTileWriter.DATABASE_FILENAME).length();
+        config.setTileFileSystemCacheMaxBytes((long)((freeSpace + cacheSize) * 0.95));
+        config.setTileFileSystemCacheTrimBytes((long)((freeSpace + cacheSize) * 0.90));
+
         View v = inflater.inflate(R.layout.fragment_map, container, false);
 
         textViewZoomLevel = (TextView) v.findViewById(R.id.text_view_zoom_level);
@@ -110,7 +122,6 @@ public class MapFragment extends Fragment implements LocationListener {
 
         database = CTAHelper.getDatabaseInstance();
 
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         mapView = (MapView) v.findViewById(R.id.map_view);
 
         if (! PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_download_new_tiles", true))
