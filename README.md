@@ -5,6 +5,9 @@ It's able to do this by using the CTA's [Bus Tracker by Text](http://www.transit
 
 Data provided by [Chicago Transit Authority](http://transitchicago.com).
 
-Uses [osmdroid](https://github.com/osmdroid/osmdroid) and [Android SQLiteAssetHelper](https://github.com/jgilfelt/android-sqlite-asset-helper).
-
 [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser) was used during development.
+
+##Dependencies:
+
+* [osmdroid](https://github.com/osmdroid/osmdroid)
+* [Android SQLiteAssetHelper](https://github.com/jgilfelt/android-sqlite-asset-helper)
