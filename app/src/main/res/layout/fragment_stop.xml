@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="128dp"
+    android:weightSum="1"
     android:layout_alignParentBottom="true"
     android:background="?android:attr/windowBackground"
     tools:context="com.example.mmkrell.timesviatext.StopFragment">
@@ -12,7 +13,8 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="8"
+        android:layout_weight="0.85"
+        android:layout_marginStart="16dp"
         android:gravity="center_vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -39,17 +41,15 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:layout_gravity="center_vertical"
-        android:padding="10dp"
+        android:layout_weight="0.15"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="16dp"
         android:contentDescription="@string/favorite_button_content_description"
         app:srcCompat="@drawable/ic_favorite_border_red_24dp"
         android:id="@+id/stop_fragment_button_favorite" />
     <Button
-        android:layout_width="0dp"
+        android:layout_width="96dp"
         android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:layout_gravity="center_vertical"
         android:text="@string/button_get_stop_times"
         android:id="@+id/stop_fragment_button_write_text" />
 </LinearLayout>
