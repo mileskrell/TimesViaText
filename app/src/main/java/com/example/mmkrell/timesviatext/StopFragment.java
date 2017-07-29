@@ -96,10 +96,12 @@ public class StopFragment extends Fragment {
                 if (checked) {
                     // Set image to filled heart and add stop to favorites
                     buttonFavorite.setImageDrawable(checkedFavorite);
+                    growAndShrink(buttonFavorite);
                     favoritesSet.add(String.valueOf(stopId));
                 } else {
                     // Set image to empty heart and remove stop from favorites
                     buttonFavorite.setImageDrawable(uncheckedFavorite);
+                    growAndShrink(buttonFavorite);
                     favoritesSet.remove(String.valueOf(stopId));
                 }
 
@@ -141,5 +143,16 @@ public class StopFragment extends Fragment {
         Animation a = new Animation() {};
         a.setDuration(0);
         return a;
+    }
+
+    private static void growAndShrink(final View v) {
+        v.animate().setDuration(250).scaleX(1.75f).scaleY(1.75f).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                v.animate().scaleX(1).scaleY(1);
+                // The same ViewPropertyAnimator is being used,
+                // so we don't need to call setDuration() again
+            }
+        });
     }
 }
