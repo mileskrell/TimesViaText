@@ -91,7 +91,6 @@ public class StopFragment extends Fragment {
             public void onClick(View v) {
                 // Flip the "checked" boolean
                 checked = ! checked;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
 
                 if (checked) {
                     // Set image to filled heart and add stop to favorites
@@ -105,8 +104,7 @@ public class StopFragment extends Fragment {
                     favoritesSet.remove(String.valueOf(stopId));
                 }
 
-                editor.putStringSet("favorites", favoritesSet);
-                editor.apply();
+                sharedPreferences.edit().putStringSet("favorites", favoritesSet).apply();
 
                 FavoritesFragment favoritesFragment = (FavoritesFragment) getActivity()
                         .getSupportFragmentManager().findFragmentByTag("favorites_fragment");
