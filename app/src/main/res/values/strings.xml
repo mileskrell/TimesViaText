@@ -27,6 +27,7 @@
 
     <string name="favorite_button_content_description">Add or remove favorite stop</string>
     <string name="button_get_stop_times">Get stop times</string>
+    <string name="no_sms_app_found">No SMS app found</string>
 
     <string name="openstreetmap_credit">© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors</string>
 

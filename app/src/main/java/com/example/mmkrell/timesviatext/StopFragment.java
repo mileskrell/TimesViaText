@@ -128,7 +128,7 @@ public class StopFragment extends Fragment {
                 if (getStopTimesIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(getStopTimesIntent);
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "No SMS app found", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.no_sms_app_found, Toast.LENGTH_LONG).show();
                 }
             }
         });
