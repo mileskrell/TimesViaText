@@ -26,8 +26,9 @@ public class IntroActivity extends AppCompatActivity implements ActivityCompat.O
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 
         // If the user has already been through the tutorial, go straight to the map
-        if (permissionsAlreadyGranted)
+        if (permissionsAlreadyGranted) {
             startActivity(new Intent(this, NavigationBarActivity.class));
+        }
 
         setContentView(R.layout.activity_main);
         buttonOpenMap = (Button) findViewById(R.id.button_open_map);
@@ -52,13 +53,16 @@ public class IntroActivity extends AppCompatActivity implements ActivityCompat.O
         // If any permission request is denied, just exit the app
         boolean permissionDenied = false;
 
-        for (int x : grantResults)
-            if (x == PackageManager.PERMISSION_DENIED)
+        for (int x : grantResults) {
+            if (x == PackageManager.PERMISSION_DENIED) {
                 permissionDenied = true;
+            }
+        }
 
-        if (permissionDenied)
+        if (permissionDenied) {
             finish();
-        else
+        } else {
             startActivity(new Intent(this, NavigationBarActivity.class));
+        }
     }
 }

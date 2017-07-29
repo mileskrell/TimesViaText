@@ -54,10 +54,11 @@ class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>
         holder.textViewStopName.setText(query.getString(0));
 
         String stopDirection = query.getString(1);
-        if (stopDirection.isEmpty())
+        if (stopDirection.isEmpty()) {
             holder.textViewStopDirection.setVisibility(View.GONE);
-        else
+        } else {
             holder.textViewStopDirection.setText(stopDirection);
+        }
 
         query.close();
 

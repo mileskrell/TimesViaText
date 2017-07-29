@@ -125,10 +125,11 @@ public class StopFragment extends Fragment {
             public void onClick(View v) {
                 Intent getStopTimesIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:41411"));
                 getStopTimesIntent.putExtra("sms_body", "CTABUS " + stopId);
-                if (getStopTimesIntent.resolveActivity(getActivity().getPackageManager()) != null)
+                if (getStopTimesIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(getStopTimesIntent);
-                else
+                } else {
                     Toast.makeText(getActivity().getApplicationContext(), "No SMS app found", Toast.LENGTH_LONG).show();
+                }
             }
         });
         return v;
@@ -137,8 +138,9 @@ public class StopFragment extends Fragment {
     // See http://stackoverflow.com/a/11253987
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        if (enableAnimations)
+        if (enableAnimations) {
             return super.onCreateAnimation(transit, enter, nextAnim);
+        }
 
         Animation a = new Animation() {};
         a.setDuration(0);

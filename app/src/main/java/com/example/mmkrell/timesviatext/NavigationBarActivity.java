@@ -145,9 +145,10 @@ public class NavigationBarActivity extends AppCompatActivity {
         // If we've gotten this far, the user must be viewing MapFragment
 
         // Try to remove StopFragment
-        if (! mapFragment.deselectMarkerAndRemoveStopFragment(true))
+        if (! mapFragment.deselectMarkerAndRemoveStopFragment(true)) {
             // If nothing was removed, call onBackPressed()
             super.onBackPressed();
+        }
     }
 
     BottomNavigationView getBottomNavigationView() {

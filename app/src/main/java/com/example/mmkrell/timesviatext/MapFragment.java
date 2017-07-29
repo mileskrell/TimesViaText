@@ -124,13 +124,15 @@ public class MapFragment extends Fragment implements LocationListener {
 
         mapView = (MapView) v.findViewById(R.id.map_view);
 
-        if (! PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_download_new_tiles", true))
+        if (! PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_download_new_tiles", true)) {
             mapView.setUseDataConnection(false);
+        }
 
         mapView.setTileSource(TileSourceFactory.MAPNIK);
 
-        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_scale_tiles_to_dpi", true))
+        if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_scale_tiles_to_dpi", true)) {
             mapView.setTilesScaledToDpi(true);
+        }
 
         mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);
         mapView.setMinZoomLevel(15);
@@ -142,13 +144,15 @@ public class MapFragment extends Fragment implements LocationListener {
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         Location lastKnownLocation = null;
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
         // Set the map center to the last known location, if available
-        if (lastKnownLocation != null)
+        if (lastKnownLocation != null) {
             mapView.getController().setCenter(new GeoPoint(lastKnownLocation));
-        else
+        } else {
             mapView.getController().setCenter(new GeoPoint(41.945477, -87.690778));
+        }
 
         myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()), mapView);
         mapView.getOverlays().add(myLocationOverlay);
@@ -235,14 +239,16 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onResume() {
         super.onResume();
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }
 
         // This check is needed because if this stuff is enabled while GPS is disabled, it won't appear
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             myLocationOverlay.enableMyLocation();
-            if (followMeShouldBeEnabled)
+            if (followMeShouldBeEnabled) {
                 setFollowMeState(true);
+            }
 
             // If the thread is null, no Location has been received yet.
             // If this thread isn't running, then it's been over ten seconds since the last fix.
@@ -258,8 +264,9 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onPause() {
         super.onPause();
         paused = true;
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager.removeUpdates(this);
+        }
         myLocationOverlay.disableFollowLocation();
         myLocationOverlay.disableMyLocation();
 
@@ -321,8 +328,9 @@ public class MapFragment extends Fragment implements LocationListener {
     public void onProviderEnabled(String provider) {
         // Now we can enable this stuff
         myLocationOverlay.enableMyLocation();
-        if (followMeShouldBeEnabled)
+        if (followMeShouldBeEnabled) {
             setFollowMeState(true);
+        }
 
         viewGpsDisabled.setVisibility(View.INVISIBLE);
         viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
@@ -367,8 +375,9 @@ public class MapFragment extends Fragment implements LocationListener {
         while (query.moveToNext()) {
             OverlayItem marker = new OverlayItem(query.getString(0), null, new GeoPoint(query.getDouble(1), query.getDouble(2)));
             // If the stop code matches the selected stop code, give this marker a different drawable to reflect that
-            if (marker.getTitle().equals(String.valueOf(selectedMarker)))
+            if (marker.getTitle().equals(String.valueOf(selectedMarker))) {
                 marker.setMarker(ContextCompat.getDrawable(getContext(), R.drawable.marker_selected));
+            }
             itemizedIconOverlay.addItem(marker);
         }
 
@@ -409,16 +418,18 @@ public class MapFragment extends Fragment implements LocationListener {
 
     // Returns true if StopFragment was removed
     boolean deselectMarkerAndRemoveStopFragment(boolean animate) {
-        if (! animate)
+        if (! animate) {
             StopFragment.enableAnimations = false;
+        }
 
         // Remove StopFragment
         boolean removed = getActivity().getSupportFragmentManager().popBackStackImmediate();
 
         StopFragment.enableAnimations = true;
 
-        if (! removed)
+        if (! removed) {
             return false;
+        }
 
         // Now that the StopFragment has been removed, set selectedMarker to 0
         selectedMarker = 0;

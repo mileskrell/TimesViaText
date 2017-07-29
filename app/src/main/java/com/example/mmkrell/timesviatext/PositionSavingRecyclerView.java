@@ -28,8 +28,9 @@ public class PositionSavingRecyclerView extends RecyclerView {
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable state = super.onSaveInstanceState();
-        if (getAdapter() instanceof RoutesAdapter)
+        if (getAdapter() instanceof RoutesAdapter) {
             routesAdapterState = state;
+        }
         return state;
     }
 
