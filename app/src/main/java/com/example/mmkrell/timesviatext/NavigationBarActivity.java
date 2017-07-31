@@ -68,9 +68,9 @@ public class NavigationBarActivity extends AppCompatActivity {
         // Initialize the database
         CTAHelper.setDatabaseInstance(new CTAHelper(getApplicationContext()).getReadableDatabase());
 
-        favoritesFragment = FavoritesFragment.newInstance();
         mapFragment = MapFragment.newInstance();
         routesFragment = RoutesFragment.newInstance();
+        favoritesFragment = FavoritesFragment.newInstance();
 
         supportFragmentManager = getSupportFragmentManager();
 
