@@ -15,7 +15,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
     private final ArrayList<String> routeIds;
     private final SQLiteDatabase database;
     private final NavigationBarActivity navigationBarActivity;
-    private final PositionSavingRecyclerView positionSavingRecyclerView;
+    private final RoutesFragment routesFragment;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -32,8 +32,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         }
     }
 
-    RoutesAdapter(NavigationBarActivity navigationBarActivity,
-                  PositionSavingRecyclerView positionSavingRecyclerView) {
+    RoutesAdapter(NavigationBarActivity navigationBarActivity, RoutesFragment routesFragment) {
         database = CTAHelper.getDatabaseInstance();
         routeIds = new ArrayList<>();
         Cursor query = database.rawQuery("SELECT route_id FROM routes ORDER BY route_sequence", null);
@@ -42,7 +41,7 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
         }
         query.close();
         this.navigationBarActivity = navigationBarActivity;
-        this.positionSavingRecyclerView = positionSavingRecyclerView;
+        this.routesFragment = routesFragment;
     }
 
     @Override
@@ -71,11 +70,11 @@ class RoutesAdapter extends RecyclerView.Adapter<RoutesAdapter.ViewHolder> {
             public void onClick(View v) {
 
                 // Save position of RecyclerView
-                positionSavingRecyclerView.onSaveInstanceState();
+                routesFragment.saveRoutesRecyclerViewState();
 
                 // Switch to a DirectionsAdapter
-                positionSavingRecyclerView.setAdapter(new DirectionsAdapter(routeId,
-                        navigationBarActivity, positionSavingRecyclerView));
+                routesFragment.getRoutesRecyclerView().setAdapter(new DirectionsAdapter(routeId,
+                        navigationBarActivity, routesFragment));
 
                 // Update currentAdapterName
                 RoutesFragment.currentAdapterName = "DirectionsAdapter";

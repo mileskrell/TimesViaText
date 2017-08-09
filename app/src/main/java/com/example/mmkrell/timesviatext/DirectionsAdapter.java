@@ -20,7 +20,7 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
     static String routeId;
 
     private final NavigationBarActivity navigationBarActivity;
-    private final RecyclerView recyclerView;
+    private final RoutesFragment routesFragment;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -35,10 +35,10 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
         }
     }
 
-    DirectionsAdapter(String routeId, NavigationBarActivity navigationBarActivity, RecyclerView recyclerView) {
+    DirectionsAdapter(String routeId, NavigationBarActivity navigationBarActivity, RoutesFragment routesFragment) {
         DirectionsAdapter.routeId = routeId;
         this.navigationBarActivity = navigationBarActivity;
-        this.recyclerView = recyclerView;
+        this.routesFragment = routesFragment;
 
         database = CTAHelper.getDatabaseInstance();
         directions = new ArrayList<>();
@@ -66,7 +66,7 @@ class DirectionsAdapter extends RecyclerView.Adapter<DirectionsAdapter.ViewHolde
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setAdapter(new StopsAdapter(routeId, direction, navigationBarActivity));
+                routesFragment.getRoutesRecyclerView().setAdapter(new StopsAdapter(routeId, direction, navigationBarActivity));
 
                 // Update our position
                 RoutesFragment.currentAdapterName = "StopsAdapter";

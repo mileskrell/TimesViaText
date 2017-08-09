@@ -119,21 +119,19 @@ public class NavigationBarActivity extends AppCompatActivity {
                 return;
             case "DirectionsAdapter":
                 // Return to a RoutesAdapter
-                routesFragment.getPositionSavingRecyclerView().setAdapter(
-                        new RoutesAdapter(this, routesFragment.getPositionSavingRecyclerView()));
+                routesFragment.getRoutesRecyclerView().setAdapter(
+                        new RoutesAdapter(this, routesFragment));
 
                 // Restore scroll position of Routes list
-                routesFragment.getPositionSavingRecyclerView()
-                        .onRestoreInstanceState(PositionSavingRecyclerView.routesAdapterState);
+                routesFragment.restoreRoutesRecyclerViewState();
 
                 RoutesFragment.currentAdapterName = "RoutesAdapter";
                 updateTitleAndUserLocation("RoutesAdapter");
                 return;
             case "StopsAdapter":
                 // Return to a DirectionsAdapter
-                routesFragment.getPositionSavingRecyclerView().setAdapter(
-                        new DirectionsAdapter(DirectionsAdapter.routeId, this,
-                                routesFragment.getPositionSavingRecyclerView()));
+                routesFragment.getRoutesRecyclerView().setAdapter(
+                        new DirectionsAdapter(DirectionsAdapter.routeId, this, routesFragment));
                 RoutesFragment.currentAdapterName = "DirectionsAdapter";
                 updateTitleAndUserLocation("DirectionsAdapter");
                 return;
