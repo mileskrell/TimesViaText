@@ -7,7 +7,7 @@ Data provided by [Chicago Transit Authority](http://transitchicago.com).
 
 [DB Browser for SQLite](https://github.com/sqlitebrowser/sqlitebrowser) was used during development.
 
-##Dependencies:
+## Dependencies:
 
 * [osmdroid](https://github.com/osmdroid/osmdroid)
 * [Android SQLiteAssetHelper](https://github.com/jgilfelt/android-sqlite-asset-helper)
