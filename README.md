@@ -11,3 +11,11 @@ Data provided by [Chicago Transit Authority](http://transitchicago.com).
 
 * [osmdroid](https://github.com/osmdroid/osmdroid)
 * [Android SQLiteAssetHelper](https://github.com/jgilfelt/android-sqlite-asset-helper)
+
+## Building:
+
+To keep the repository from getting needlessly large, the master branch no longer includes the necessary database.
+
+To build immediately, use a branch with a name in the format YYYY-MM-DD.
+
+Otherwise, you must create the database as specified in `DATABASE_CREATION.md`.

@@ -3,6 +3,7 @@ package com.example.mmkrell.timesviatext;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -12,6 +13,10 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        TextView textViewDataUpdated = (TextView) findViewById(R.id.about_text_view_data_updated);
+
+        textViewDataUpdated.setText(getString(R.string.about_credits, getString(R.string.data_last_updated)));
     }
 
     @Override

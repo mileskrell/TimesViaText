@@ -17,7 +17,8 @@
     <string name="about">About</string>
 
     <string name="about_name">Times via Text</string>
-    <string name="about_credits">An app by Miles Krell\n\nCTA data from June 11, 2017</string>
+    <string name="about_credits">An app by Miles Krell\n\nCTA data from %s</string>
+    <string name="data_last_updated"></string>
 
     <string name="image_button_follow_me_description">Follow my location</string>
 

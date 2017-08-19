@@ -1,5 +1,9 @@
 # Instructions for creating an SQLite database from CTA GTFS data
 
+The data can be found [here](http://www.transitchicago.com/downloads/sch_data/google_transit.zip).
+
+This file is updated roughly once a month.
+
 ## 1. Database structure setup
 
 ### routes
@@ -100,3 +104,7 @@ Repeat for every route (probably either 126 or 128).
 2. Remove `trips` table and `stop_times` table.
 
 3. Compact the database (it should be around 1 MB).
+
+4. Move the database to `app/src/main/assets/databases/cta.db`.
+
+5. Add the date of the data to `R.string.data_last_updated`.
