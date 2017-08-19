@@ -16,7 +16,6 @@
     <string name="settings">Settings</string>
     <string name="about">About</string>
 
-    <string name="about_name">Times via Text</string>
     <string name="about_credits">An app by Miles Krell\n\nCTA data from %s</string>
     <string name="data_last_updated"></string>
 
