@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -21,8 +22,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
+
+import com.example.mmkrell.timesviatext.databinding.FragmentMapBinding;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 public class MapFragment extends Fragment implements LocationListener {
 
-    private MapView mapView;
+    private FragmentMapBinding binding;
 
     // Accessed from SettingsFragment
     static final BoundingBox chicagoBoundingBox = new BoundingBox(42.07, -87.52, 41.64, -87.89);
@@ -54,14 +55,6 @@ public class MapFragment extends Fragment implements LocationListener {
     private Thread fixIsAging;
 
     private boolean paused;
-
-    private View viewWaitingForGpsSignal;
-    private View viewGpsDisabled;
-    private View viewOutsideOfChicago;
-
-    private TextView textViewZoomLevel;
-    private ImageButton buttonFollowMe;
-    private TextView textViewOpenStreetMapCredit;
 
     private SQLiteDatabase database;
 
@@ -98,14 +91,8 @@ public class MapFragment extends Fragment implements LocationListener {
         config.setTileFileSystemCacheMaxBytes((long)((freeSpace + cacheSize) * 0.95));
         config.setTileFileSystemCacheTrimBytes((long)((freeSpace + cacheSize) * 0.90));
 
-        View v = inflater.inflate(R.layout.fragment_map, container, false);
-
-        textViewZoomLevel = (TextView) v.findViewById(R.id.text_view_zoom_level);
-        viewWaitingForGpsSignal = v.findViewById(R.id.view_waiting_for_gps_signal);
-        viewGpsDisabled = v.findViewById(R.id.view_gps_disabled);
-        viewOutsideOfChicago = v.findViewById(R.id.view_outside_of_chicago);
-
-        buttonFollowMe = (ImageButton) v.findViewById(R.id.button_follow_me);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false);
+        View v = binding.getRoot();
 
         personBitmap = BitmapFactory.decodeResource(getResources(),
                 org.osmdroid.library.R.drawable.person);
@@ -116,30 +103,27 @@ public class MapFragment extends Fragment implements LocationListener {
         grayDirectionArrowBitmap = BitmapFactory.decodeResource(getResources(),
                 R.drawable.gray_direction_arrow);
 
-        textViewOpenStreetMapCredit = (TextView) v.findViewById(R.id.text_view_openstreetmap_credit);
         // Makes the link clickable
-        textViewOpenStreetMapCredit.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.textViewOpenstreetmapCredit.setMovementMethod(LinkMovementMethod.getInstance());
 
         database = CTAHelper.getDatabaseInstance();
 
-        mapView = (MapView) v.findViewById(R.id.map_view);
-
         if (! PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_download_new_tiles", true)) {
-            mapView.setUseDataConnection(false);
+            binding.mapView.setUseDataConnection(false);
         }
 
-        mapView.setTileSource(TileSourceFactory.MAPNIK);
+        binding.mapView.setTileSource(TileSourceFactory.MAPNIK);
 
         if (PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("pref_scale_tiles_to_dpi", true)) {
-            mapView.setTilesScaledToDpi(true);
+            binding.mapView.setTilesScaledToDpi(true);
         }
 
-        mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);
-        mapView.setMinZoomLevel(15);
-        mapView.setMaxZoomLevel(18);
-        mapView.getController().setZoom(18);
+        binding.mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);
+        binding.mapView.setMinZoomLevel(15);
+        binding.mapView.setMaxZoomLevel(18);
+        binding.mapView.getController().setZoom(18);
 
-        mapView.setMultiTouchControls(true);
+        binding.mapView.setMultiTouchControls(true);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -149,15 +133,15 @@ public class MapFragment extends Fragment implements LocationListener {
         }
         // Set the map center to the last known location, if available
         if (lastKnownLocation != null) {
-            mapView.getController().setCenter(new GeoPoint(lastKnownLocation));
+            binding.mapView.getController().setCenter(new GeoPoint(lastKnownLocation));
         } else {
-            mapView.getController().setCenter(new GeoPoint(41.945477, -87.690778));
+            binding.mapView.getController().setCenter(new GeoPoint(41.945477, -87.690778));
         }
 
-        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()), mapView);
-        mapView.getOverlays().add(myLocationOverlay);
+        myLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getContext()), binding.mapView);
+        binding.mapView.getOverlays().add(myLocationOverlay);
 
-        buttonFollowMe.setOnClickListener(new View.OnClickListener() {
+        binding.buttonFollowMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (myLocationOverlay.isFollowLocationEnabled()) {
@@ -168,7 +152,7 @@ public class MapFragment extends Fragment implements LocationListener {
             }
         });
 
-        mapView.setMapListener(new MapListener() {
+        binding.mapView.setMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
                 // Only disable follow me if the onScroll() was triggered by the user, which would have disabled follow me
@@ -186,14 +170,14 @@ public class MapFragment extends Fragment implements LocationListener {
 
             @Override
             public boolean onZoom(ZoomEvent event) {
-                textViewZoomLevel.setText("Zoom level: " + event.getZoomLevel());
+                binding.textViewZoomLevel.setText("Zoom level: " + event.getZoomLevel());
                 updateMarkers();
                 return false;
             }
         });
 
         // Used in place of an OnClickListener
-        mapView.setOnTouchListener(new View.OnTouchListener() {
+        binding.mapView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
@@ -231,7 +215,7 @@ public class MapFragment extends Fragment implements LocationListener {
                 return false;
             }
         }, getContext());
-        mapView.getOverlays().add(itemizedIconOverlay);
+        binding.mapView.getOverlays().add(itemizedIconOverlay);
 
         return v;
     }
@@ -253,7 +237,7 @@ public class MapFragment extends Fragment implements LocationListener {
             // If the thread is null, no Location has been received yet.
             // If this thread isn't running, then it's been over ten seconds since the last fix.
             if (fixIsAging == null || ! fixIsAging.isAlive()) {
-                viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
+                binding.viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
                 myLocationOverlay.setPersonIcon(grayPersonBitmap);
             }
         }
@@ -272,13 +256,13 @@ public class MapFragment extends Fragment implements LocationListener {
 
         // Remove the GPS messages
         // Their removal is visible, but it's better than removing them in onResume()
-        viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
-        viewGpsDisabled.setVisibility(View.INVISIBLE);
+        binding.viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
+        binding.viewGpsDisabled.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
+        binding.viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
         myLocationOverlay.setDirectionArrow(personBitmap, directionArrowBitmap);
 
         if (fixIsAging != null) {
@@ -286,9 +270,9 @@ public class MapFragment extends Fragment implements LocationListener {
         }
 
         if (chicagoBoundingBox.contains(new GeoPoint(location))) {
-            viewOutsideOfChicago.setVisibility(View.INVISIBLE);
+            binding.viewOutsideOfChicago.setVisibility(View.INVISIBLE);
         } else {
-            viewOutsideOfChicago.setVisibility(View.VISIBLE);
+            binding.viewOutsideOfChicago.setVisibility(View.VISIBLE);
         }
 
         fixIsAging = new Thread(new Runnable() {
@@ -304,13 +288,13 @@ public class MapFragment extends Fragment implements LocationListener {
                 }
                 // Make person icon gray and show "waiting for GPS signal" view
                 myLocationOverlay.setDirectionArrow(grayPersonBitmap, grayDirectionArrowBitmap);
-                viewWaitingForGpsSignal.post(new Runnable() {
+                binding.viewWaitingForGpsSignal.post(new Runnable() {
                     @Override
                     public void run() {
                         // Since it's been ten seconds since the last fix, we don't know if
                         // the person is still outside of Chicago (if they had been before)
-                        viewOutsideOfChicago.setVisibility(View.INVISIBLE);
-                        viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
+                        binding.viewOutsideOfChicago.setVisibility(View.INVISIBLE);
+                        binding.viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -332,8 +316,8 @@ public class MapFragment extends Fragment implements LocationListener {
             setFollowMeState(true);
         }
 
-        viewGpsDisabled.setVisibility(View.INVISIBLE);
-        viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
+        binding.viewGpsDisabled.setVisibility(View.INVISIBLE);
+        binding.viewWaitingForGpsSignal.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -347,13 +331,13 @@ public class MapFragment extends Fragment implements LocationListener {
         myLocationOverlay.setDirectionArrow(grayPersonBitmap, grayDirectionArrowBitmap);
 
         // Hide "waiting for GPS signal" view
-        viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
+        binding.viewWaitingForGpsSignal.setVisibility(View.INVISIBLE);
 
         // Hide "outside of Chicago" view
-        viewOutsideOfChicago.setVisibility(View.INVISIBLE);
+        binding.viewOutsideOfChicago.setVisibility(View.INVISIBLE);
 
         // Show "Gps disabled" view
-        viewGpsDisabled.setVisibility(View.VISIBLE);
+        binding.viewGpsDisabled.setVisibility(View.VISIBLE);
         // If GPS is disabled when requestLocationUpdates() is called in onResume(), onProviderDisabled() will be called
         // That means that viewGpsDisabled.setVisibility(View.VISIBLE) doesn't need to also be called in onResume()
     }
@@ -361,10 +345,10 @@ public class MapFragment extends Fragment implements LocationListener {
     private void updateMarkers() {
         itemizedIconOverlay.removeAllItems();
 
-        double north = mapView.getBoundingBox().getLatNorth() + mapView.getBoundingBox().getLatitudeSpan() / 10;
-        double south = mapView.getBoundingBox().getLatSouth() - mapView.getBoundingBox().getLatitudeSpan() / 10;
-        double east = mapView.getBoundingBox().getLonEast() + mapView.getBoundingBox().getLongitudeSpan() / 10;
-        double west = mapView.getBoundingBox().getLonWest() - mapView.getBoundingBox().getLongitudeSpan() / 10;
+        double north = binding.mapView.getBoundingBox().getLatNorth() + binding.mapView.getBoundingBox().getLatitudeSpan() / 10;
+        double south = binding.mapView.getBoundingBox().getLatSouth() - binding.mapView.getBoundingBox().getLatitudeSpan() / 10;
+        double east = binding.mapView.getBoundingBox().getLonEast() + binding.mapView.getBoundingBox().getLongitudeSpan() / 10;
+        double west = binding.mapView.getBoundingBox().getLonWest() - binding.mapView.getBoundingBox().getLongitudeSpan() / 10;
 
         String[] selectionArgs = {String.valueOf(north), String.valueOf(south), String.valueOf(east), String.valueOf(west)};
 
@@ -386,11 +370,11 @@ public class MapFragment extends Fragment implements LocationListener {
 
     void setFollowMeState(boolean enabled) {
         if (enabled) {
-            buttonFollowMe.setImageResource(org.osmdroid.library.R.drawable.osm_ic_follow_me_on);
+            binding.buttonFollowMe.setImageResource(org.osmdroid.library.R.drawable.osm_ic_follow_me_on);
             myLocationOverlay.enableFollowLocation();
             followMeShouldBeEnabled = true;
         } else {
-            buttonFollowMe.setImageResource(org.osmdroid.library.R.drawable.osm_ic_follow_me);
+            binding.buttonFollowMe.setImageResource(org.osmdroid.library.R.drawable.osm_ic_follow_me);
             myLocationOverlay.disableFollowLocation();
             followMeShouldBeEnabled = false;
         }
@@ -444,13 +428,13 @@ public class MapFragment extends Fragment implements LocationListener {
                 "WHERE stop_id = ?", new String[] {String.valueOf(stopId)});
         query.moveToNext();
 
-        mapView.getController().animateTo(new GeoPoint(query.getDouble(0), query.getDouble(1)));
+        binding.mapView.getController().animateTo(new GeoPoint(query.getDouble(0), query.getDouble(1)));
 
         query.close();
     }
 
     // Used in SettingsFragment
     MapView getMapView() {
-        return mapView;
+        return binding.mapView;
     }
 }
