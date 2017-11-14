@@ -115,7 +115,9 @@ public class NavigationBarActivity extends AppCompatActivity {
 
         switch (userLocation) {
             case "RoutesAdapter":
-                finish();
+                // Return to MapFragment
+                bottomNavigationView.setSelectedItemId(R.id.navigation_map);
+                updateTitleAndUserLocation("MapFragment");
                 return;
             case "DirectionsAdapter":
                 // Return to a RoutesAdapter
@@ -136,7 +138,9 @@ public class NavigationBarActivity extends AppCompatActivity {
                 updateTitleAndUserLocation("DirectionsAdapter");
                 return;
             case "FavoritesFragment":
-                finish();
+                // Return to MapFragment
+                bottomNavigationView.setSelectedItemId(R.id.navigation_map);
+                updateTitleAndUserLocation("MapFragment");
                 return;
         }
 
