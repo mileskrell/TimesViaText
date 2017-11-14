@@ -3,23 +3,23 @@ package com.example.mmkrell.timesviatext;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.example.mmkrell.timesviatext.databinding.FragmentFavoritesBinding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 public class FavoritesFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private TextView textViewNoFavorites;
+    private FragmentFavoritesBinding binding;
 
     private SharedPreferences sharedPreferences;
 
@@ -33,13 +33,11 @@ public class FavoritesFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_favorites, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_favorites, container, false);
+        View v = binding.getRoot();
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.favorites_recycler_view);
-        textViewNoFavorites = (TextView) v.findViewById(R.id.text_view_no_favorites);
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.favoritesRecyclerView.setHasFixedSize(true);
+        binding.favoritesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         HashSet<String> favoritesSet = new HashSet<>(sharedPreferences.getStringSet("favorites", new HashSet<String>()));
@@ -47,24 +45,24 @@ public class FavoritesFragment extends Fragment {
         ArrayList<Integer> favoritesArrayList = sortStopIdsByNameAndDirection(favoritesSet);
 
         if (favoritesArrayList.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            textViewNoFavorites.setVisibility(View.VISIBLE);
+            binding.favoritesRecyclerView.setVisibility(View.GONE);
+            binding.textViewNoFavorites.setVisibility(View.VISIBLE);
         }
 
         FavoritesAdapter adapter = new FavoritesAdapter((NavigationBarActivity) getActivity(), favoritesArrayList);
-        recyclerView.setAdapter(adapter);
+        binding.favoritesRecyclerView.setAdapter(adapter);
 
         return v;
     }
 
     void updateFavorites(ArrayList<Integer> newFavorites) {
         if (newFavorites.isEmpty()) {
-            recyclerView.setVisibility(View.GONE);
-            textViewNoFavorites.setVisibility(View.VISIBLE);
+            binding.favoritesRecyclerView.setVisibility(View.GONE);
+            binding.textViewNoFavorites.setVisibility(View.VISIBLE);
         } else {
-            ((FavoritesAdapter) recyclerView.getAdapter()).swap(newFavorites);
-            textViewNoFavorites.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+            ((FavoritesAdapter) binding.favoritesRecyclerView.getAdapter()).swap(newFavorites);
+            binding.textViewNoFavorites.setVisibility(View.GONE);
+            binding.favoritesRecyclerView.setVisibility(View.VISIBLE);
         }
     }
 
