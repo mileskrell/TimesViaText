@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:layout_marginBottom="8dp"
+    app:cardBackgroundColor="@color/cardview_light_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:textSize="18sp"
-        android:textColor="#00AA00"
-        tools:text="Addison &amp; Forest Preserve Avenue"
-        android:id="@+id/favorite_text_view_stop_name" />
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackground">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/favorite_text_view_stop_name"
-        android:textSize="14sp"
-        android:textColor="#AA0000"
-        tools:text="Westbound"
-        android:id="@+id/favorite_text_view_stop_direction" />
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:textColor="#00AA00"
+            tools:text="Addison &amp; Forest Preserve Avenue"
+            android:id="@+id/favorite_text_view_stop_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/favorite_text_view_stop_name"
+            android:textSize="14sp"
+            android:textColor="#AA0000"
+            tools:text="Westbound"
+            android:id="@+id/favorite_text_view_stop_direction" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
