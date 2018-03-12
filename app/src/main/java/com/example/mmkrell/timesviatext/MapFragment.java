@@ -124,6 +124,7 @@ public class MapFragment extends Fragment implements LocationListener {
         binding.mapView.getController().setZoom(18);
 
         binding.mapView.setMultiTouchControls(true);
+        binding.mapView.setBuiltInZoomControls(false);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
