@@ -119,8 +119,8 @@ public class MapFragment extends Fragment implements LocationListener {
         }
 
         binding.mapView.setScrollableAreaLimitDouble(chicagoBoundingBox);
-        binding.mapView.setMinZoomLevel(15);
-        binding.mapView.setMaxZoomLevel(18);
+        binding.mapView.setMinZoomLevel(15.0);
+        binding.mapView.setMaxZoomLevel(18.0);
         binding.mapView.getController().setZoom(18);
 
         binding.mapView.setMultiTouchControls(true);
