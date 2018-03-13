@@ -56,9 +56,9 @@ Remove extra data from `stop_desc`:
 			)
 		)
 
-Use sqlitebrowser to find and fix the stop names of stops 572, 606, 2990, and 18343 (as of July 24, 2017).
+Use sqlitebrowser to find and fix the stop names of stops 572, 606, and 2990 (as of January 31, 2018).
 
-Use sqlitebrowser to remove stops 110, 944, 3528, 9333, 17031, 17508, 17509, 17538, and 17673 (as of July 24, 2017).
+Use sqlitebrowser to remove stops 2248, 9333, 16123, 17031, 17353, 17508, 17509, 17538, 17673, and 18219 (as of January 31, 2018).
 
 Rename `stop_desc` to `stop_dir`.
 
